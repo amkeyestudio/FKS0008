@@ -1,0 +1,338 @@
+# 3.16 WiFi Controlled Smart Car
+
+## 3.16.1 Lesson Introduction
+
+Previously, we learned how to connect the ESP32S3 to WiFi and implemented a simple web page display. Next, we will comprehensively upgrade this functionality.
+
+In this lesson, we will use the ESP32S3 Pro development board as the "brain" of the smart car, utilizing its powerful WiFi capabilities to build a dedicated web remote controller. You don't need to download any complex apps; simply open your phone's browser, enter an address, and you will see the control buttons. When you click "Forward" or "Back" on the screen, the car will immediately execute the action.
+
+## 3.16.2 Lesson Objectives
+
+*   **Implement Remote Control**: Be able to write code to send commands via mobile web buttons, controlling the motion state of the car (forward, backward, left turn, right turn, stop).
+*   **Extended Peripheral Control**: Learn to control servos via the webpage (such as mechanical claw opening and closing) and read distance data from ultrasonic sensors.
+*   **Debug Network Issues**: Learn to view serial monitor information to resolve common WiFi connection failures or webpage access issues.
+
+## 3.16.3 Lesson Equipment
+
+| Component Name     | Specification/Model                 | Quantity | Remarks                                                      |
+| :----------------- | :---------------------------------- | :------- | :----------------------------------------------------------- |
+| Main Control Board | ESP32S3 Pro Development Board       | 1        | Core controller, with built-in WiFi and Bluetooth            |
+| Expansion Board    | ESP32S3 Pro Expansion Board         | 1        | Integrated with motor drive, infrared receiver, and other interfaces |
+| Battery Case       | 6x AA battery case or 2x 18650 case | 1        | Batteries provided by user, powers the motors and development board |
+| Geared Motor       | TT Motor with wheels                | 2        | Drives the smart car movement                                |
+| Ultrasonic Module  | HC-SR04 or compatible module        | 1        | Used for distance measurement (optional)                     |
+| Servo              | SG90 or MG90S                       | 1        | Used to control camera angle or mechanical claw (optional)   |
+| Car Chassis        | Acrylic or metal chassis            | 1        | Carries all electronic components                            |
+
+## 3.16.4 Lesson Principles
+
+### 1. WiFi Connection Principle: Equipping the Brain with "Ears"
+
+The ESP32S3 Pro development board has a built-in WiFi chip, which is like equipping the car's brain with a pair of sensitive "ears." When we tell it our home WiFi name (SSID) and password, it sends a request to the router: "Hello, I am ESP32, I want to join your network." After verifying that the password is correct, the router assigns it a unique "house number," which is the **IP address** (e.g., `192.168.1.105`). With this IP address, other devices on the same WiFi network (such as your phone) can find it.
+
+### 2. Network Protocol Explanation: HTTP is the Universal "Language"
+
+In this lesson, we use the **HTTP protocol**. You can think of HTTP as a standard "letter format." When you enter the IP address in your mobile browser, your phone acts like a postman, sending a "letter" (request) to the ESP32. Upon receiving the letter, the ESP32 replies with a "letter" (response) containing the webpage content. Because HTTP is the most fundamental language of the internet, any phone, tablet, or computer can understand it without installing special software.
+
+### 3. Application Scenario: The Webpage is the Remote Control
+
+Traditional remote controllers require infrared rays and dedicated receiving heads, which have short ranges and directional limitations. Through a Web Server, the ESP32S3 Pro becomes a miniature website host. We write the HTML page (including buttons) directly in the code; when the phone accesses it, the ESP32 sends this page to the phone. When you click a button on the webpage, the phone sends a specific URL back to the ESP32 (such as `/cmd?move=forward`), and upon detecting this URL, the ESP32 knows you want it to move forward, thereby controlling the motor rotation.
+
+## 3.16.5 Wiring Instructions
+
+Before starting the wiring, make sure all equipment is powered off. We will focus on connecting the motor driver module, ultrasonic module, and servo to the ESP32S3 Pro development board (or connecting via the expansion board).
+
+### Detailed Wiring Table
+
+| Module Name                 | Module Pin              | ESP32S3 Pro Pin                       | Description                                                  |
+| :-------------------------- | :---------------------- | :------------------------------------ | :----------------------------------------------------------- |
+| **Left Motor (Channel A)**  | Direction Control (AIN) | GPIO 40                               | Controls left motor forward/reverse                          |
+|                             | Speed Control (AEN)     | GPIO 41                               | PWM signal controls left motor speed                         |
+| **Right Motor (Channel B)** | Direction Control (BIN) | GPIO 38                               | Controls right motor forward/reverse                         |
+|                             | Speed Control (BEN)     | GPIO 21                               | PWM signal controls right motor speed                        |
+| **Ultrasonic Module**       | Trigger Pin (TRIG)      | GPIO 12                               | Sends ultrasonic signal                                      |
+|                             | Echo Pin (ECHO)         | GPIO 13                               | Receives reflected ultrasonic signal                         |
+| **Servo**                   | Signal Line (Signal)    | GPIO 42                               | Receives PWM control signal                                  |
+| **Power Supply**            | Positive (VCC/VM)       | Battery case positive                 | Provides power for the motor driver                          |
+|                             | Negative (GND)          | Battery case negative / Dev board GND | **Must share common ground**, ensuring consistent signal reference levels |
+
+> **⚠️ Notes**:
+>
+> 1. The GND of the motor driver module must be connected to the GND of the ESP32S3 Pro (shared ground), otherwise the control signals cannot be recognized.
+> 2. It is recommended that the servo's power supply be provided by the 5V/3.3V pin on the expansion board; if the current is too high, supply power separately.
+
+## 3.16.6 Example Program
+
+This code implements the following functions: connects to WiFi, starts a Web server, and displays a control panel on a mobile phone with buttons for "Forward", "Backward", "Turn Left", "Turn Right", "Stop", and servo control.
+
+```cpp
+#include <WiFi.h>
+#include <WebServer.h>
+#include <ESP32Servo.h>
+#include "webpage.h" // Include external webpage HTML code file
+
+// ================= WiFi Configuration =================
+const char* ssid = "KS0567";         // Replace with your WiFi name
+const char* password = "88888888";   // Replace with your WiFi password
+
+// ================= Global Objects =================
+WebServer server(80); // Create Web server instance, listening on port 80
+Servo myServo;        // Create servo object
+
+// ================= Motor Pin Definitions =================
+#define MOTOR_AIN 40  // Motor A direction control (left wheel)
+#define MOTOR_AEN 41  // Motor A PWM control (left wheel speed)
+#define MOTOR_BIN 38  // Motor B direction control (right wheel)
+#define MOTOR_BEN 21  // Motor B PWM control (right wheel speed)
+
+// ================= Ultrasonic Pin Definitions =================
+const int TRIG_PIN = 12; // Ultrasonic trigger pin
+const int ECHO_PIN = 13; // Ultrasonic echo pin
+
+// ================= Servo Pin and State =================
+const int SERVO_PIN = 42; // Servo signal pin
+int servoAngle = 90;      // Initial servo angle
+
+// ================= Motor Control Functions =================
+
+// Set PWM speeds for left and right motors (0-255)
+void setMotor(int leftSpeed, int rightSpeed) {
+  ledcWrite(MOTOR_AEN, leftSpeed);  // Write left wheel PWM value
+  ledcWrite(MOTOR_BEN, rightSpeed); // Write right wheel PWM value
+}
+
+// Forward
+void forward(int leftSpeed, int rightSpeed) {
+  digitalWrite(MOTOR_AIN, HIGH); // Left wheel forward
+  digitalWrite(MOTOR_BIN, HIGH); // Right wheel forward
+  setMotor(leftSpeed, rightSpeed);
+}
+
+// Backward
+void back(int leftSpeed, int rightSpeed) {
+  digitalWrite(MOTOR_AIN, LOW);  // Left wheel reverse
+  digitalWrite(MOTOR_BIN, LOW);  // Right wheel reverse
+  setMotor(leftSpeed, rightSpeed);
+}
+
+// Turn left (left wheel stop, right wheel forward)
+void left(int leftSpeed, int rightSpeed) {
+  digitalWrite(MOTOR_AIN, LOW);  // Left wheel stop
+  digitalWrite(MOTOR_BIN, HIGH); // Right wheel forward
+  setMotor(leftSpeed, rightSpeed);
+}
+
+// Turn right (left wheel forward, right wheel stop)
+void right(int leftSpeed, int rightSpeed) {
+  digitalWrite(MOTOR_AIN, HIGH); // Left wheel forward
+  digitalWrite(MOTOR_BIN, LOW);  // Right wheel stop
+  setMotor(leftSpeed, rightSpeed);
+}
+
+// Stop motors
+void stop_Motor() {
+  setMotor(0, 0); // Set speed to 0
+}
+
+// ================= Sensor and Peripheral Functions =================
+
+// Read ultrasonic distance (unit: cm)
+long readDistance() {
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10); // Send 10-microsecond high pulse
+  digitalWrite(TRIG_PIN, LOW);
+  
+  // Read high level duration, timeout set to 30000 microseconds
+  long duration = pulseIn(ECHO_PIN, HIGH, 30000); 
+  // Distance = (time * speed of sound) / 2, speed of sound is approximately 0.034 cm/us
+  return duration * 0.034 / 2; 
+}
+
+// ================= Web Server Request Handling =================
+
+// Handle control commands
+void handleCmd() {
+  // Get the "move" value from URL parameters
+  String moveCommand = server.arg("move");
+
+  // Execute corresponding action based on command
+  if (moveCommand == "forward") {
+    forward(200, 200);
+  } 
+  else if (moveCommand == "backward") {
+    back(200, 200);
+  } 
+  else if (moveCommand == "left") {
+    left(200, 200);
+  } 
+  else if (moveCommand == "right") {
+    right(200, 200);
+  } 
+  else if (moveCommand == "stop") {
+    stop_Motor();
+    myServo.write(90); // Center servo when stopped
+  } 
+  else if (moveCommand == "servo_plus") {
+    // Increase servo angle (simplified here to go directly to max angle)
+    // servoAngle = min(180, servoAngle + 5);
+    // myServo.write(servoAngle);
+    myServo.write(180);
+  } 
+  else if (moveCommand == "servo_minus") {
+    // Decrease servo angle (simplified here to go directly to min angle)
+    // servoAngle = max(0, servoAngle - 5);
+    // myServo.write(servoAngle);
+    myServo.write(0);
+  } 
+  else if (moveCommand == "claw_open") {
+    myServo.write(0);   // Open mechanical claw
+    servoAngle = 0;
+  } 
+  else if (moveCommand == "claw_close") {
+    myServo.write(180); // Close mechanical claw
+    servoAngle = 90;
+  }
+
+  // Return success response to client
+  server.send(200, "text/plain", "OK");
+}
+
+// ================= Initialization Setup =================
+void setup() {
+  // Initialize serial monitor, baud rate 115200
+  Serial.begin(115200);
+
+  // Set motor direction pins as output mode
+  pinMode(MOTOR_AIN, OUTPUT);
+  pinMode(MOTOR_BIN, OUTPUT);
+
+  // Configure PWM channels (ESP32 Arduino Core 3.x syntax)
+  // Parameters: pin, frequency (1000Hz), resolution (8-bit, i.e., 0-255)
+  ledcAttach(MOTOR_AEN, 1000, 8);
+  ledcAttach(MOTOR_BEN, 1000, 8);
+
+  // Set ultrasonic pin modes
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+
+  // Initialize servo
+  myServo.attach(SERVO_PIN);
+  myServo.write(servoAngle); // Set initial angle
+
+  // Start connecting to WiFi
+  Serial.print("Connecting to WiFi: ");
+  Serial.println(ssid);
+  WiFi.begin(ssid, password);
+  
+  // Wait for WiFi connection to succeed
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println();
+  Serial.println("WiFi connected successfully!");
+  Serial.print("IP Address: ");
+  Serial.println(WiFi.localIP()); // Print assigned IP address
+
+  // Configure Web server routes
+  // When accessing root path "/", send webpage HTML content
+  server.on("/", []() {
+    server.send_P(200, "text/html; charset=UTF-8", index_html);
+  });
+  
+  // When accessing "/cmd" path, call handleCmd function to process commands
+  server.on("/cmd", handleCmd);
+  
+  // When accessing "/distance" path, return ultrasonic ranging data
+  server.on("/distance", []() {
+    server.send(200, "text/plain", String(readDistance()));
+  });
+
+  // Start Web server
+  server.begin();
+  Serial.println("Web server started!");
+}
+
+// ================= Main Loop =================
+void loop() {
+  // Continuously handle client requests
+  server.handleClient();
+}
+```
+
+## 3.16.7 Code Explanation
+
+To help you better understand the running mechanism of the code, we have divided it into the following core parts for detailed explanation:
+
+### 1. Header Files and Global Variables
+
+*   `WiFi.h` and `WebServer.h`: Official network libraries provided by ESP32, used for connecting to WiFi and handling HTTP requests.
+*   `ESP32Servo.h`: A servo control library optimized specifically for ESP32, which resolves compatibility issues of the standard Servo library on ESP32.
+*   `webpage.h`: A custom header file containing the `index_html` string variable, which holds the HTML, CSS, and JavaScript code of the frontend webpage.
+
+### 2. Motor and Motion Control Logic
+
+*   **PWM Speed Control**: Uses the `ledcAttach` and `ledcWrite` functions to generate PWM (Pulse Width Modulation) signals. By changing the duty cycle (0-255), the motor speed can be adjusted steplessly.
+*   **Differential Steering**: The robot's steering relies on the speed difference between the left and right wheels. For example, in the `left()` function, the left wheel speed is set to 0 while the right wheel continues moving forward, causing the car to turn left around the left wheel as the center.
+
+### 3. Web Server Route Configuration
+
+*   `server.on("/", ...)`: Triggered when the user enters the IP address (root path) in the browser. Uses `send_P` to send the `index_html` webpage code stored in PROGMEM (flash memory) to the phone, saving RAM space.
+*   `server.on("/cmd", handleCmd)`: When a button on the mobile webpage is clicked, the frontend JavaScript sends an asynchronous request to `/cmd?move=forward`. The `handleCmd` function extracts parameters via `server.arg("move")` and executes the corresponding hardware actions.
+
+### 4. Asynchronous and Blocking Handling
+
+*   `server.handleClient()`: Must be placed in the `loop()` function. Its role is to continuously listen to network ports and handle HTTP requests from the mobile browser. If this line of code is missing, the webpage will not refresh, and the buttons will become unresponsive.
+
+## 3.16.8 Experimental Results
+
+1.  **Serial Monitor**: After uploading the code, open the Serial Monitor (set the baud rate to 115200). You will see a string of dots `.....`, followed by "WiFi connected successfully!" and a line similar to `IP address: 192.168.1.105`. **Be sure to note down this IP address!**
+2.  **Mobile Access**: Ensure your phone is connected to the **same WiFi network**. Open your mobile browser (such as Safari or Chrome), type the IP address you just noted into the address bar, and go to the page.
+3.  **Webpage Display**: You should see a page titled "🚗 My WiFi Robot Car", with five colored direction buttons underneath along with servo/mechanical claw control buttons.
+4.  **Control Test**:
+    *   Click "Forward", and both wheels of the car should rotate forward simultaneously.
+    *   Click "Stop", and the car will stop immediately.
+    *   Click "Left", the right wheel rotates while the left wheel stops, and the car turns left.
+    *   Click the servo control buttons to observe whether the servo rotates to the specified angle.
+    *   If the car's actions are reversed (e.g., it moves backward when you click forward), simply swap the direction pin definitions of the corresponding motor in the code (e.g., swap the pin numbers for `MOTOR_AIN` and `MOTOR_BIN`), or physically swap the signal wires on the motor driver module.
+
+Awesome! You just controlled real hardware with code!
+
+![image-20260920095951063](./media/image-20260920095951063.png)
+
+## 3.16.9 FAQ
+
+**Issue: The Serial Monitor keeps printing dots and cannot connect to WiFi**
+
+*   **Cause**: The WiFi name or password is incorrect, or the WiFi signal is too weak.
+*   **Solution**: Check whether `ssid` and `password` in the code are completely correct (pay attention to case sensitivity and spaces). Ensure the ESP32S3 Pro is close to the router. **Note: ESP32 only supports 2.4GHz WiFi and does not support 5GHz WiFi.**
+
+**Issue: Mobile browser displays "Cannot reach this site" or "Connection timed out"**
+
+*   **Cause**: The phone and the development board are not on the same WiFi network, or AP isolation is enabled on the router, or mobile data is enabled on the phone.
+*   **Solution**: Confirm that the WiFi name connected by the phone is identical to the one connected by the development board. Try turning off mobile data on your phone and keeping only WiFi. Check router settings and disable the "AP Isolation" feature.
+
+**Issue: Webpage displays garbled text or weird button styles**
+
+*   **Cause**: The character encoding is not set in the HTML header, or the `webpage.h` file is missing/formatted incorrectly.
+*   **Solution**: Check if `<meta charset="UTF-8">` exists in the code. This example code already includes this line, so it usually won't go wrong. Ensure the `webpage.h` file is in the same directory as the `.ino` file.
+
+**Issue: Clicking buttons causes no response from the car, but the webpage works normally**
+
+*   **Cause**: Wiring errors, pin definitions mismatch, or motor power not turned on.
+*   **Solution**: Check whether IN1-IN4 of the motor driver module are securely connected to the corresponding GPIOs of the ESP32S3 Pro. Check whether the GND of the motor driver module is connected to the GND of the ESP32S3 Pro (common ground). Check if the battery holder has power. You can use a simple LED to test whether the pins have high/low level outputs.
+
+**Issue: Compilation error prompts that `ESP32Servo.h` or `webpage.h` cannot be found**
+
+*   **Cause**: Missing necessary library files or custom header files.
+*   **Solution**: Search for and install `ESP32Servo` via "Tools" -> "Manage Libraries" in the Arduino IDE. Ensure the `webpage.h` file is correctly placed in the project folder.
+
+## Safety Tips
+
+*   **Avoid Short Circuits**: Be extremely careful when wiring. Do not let the positive and negative power terminals touch directly to avoid burning out the development board or motor driver module.
+*   **Power Supply Safety**: Do not use a power supply exceeding 12V to directly power the motor driver module. Never connect high voltages (such as 12V/24V) directly to the GPIO pins of the ESP32S3 Pro, or it will instantly break down the chip.
+*   **Battery Safety**: When using 18650 lithium batteries, ensure they come with a protection board to prevent overcharging and over-discharging. When not in use for a long time, remove the batteries or disconnect the power switch.
+*   **Debugging Advice**: When debugging the code and testing the motion logic for the first time, it is strongly recommended to prop up the car (with wheels off the ground) to prevent it from suddenly losing control, crashing, or causing injury.
