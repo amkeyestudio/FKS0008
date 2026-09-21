@@ -1,40 +1,40 @@
-# 导入专门为这块小车开发板写好的“控制工具箱”
+# Import the "control toolbox" written specifically for this car development board
 from ESP32S3_4WD_Car import Keyes_ESP32S3_4WD
-# 导入“时间”工具箱，用于延时
+# Import the "time" toolbox for delays
 import time
 
-# 创建一个名为 car 的对象，唤醒开发板
+# Create an object named car to wake up the development board
 car = Keyes_ESP32S3_4WD()
 
-# 定义蜂鸣器控制引脚为 IO10，因为蜂鸣器焊死在这个引脚上了
+# Define the buzzer control pin as IO10, because the buzzer is soldered to this pin
 BUZZER_PIN = 10
 
-# 初始化板载蜂鸣器，让 10 号引脚准备好输出控制信号
+# Initialize the onboard buzzer, preparing pin 10 to output control signals
 car.Buzzer_init(BUZZER_PIN)
 
 
-# 定义一个列表（可以理解为排好队的盒子），里面装的是《生日快乐歌》的音符索引
-# 数字代表 Do=1, Re=2, Mi=3... 这里的数字对应底层库中预设好的音阶位置
+# Define a list (which can be thought of as a row of boxes) containing the note indices for "Happy Birthday"
+# Numbers represent Do=1, Re=2, Mi=3... These numbers correspond to the preset scale positions in the underlying library
 HAPPY_BIRTHDAY = [
-    5, 5, 6, 5, 8, 7,       # 祝你生日快乐
-    5, 5, 6, 5, 9, 8,       # 祝你生日快乐
-    5, 5, 12, 10, 8, 7, 6,  # 祝你生日快乐（高潮部分）
-    11, 11, 10, 8, 9, 8     # 祝你生日快乐
+    5, 5, 6, 5, 8, 7,       # Wish you a happy birthday
+    5, 5, 6, 5, 9, 8,       # Wish you a happy birthday
+    5, 5, 12, 10, 8, 7, 6,  # Wish you a happy birthday (climactic part)
+    11, 11, 10, 8, 9, 8     # Wish you a happy birthday
 ]
 
-# 定义一个列表，里面装的是每个音符对应的节拍长度（也就是声音持续的时间）
-# 数值代表相对节拍长度，基础节拍为 200ms（0.2秒），比如 2 就是 400ms
+# Define a list containing the beat length (duration of the sound) corresponding to each note
+# Values represent relative beat lengths, where the base beat is 200ms (0.2 seconds), e.g., 2 means 400ms
 METER = [
-    1, 1, 2, 2, 2, 4,       # 对应第一句的时长
-    1, 1, 2, 2, 2, 4,       # 对应第二句的时长
-    1, 1, 2, 2, 2, 2, 2,    # 对应第三句的时长
-    1, 1, 2, 2, 2, 4        # 对应第四句的时长
+    1, 1, 2, 2, 2, 4,       # Duration corresponding to the first phrase
+    1, 1, 2, 2, 2, 4,       # Duration corresponding to the second phrase
+    1, 1, 2, 2, 2, 2, 2,    # Duration corresponding to the third phrase
+    1, 1, 2, 2, 2, 4        # Duration corresponding to the fourth phrase
 ]
 
-# 开启无限循环，让歌曲一直播放
+# Start an infinite loop to keep playing the song
 while True:
-    # 调用底层封装好的音乐播放函数，把音符列表和节拍列表传给它，让它自动演奏
+    # Call the underlying encapsulated music playback function, passing the note list and meter list to it for automatic performance
     car.Buzzer_play_Music(HAPPY_BIRTHDAY,METER)
-    # 整首歌曲播放完毕后，让程序暂停 2000毫秒（2秒），然后再循环播放下一遍
+    # After the entire song finishes playing, pause the program for 2000 milliseconds (2 seconds) before looping to play it again
     time.sleep_ms(2000)
         

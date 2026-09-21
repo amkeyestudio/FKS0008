@@ -1,71 +1,71 @@
-# ==================== 导入模块 ====================
-# 从 ESP32S3_4WD_Car 这个“工具箱”里，拿出专门控制小车的“遥控器”（Keyes_ESP32S3_4WD）
+# ==================== Import Modules ====================
+# Take out the "remote control" (Keyes_ESP32S3_4WD) specially designed to control the car from the "toolbox" named ESP32S3_4WD_Car
 from ESP32S3_4WD_Car import Keyes_ESP32S3_4WD
-# 导入 time（时间）模块，用来让程序“等一等”（延时）
+# Import the time module to make the program "wait" (delay)
 import time
 
-# 把“遥控器”启动，并给它起个简短的名字叫 car（小车），后面我们就用 car 来指挥它
+# Start the "remote control" and give it a short name called car; we will use car to command it later
 car = Keyes_ESP32S3_4WD()
 
-# ==================== 引脚定义 ====================
-# 巡线传感器通过 PCF8574 扩展芯片连接，这里定义 I2C（一种通信规则）的引脚
-I2C_SCL = 9   # 设置 I2C 的“时钟线”引脚为 9 号，用来同步数据传输的节奏
-I2C_SDA = 8   # 设置 I2C 的“数据线”引脚为 8 号，用来实际传输数据
+# ==================== Pin Definitions ====================
+# The line tracking sensor is connected via the PCF8574 expansion chip. Here we define the I2C (a communication protocol) pins
+I2C_SCL = 9   # Set the I2C "clock line" pin to pin 9, used to synchronize the rhythm of data transmission
+I2C_SDA = 8   # Set the I2C "data line" pin to pin 8, used to actually transmit data
 
-# 告诉小车，巡线传感器接在刚才定义的 9 号和 8 号引脚上，初始化（启动）传感器
+# Tell the car that the line tracking sensor is connected to the previously defined pins 9 and 8, and initialize (start) the sensor
 car.Line_init(I2C_SCL, I2C_SDA)
 
-# 定义电机控制的引脚（引脚就是开发板上的金属接口，用来输出电信号）
-MOTOR_AIN = 40  # 定义 A路（左轮）的方向控制引脚为 40 号，决定左轮正转还是反转
-MOTOR_AEN = 41  # 定义 A路（左轮）的速度控制引脚为 41 号，决定左轮转多快
-MOTOR_BIN = 38  # 定义 B路（右轮）的方向控制引脚为 38 号，决定右轮正转还是反转
-MOTOR_BEN = 21  # 定义 B路（右轮）的速度控制引脚为 21 号，决定右轮转多快
+# Define the motor control pins (pins are the metal interfaces on the development board used to output electrical signals)
+MOTOR_AIN = 40  # Define channel A's (left wheel) direction control pin as pin 40, determining whether the left wheel rotates forward or backward
+MOTOR_AEN = 41  # Define channel A's (left wheel) speed control pin as pin 41, determining how fast the left wheel rotates
+MOTOR_BIN = 38  # Define channel B's (right wheel) direction control pin as pin 38, determining whether the right wheel rotates forward or backward
+MOTOR_BEN = 21  # Define channel B's (right wheel) speed control pin as pin 21, determining how fast the right wheel rotates
 
-# 告诉小车，电机接在刚才定义的 40、41、38、21 号引脚上，初始化（启动）电机
+# Tell the car that the motors are connected to the previously defined pins 40, 41, 38, and 21, and initialize (start) the motors
 car.Motor_init(MOTOR_AIN, MOTOR_AEN, MOTOR_BIN, MOTOR_BEN)
 
-# 定义速度参数（数值范围是 0 到 255，255 是最快，0 是停止）
-BASE_SPEED = 220  # 设置基础直行速度为 220，这是一个比较快但又不会失控的速度
-TURN_SPEED = 220  # 设置转向时的速度为 220，和直行速度保持一致
+# Define speed parameters (numerical range is 0 to 255, where 255 is the fastest and 0 is stopped)
+BASE_SPEED = 220  # Set the base straight-line speed to 220, which is relatively fast yet controllable
+TURN_SPEED = 220  # Set the turning speed to 220, keeping it consistent with the straight-line speed
 
-# 初始状态先让所有电机停止，防止小车一通电就乱跑
+# Stop all motors in the initial state to prevent the car from running around as soon as it is powered on
 car.stop_motor()
-# 在电脑上打印一句启动信息，告诉我们程序已经开始运行了
+# Print a startup message on the computer to tell us that the program has started running
 print("Line Tracking Start")
 
-# ==================== 主循环 ====================
-# 这是一个“死循环”，意思是只要小车有电，里面的代码就会一遍又一遍不停地执行
+# ==================== Main Loop ====================
+# This is an "infinite loop", meaning as long as the car has power, the code inside will execute over and over again
 while True:
-    # 读取 5 路传感器的状态，把结果分别赋给 A, B, C, D, E（1 代表看到黑线，0 代表看到白线）
+    # Read the status of the 5 sensors and assign the results to A, B, C, D, E respectively (1 means seeing a black line, 0 means seeing white)
     A, B, C, D, E = car.Line_get_data()
 
-    # 把 A, B, C, D, E 的状态拼接成一句话，打印到电脑的“串口监视器”上，方便我们观察
+    # Concatenate the status of A, B, C, D, E into a sentence and print it to the computer's "Serial Monitor" for easy observation
     print("ABCDE: {}{}{}{}{}".format(A, B, C, D, E))
 
-    # 把 A, B, C, D, E 这 5 个数字合并成一个“状态码”（用到了位运算，把数字往左挪并拼起来）
+    # Combine the 5 numbers A, B, C, D, E into a single "status code" (using bitwise operations to shift bits and assemble them)
     state = (A << 4) | (B << 3) | (C << 2) | (D << 1) | E
 
-    # 根据合并后的状态码，用“如果...那么...”的逻辑来决定小车怎么走
+    # According to the combined status code, use "if... then..." logic to decide how the car should move
     if state == 0b01110:
-        # 如果状态码是 01110（意思是中间 3 个传感器 B,C,D 看到了黑线），说明车在正中间
-        # 让小车以基础速度向前直行
+        # If the status code is 0b01110 (meaning the middle 3 sensors B, C, D see the black line), it means the car is right in the middle
+        # Make the car move straight forward at the base speed
         car.forward(BASE_SPEED, BASE_SPEED)
     elif state in (0b11100, 0b11000, 0b10000):
-        # 如果状态码是 11100、11000 或 10000（意思是左边的传感器 A 或 B 看到了黑线），说明车偏左了
-        # 让小车左转（左轮速度设为 BASE_SPEED，右轮速度设为 0，通过差速实现左转）
+        # If the status code is 0b11100, 0b11000, or 0b10000 (meaning the left sensors A or B see the black line), it means the car has drifted to the left
+        # Make the car turn left (left wheel speed set to BASE_SPEED, right wheel speed set to BASE_SPEED/0 depending on differential implementation, achieving a left turn via differential speed)
         car.left(BASE_SPEED, BASE_SPEED)
     elif state in (0b00111, 0b00011, 0b00001):
-        # 如果状态码是 00111、00011 或 00001（意思是右边的传感器 D 或 E 看到了黑线），说明车偏右了
-        # 让小车右转（左轮速度设为 0，右轮速度设为 BASE_SPEED，通过差速实现右转）
+        # If the status code is 0b00111, 0b00011, or 0b00001 (meaning the right sensors D or E see the black line), it means the car has drifted to the right
+        # Make the car turn right (achieving a right turn via differential speed)
         car.right(BASE_SPEED, BASE_SPEED)
     elif state == 0b00000:
-        # 如果状态码是 00000（意思是 5 个传感器全都没看到黑线），说明车完全偏离轨道了
-        # 赶紧让所有电机停止，防止小车跑丢
+        # If the status code is 0b00000 (meaning none of the 5 sensors see the black line), it means the car has completely deviated from the track
+        # Immediately stop all motors to prevent the car from getting lost
         car.stop_motor()
     else:
-        # 如果是其他复杂的状态（比如同时看到两条线等），说明情况有点特殊
-        # 让小车以较慢的速度（150）直行，尝试慢慢修正方向
+        # For other complex states (such as seeing two lines at the same time), the situation is special
+        # Make the car go straight at a slower speed (150) to try to slowly correct the direction
         car.forward(150, 150)
 
-    # 让程序暂停 200 毫秒（0.2秒），控制循环的速度，避免小车反应过快导致左右摇摆（震荡）
+    # Pause the program for 50 milliseconds (0.05 seconds) to control the loop speed, preventing the car from reacting too quickly and oscillating (swaying left and right)
     time.sleep_ms(50)

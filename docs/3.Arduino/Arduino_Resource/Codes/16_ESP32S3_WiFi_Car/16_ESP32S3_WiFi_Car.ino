@@ -1,96 +1,95 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <ESP32Servo.h>
-#include "webpage.h" // 引入外部网页 HTML 代码文件
+#include "webpage.h" // Include external webpage HTML code file
 
-// ================= WiFi 配置 =================
-const char* ssid = "KS0567";         // 替换为你的 WiFi 名称
-const char* password = "88888888";   // 替换为你的 WiFi 密码
+// ================= WiFi Configuration =================
+const char* ssid = "KS0567";         // Replace with your WiFi name
+const char* password = "88888888";   // Replace with your WiFi password
 
-// ================= 全局对象 =================
-WebServer server(80); // 创建 Web 服务器实例，监听 80 端口
+// ================= Global Objects =================
+WebServer server(80); // Create Web server instance, listening on port 80
+Servo myServo;        // Create servo object
 
-Servo myServo;        // 创建舵机对象
+// ================= Motor Pin Definitions =================
+#define MOTOR_AIN 40  // Motor A direction control (left wheel)
+#define MOTOR_AEN 41  // Motor A PWM control (left wheel speed)
+#define MOTOR_BIN 38  // Motor B direction control (right wheel)
+#define MOTOR_BEN 21  // Motor B PWM control (right wheel speed)
 
-// ================= 电机引脚定义 =================
-#define MOTOR_AIN 40  // A路方向控制 (左轮)
-#define MOTOR_AEN 41  // A路 PWM 控制 (左轮速度)
-#define MOTOR_BIN 38  // B路方向控制 (右轮)
-#define MOTOR_BEN 21  // B路 PWM 控制 (右轮速度)
+// ================= Ultrasonic Pin Definitions =================
+const int TRIG_PIN = 12; // Ultrasonic trigger pin
+const int ECHO_PIN = 13; // Ultrasonic echo pin
 
-// ================= 超声波引脚定义 =================
-const int TRIG_PIN = 12; // 超声波触发引脚
-const int ECHO_PIN = 13; // 超声波回声引脚
+// ================= Servo Pin and State =================
+const int SERVO_PIN = 42; // Servo signal pin
+int servoAngle = 90;      // Initial servo angle
 
-// ================= 舵机引脚与状态 =================
-const int SERVO_PIN = 42; // 舵机信号引脚
-int servoAngle = 90;      // 舵机初始角度
+// ================= Motor Control Functions =================
 
-// ================= 电机控制函数 =================
-
-// 设置左右电机的 PWM 速度 (0-255)
+// Set PWM speeds for left and right motors (0-255)
 void setMotor(int leftSpeed, int rightSpeed) {
-  ledcWrite(MOTOR_AEN, leftSpeed);  // 写入左轮 PWM 值
-  ledcWrite(MOTOR_BEN, rightSpeed); // 写入右轮 PWM 值
+  ledcWrite(MOTOR_AEN, leftSpeed);  // Write left wheel PWM value
+  ledcWrite(MOTOR_BEN, rightSpeed); // Write right wheel PWM value
 }
 
-// 前进
+// Forward
 void forward(int leftSpeed, int rightSpeed) {
-  digitalWrite(MOTOR_AIN, HIGH); // 左轮正转
-  digitalWrite(MOTOR_BIN, HIGH); // 右轮正转
+  digitalWrite(MOTOR_AIN, HIGH); // Left wheel forward
+  digitalWrite(MOTOR_BIN, HIGH); // Right wheel forward
   setMotor(leftSpeed, rightSpeed);
 }
 
-// 后退
+// Backward
 void back(int leftSpeed, int rightSpeed) {
-  digitalWrite(MOTOR_AIN, LOW);  // 左轮反转
-  digitalWrite(MOTOR_BIN, LOW);  // 右轮反转
+  digitalWrite(MOTOR_AIN, LOW);  // Left wheel reverse
+  digitalWrite(MOTOR_BIN, LOW);  // Right wheel reverse
   setMotor(leftSpeed, rightSpeed);
 }
 
-// 左转 (左轮停止，右轮前进)
+// Turn left (left wheel stop, right wheel forward)
 void left(int leftSpeed, int rightSpeed) {
-  digitalWrite(MOTOR_AIN, LOW);  // 左轮停止
-  digitalWrite(MOTOR_BIN, HIGH); // 右轮正转
+  digitalWrite(MOTOR_AIN, LOW);  // Left wheel stop
+  digitalWrite(MOTOR_BIN, HIGH); // Right wheel forward
   setMotor(leftSpeed, rightSpeed);
 }
 
-// 右转 (左轮前进，右轮停止)
+// Turn right (left wheel forward, right wheel stop)
 void right(int leftSpeed, int rightSpeed) {
-  digitalWrite(MOTOR_AIN, HIGH); // 左轮正转
-  digitalWrite(MOTOR_BIN, LOW);  // 右轮停止
+  digitalWrite(MOTOR_AIN, HIGH); // Left wheel forward
+  digitalWrite(MOTOR_BIN, LOW);  // Right wheel stop
   setMotor(leftSpeed, rightSpeed);
 }
 
-// 停止电机
-void stopMotor() {
-  setMotor(0, 0); // 速度设为 0
+// Stop motors
+void stop_Motor() {
+  setMotor(0, 0); // Set speed to 0
 }
 
-// ================= 传感器与外设函数 =================
+// ================= Sensor and Peripheral Functions =================
 
-// 读取超声波距离 (单位：厘米)
+// Read ultrasonic distance (unit: cm)
 long readDistance() {
   digitalWrite(TRIG_PIN, LOW);
   delayMicroseconds(2);
   digitalWrite(TRIG_PIN, HIGH);
-  delayMicroseconds(10); // 发送 10 微秒的高电平脉冲
+  delayMicroseconds(10); // Send 10-microsecond high pulse
   digitalWrite(TRIG_PIN, LOW);
   
-  // 读取高电平持续时间，超时时间设为 30000 微秒
+  // Read high level duration, timeout set to 30000 microseconds
   long duration = pulseIn(ECHO_PIN, HIGH, 30000); 
-  // 距离 = (时间 * 声速) / 2，声速约为 0.034 cm/us
+  // Distance = (time * speed of sound) / 2, speed of sound is approximately 0.034 cm/us
   return duration * 0.034 / 2; 
 }
 
-// ================= Web 服务器请求处理 =================
+// ================= Web Server Request Handling =================
 
-// 处理控制指令
+// Handle control commands
 void handleCmd() {
-  // 获取 URL 参数中的 "move" 值
+  // Get the "move" value from URL parameters
   String moveCommand = server.arg("move");
 
-  // 根据指令执行对应动作
+  // Execute corresponding action based on command
   if (moveCommand == "forward") {
     forward(200, 200);
   } 
@@ -104,93 +103,93 @@ void handleCmd() {
     right(200, 200);
   } 
   else if (moveCommand == "stop") {
-    stopMotor();
-    myServo.write(90); // 停止时舵机回中
+    stop_Motor();
+    myServo.write(90); // Center servo when stopped
   } 
   else if (moveCommand == "servo_plus") {
-    // 舵机角度增加 (此处简化为直接转到最大角度)
+    // Increase servo angle (simplified here to go directly to max angle)
     // servoAngle = min(180, servoAngle + 5);
     // myServo.write(servoAngle);
     myServo.write(180);
   } 
   else if (moveCommand == "servo_minus") {
-    // 舵机角度减小 (此处简化为直接转到最小角度)
+    // Decrease servo angle (simplified here to go directly to min angle)
     // servoAngle = max(0, servoAngle - 5);
     // myServo.write(servoAngle);
     myServo.write(0);
   } 
   else if (moveCommand == "claw_open") {
-    myServo.write(0);   // 机械爪张开
+    myServo.write(0);   // Open mechanical claw
     servoAngle = 0;
   } 
   else if (moveCommand == "claw_close") {
-    myServo.write(180); // 机械爪闭合
+    myServo.write(180); // Close mechanical claw
     servoAngle = 90;
   }
 
-  // 向客户端返回成功响应
+  // Return success response to client
   server.send(200, "text/plain", "OK");
 }
 
-// ================= 初始化设置 =================
+// ================= Initialization Setup =================
 void setup() {
-  // 初始化串口，波特率 115200
+  // Initialize serial monitor, baud rate 115200
   Serial.begin(115200);
 
-  // 设置电机方向引脚为输出模式
+  // Set motor direction pins as output mode
   pinMode(MOTOR_AIN, OUTPUT);
   pinMode(MOTOR_BIN, OUTPUT);
 
-  // 配置 PWM 通道 (ESP32 Arduino Core 3.x 语法)
-  // 参数：引脚, 频率(1000Hz), 分辨率(8位，即0-255)
+  // Configure PWM channels (ESP32 Arduino Core 3.x syntax)
+  // Parameters: pin, frequency (1000Hz), resolution (8-bit, i.e., 0-255)
   ledcAttach(MOTOR_AEN, 1000, 8);
   ledcAttach(MOTOR_BEN, 1000, 8);
 
-  // 设置超声波引脚模式
+  // Set ultrasonic pin modes
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
 
-  // 初始化舵机
+  // Initialize servo
   myServo.attach(SERVO_PIN);
-  myServo.write(servoAngle); // 设置初始角度
+  myServo.write(servoAngle); // Set initial angle
 
-  // 开始连接 WiFi
-  Serial.print("正在连接 WiFi: ");
+  // Start connecting to WiFi
+  Serial.print("Connecting to WiFi: ");
   Serial.println(ssid);
   WiFi.begin(ssid, password);
   
-  // 等待 WiFi 连接成功
+  // Wait for WiFi connection to succeed
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
 
   Serial.println();
-  Serial.println("WiFi 连接成功！");
-  Serial.print("IP 地址：");
-  Serial.println(WiFi.localIP()); // 打印分配到的 IP 地址
+  Serial.println("WiFi connected successfully!");
+  Serial.print("IP Address: ");
+  Serial.println(WiFi.localIP()); // Print assigned IP address
 
-  // 配置 Web 服务器路由
-  // 访问根路径 "/" 时，发送网页 HTML 内容
+  // Configure Web server routes
+  // When accessing root path "/", send webpage HTML content
   server.on("/", []() {
     server.send_P(200, "text/html; charset=UTF-8", index_html);
   });
   
-  // 访问 "/cmd" 路径时，调用 handleCmd 函数处理指令
+  // When accessing "/cmd" path, call handleCmd function to process commands
   server.on("/cmd", handleCmd);
   
-  // 访问 "/distance" 路径时，返回超声波测距数据
+  // When accessing "/distance" path, return ultrasonic ranging data
   server.on("/distance", []() {
     server.send(200, "text/plain", String(readDistance()));
   });
 
-  // 启动 Web 服务器
+  // Start Web server
   server.begin();
-  Serial.println("Web 服务器已启动！");
+  Serial.println("Web server started!");
 }
 
-// ================= 主循环 =================
+// ================= Main Loop =================
 void loop() {
-  // 持续处理客户端请求
+  // Continuously handle client requests
   server.handleClient();
 }

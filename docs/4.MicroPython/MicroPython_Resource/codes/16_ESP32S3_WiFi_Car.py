@@ -1,206 +1,206 @@
-# ==================== 导入模块 ====================
-# 导入网络模块，用来连接 Wi-Fi
+# ==================== Import Modules ====================
+# Import the network module to connect to Wi-Fi
 import network          
-# 导入套接字模块，用来创建 HTTP 服务器（也就是微型网站）
+# Import the socket module to create an HTTP server (i.e., a tiny website)
 import socket           
-# 导入时间模块，用来让程序暂停一下（延时）
+# Import the time module to pause the program (delay)
 import time             
-# 从我们自己的 ESP32S3_4WD_Car 文件中，导入小车控制类和网页代码
+# Import the car control class and webpage code from our own ESP32S3_4WD_Car file
 from ESP32S3_4WD_Car import Keyes_ESP32S3_4WD, INDEX_HTML
-#from webpage import INDEX_HTML               # 从 webpage.py 导入网页内容（这行被注释掉了，暂时不用）
+#from webpage import INDEX_HTML               # Import webpage content from webpage.py (this line is commented out and not used for now)
 
-# 创建一个“小车”对象，相当于给小车起个名字叫 car，以后用 car 就能控制它
+# Create a "car" object, equivalent to naming the car 'car', which will be used to control it from now on
 car = Keyes_ESP32S3_4WD()
 
-# ==================== WiFi 配置 ====================
-# 把你要连接的 WiFi 名字填在这里，比如 "FKS0008"
+# ==================== WiFi Configuration ====================
+# Fill in the name of the WiFi you want to connect to, e.g., "FKS0008"
 SSID = "FKS0008"         
-# 把你要连接的 WiFi 密码填在这里，比如 "88888888"
+# Fill in the password of the WiFi you want to connect to, e.g., "88888888"
 PASSWORD = "88888888"   
 
-# ==================== 电机引脚定义 ====================
-# 定义左轮方向控制连接的接口编号是 40
+# ==================== Motor Pin Definitions ====================
+# Define the interface number connected to the left wheel direction control as 40
 MOTOR_AIN = 40          
-# 定义左轮速度控制连接的接口编号是 41
+# Define the interface number connected to the left wheel speed control as 41
 MOTOR_AEN = 41          
-# 定义右轮方向控制连接的接口编号是 38
+# Define the interface number connected to the right wheel direction control as 38
 MOTOR_BIN = 38          
-# 定义右轮速度控制连接的接口编号是 21
+# Define the interface number connected to the right wheel speed control as 21
 MOTOR_BEN = 21          
 
-# 把上面定义的 4 个接口编号告诉小车，初始化电机
+# Tell the car the 4 interface numbers defined above to initialize the motors
 car.Motor_init(MOTOR_AIN,MOTOR_AEN,MOTOR_BIN,MOTOR_BEN)
 
-# 速度参数：设置小车的基础行驶速度，范围是 0 到 255，这里设为 220
+# Speed parameter: set the base driving speed of the car, ranging from 0 to 255, set to 220 here
 BASE_SPEED = 220  
 
-# ==================== 超声波引脚定义 ====================
-# 定义超声波发送信号连接的接口编号是 13
+# ==================== Ultrasonic Pin Definitions ====================
+# Define the interface number connected to the ultrasonic trigger signal as 13
 TRIG_PIN = 13           
-# 定义超声波接收信号连接的接口编号是 12
+# Define the interface number connected to the ultrasonic echo signal as 12
 ECHO_PIN = 12           
 
-# 把超声波的接口编号告诉小车，初始化超声波模块
+# Tell the car the ultrasonic interface numbers to initialize the ultrasonic module
 car.Ultrasonic_init(TRIG_PIN,ECHO_PIN)
 
-# ==================== 舵机引脚与状态 ====================
-# 定义舵机信号线连接的接口编号是 42
+# ==================== Servo Pin and State ====================
+# Define the interface number connected to the servo signal line as 42
 SERVO_PIN = 42          
 
-# 把舵机的接口编号告诉小车，初始化舵机
+# Tell the car the servo interface number to initialize the servo
 car.Servo_init(SERVO_PIN)
 
-# ==================== 指令处理函数 ====================
-# 定义一个“处理指令”的函数，根据收到的 move（动作）参数执行对应动作
+# ==================== Command Handling Function ====================
+# Define a "handle command" function to execute corresponding actions based on the received move parameter
 def handle_cmd(move):
-    """根据 move 参数执行对应动作"""
-    # 如果收到的指令是 "forward"（前进）
+    """Execute corresponding actions based on the move parameter"""
+    # If the received command is "forward"
     if move == "forward":
-        # 让小车以 200 的速度前进
+        # Make the car move forward at a speed of 200, 200
         car.forward(200, 200)
-    # 如果收到的指令是 "backward"（后退）
+    # If the received command is "backward"
     elif move == "backward":
-        # 让小车以 200 的速度后退
+        # Make the car move backward at a speed of 200, 200
         car.back(200, 200)
-    # 如果收到的指令是 "left"（左转）
+    # If the received command is "left"
     elif move == "left":
-        # 让小车以 200 的速度左转
+        # Make the car turn left at a speed of 200, 200
         car.left(200, 200)
-    # 如果收到的指令是 "right"（右转）
+    # If the received command is "right"
     elif move == "right":
-        # 让小车以 200 的速度右转
+        # Make the car turn right at a speed of 200, 200
         car.right(200, 200)
-    # 如果收到的指令是 "stop"（停止）
+    # If the received command is "stop"
     elif move == "stop":
-        # 让小车停止电机转动
+        # Stop the motor rotation
         car.stop_motor()
-        # 停止时让舵机回到 90 度的中间位置
+        # Return the servo to the 90-degree middle position when stopping
         car.Servo_set_angle(90)                      
-    # 如果收到的指令是 "servo_plus"（舵机角度增加）
+    # If the received command is "servo_plus" (increase servo angle)
     elif move == "servo_plus":
-        # 让舵机转到 180 度的最大角度
+        # Turn the servo to the maximum angle of 180 degrees
         car.Servo_set_angle(180)                     
-    # 如果收到的指令是 "servo_minus"（舵机角度减小）
+    # If the received command is "servo_minus" (decrease servo angle)
     elif move == "servo_minus":
-        # 让舵机转到 0 度的最小角度
+        # Turn the servo to the minimum angle of 0 degrees
         car.Servo_set_angle(0)                       
-    # 如果收到的指令是 "claw_open"（机械爪张开）
+    # If the received command is "claw_open" (open mechanical claw)
     elif move == "claw_open":
-        # 让舵机转到 0 度，使机械爪张开
+        # Turn the servo to 0 degrees to open the mechanical claw
         car.Servo_set_angle(0)                       
-    # 如果收到的指令是 "claw_close"（机械爪闭合）
+    # If the received command is "claw_close" (close mechanical claw)
     elif move == "claw_close":
-        # 让舵机转到 180 度，使机械爪闭合
+        # Turn the servo to 180 degrees to close the mechanical claw
         car.Servo_set_angle(180)                     
 
-# ==================== 连接 WiFi ====================
-# 创建一个 Wi-Fi 站点（STA）接口，意思是让开发板作为设备去连接路由器
+# ==================== Connect to WiFi ====================
+# Create a Wi-Fi Station (STA) interface, meaning the development board acts as a device to connect to a router
 wlan = network.WLAN(network.STA_IF)              
-# 激活这个 Wi-Fi 接口，让它开始工作
+# Activate this Wi-Fi interface to make it work
 wlan.active(True)                                
-# 在屏幕上打印提示文字，告诉用户正在连接哪个 WiFi
-print("正在连接 WiFi:", SSID)
-# 使用前面定义的名字和密码去连接 WiFi
+# Print a prompt message on the screen telling the user which WiFi is being connected to
+print("Connecting to WiFi:", SSID)
+# Connect to WiFi using the name and password defined earlier
 wlan.connect(SSID, PASSWORD)                     
-# 只要还没连接成功，就一直循环等待
+# Keep looping and waiting as long as it is not successfully connected
 while not wlan.isconnected():                    
-    # 每次暂停 0.5 秒，避免程序跑得太快卡死
+    # Pause for 0.5 seconds each time to prevent the program from running too fast and freezing
     time.sleep(0.5)
-    # 在屏幕上打印一个点，表示正在努力连接中
+    # Print a dot on the screen indicating that it is trying hard to connect
     print(".", end="")
 
-# 换行，让后面的文字显示在下一行
+# Print a newline so that subsequent text appears on the next line
 print()
-# 打印连接成功的提示
-print("WiFi 连接成功！")
-# 打印开发板获取到的 IP 地址（也就是它在网络中的门牌号）
-print("IP 地址：", wlan.ifconfig()[0])
+# Print a prompt that connection was successful
+print("WiFi connected successfully!")
+# Print the IP address acquired by the development board (its house number in the network)
+print("IP address:", wlan.ifconfig()[0])
 
-# ==================== 启动 HTTP 服务器 ====================
-# 创建一个网络套接字（相当于建立一个通信通道），使用 IPv4 和 TCP 协议
+# ==================== Start HTTP Server ====================
+# Create a network socket (equivalent to establishing a communication channel) using IPv4 and TCP protocols
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# 设置套接字选项，允许地址重用，防止重启程序时报错
+# Set socket options to allow address reuse and prevent errors when restarting the program
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-# 把套接字绑定到 80 端口（80 是网页默认的端口号）
+# Bind the socket to port 80 (80 is the default port number for web pages)
 s.bind(('', 80))                                 
-# 开始监听，最多允许 5 个设备同时连接
+# Start listening, allowing a maximum of 5 devices to connect simultaneously
 s.listen(5)                                      
-# 打印提示，告诉用户网页服务器已经准备好了
-print("Web 服务器已启动！")
+# Print a prompt telling the user that the web server is ready
+print("Web server started!")
 
-# ==================== 主循环 ====================
-# 这是一个无限循环，让服务器一直运行，不断等待手机发来的请求
+# ==================== Main Loop ====================
+# This is an infinite loop that keeps the server running and constantly waiting for requests from phones
 while True:
     try:
-        # 等待手机连接，一旦连上，就获取连接对象 conn 和手机地址 addr
+        # Wait for a phone connection; once connected, get the connection object conn and the phone address addr
         conn, addr = s.accept()                              
-        # 从连接中读取手机发来的数据（最多 1024 字节），并转换成文字
+        # Read data sent by the phone from the connection (up to 1024 bytes) and decode it into text
         request = conn.recv(1024).decode('utf-8')            
 
-        # 解析请求的第一行，比如：GET /cmd?move=forward HTTP/1.1
+        # Parse the first line of the request, e.g.: GET /cmd?move=forward HTTP/1.1
         first_line = request.split('\r\n')[0]
-        # 把第一行按空格拆开，分成几个部分
+        # Split the first line by spaces into multiple parts
         parts = first_line.split(' ')
-        # 提取出请求的路径（比如 "/" 或 "/cmd?move=forward"）
+        # Extract the requested path (e.g., "/" or "/cmd?move=forward")
         path = parts[1] if len(parts) >= 2 else "/"
 
-        # 路由判断：如果请求的是根路径（首页）
+        # Route matching: If the requested path is the root path (homepage)
         if path == "/" or path == "/index.html":
-            # 组装一个包含网页内容（INDEX_HTML）的 HTTP 响应
+            # Assemble an HTTP response containing the webpage content (INDEX_HTML)
             response = ('HTTP/1.1 200 OK\r\n'
                         'Content-Type: text/html; charset=UTF-8\r\n'
                         'Connection: close\r\n\r\n' + INDEX_HTML)
-            # 把响应转换成编码后发送给手机
+            # Encode the response and send it to the phone
             conn.send(response.encode('utf-8'))
 
-        # 路由判断：如果请求的是控制指令路径（以 /cmd 开头）
+        # Route matching: If the requested path is a control command path (starting with /cmd)
         elif path.startswith("/cmd"):
-            # 初始化一个空的 move 变量，用来存放动作指令
+            # Initialize an empty move variable to store the action command
             move = ""
-            # 如果路径里包含问号（说明带有参数）
+            # If the path contains a question mark (indicating parameters are attached)
             if "?" in path:
-                # 把问号后面的参数部分提取出来
+                # Extract the parameter part after the question mark
                 query = path.split("?", 1)[1]
-                # 把参数按 & 符号拆开，逐个检查
+                # Split parameters by the & symbol and check them one by one
                 for param in query.split("&"):
-                    # 如果参数是以 "move=" 开头的
+                    # If the parameter starts with "move="
                     if param.startswith("move="):
-                        # 把 "move=" 后面的具体动作（比如 forward）提取出来
+                        # Extract the specific action (e.g., forward) after "move="
                         move = param.split("=", 1)[1]
-            # 调用前面定义的函数，执行提取到的动作
+            # Call the function defined earlier to execute the extracted action
             handle_cmd(move)
-            # 组装一个成功的文本响应，告诉手机指令已执行
+            # Assemble a successful text response telling the phone that the command has been executed
             response = ('HTTP/1.1 200 OK\r\n'
                         'Content-Type: text/plain\r\n'
                         'Connection: close\r\n\r\nOK')
-            # 把响应发送给手机
+            # Send the response to the phone
             conn.send(response.encode('utf-8'))
 
-        # 路由判断：如果请求的是测距路径（/distance）
+        # Route matching: If the requested path is the distance measurement path (/distance)
         elif path == "/distance":
-            # 调用超声波模块测量距离，并把结果存到 dist 变量里
+            # Call the ultrasonic module to measure distance and store the result in the dist variable
             dist = car.Ultrasonic_measure_distance()
-            # 组装一个包含距离数据的文本响应
+            # Assemble a text response containing the distance data
             response = ('HTTP/1.1 200 OK\r\n'
                         'Content-Type: text/plain\r\n'
                         'Connection: close\r\n\r\n' + str(dist))
-            # 把响应发送给手机
+            # Send the response to the phone
             conn.send(response.encode('utf-8'))
 
-        # 路由判断：如果请求的是其他不认识的路径
+        # Route matching: If any other unrecognized path is requested
         else:
-            # 组装一个 404 找不到的错误响应
+            # Assemble a 404 Not Found error response
             response = ('HTTP/1.1 404 Not Found\r\n'
                         'Content-Type: text/plain\r\n'
                         'Connection: close\r\n\r\nNot Found')
-            # 把错误响应发送给手机
+            # Send the error response to the phone
             conn.send(response.encode('utf-8'))
 
-    # 如果上面执行过程中出了任何错误，就捕获它
+    # Catch any errors that occur during the above execution process
     except Exception as e:
-        # 在屏幕上打印出错误信息，方便我们排查
+        # Print the error message on the screen for troubleshooting
         print("Error:", e)
-    # 无论成功还是失败，最后都要执行这一步
+    # Execute this step finally, regardless of success or failure
     finally:
-        # 关闭这次连接，释放资源，准备迎接下一次连接
+        # Close this connection, release resources, and get ready for the next connection
         conn.close()

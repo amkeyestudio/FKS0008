@@ -1,76 +1,76 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <ESP32Servo.h>
-#include "webpage.h" // 引入外部网页 HTML 代码文件
+#include "webpage.h" // Include external webpage HTML code file
 
-// ================= WiFi 配置 =================
-const char* ssid = "FKS0008";         // 替换为你的 WiFi 名称
-const char* password = "88888888";   // 替换为你的 WiFi 密码
+// ================= WiFi Configuration =================
+const char* ssid = "FKS0008";         // Replace with your WiFi name
+const char* password = "88888888";   // Replace with your WiFi password
 
-// ================= 全局对象 =================
-WebServer server(80); // 创建 Web 服务器实例，监听 80 端口
-Servo myServo;        // 创建舵机对象
+// ================= Global Objects =================
+WebServer server(80); // Create Web server instance, listening on port 80
+Servo myServo;        // Create servo object
 
-// ================= 电机引脚定义 =================
-#define MOTOR_AIN 40  // A路方向控制 (左轮)
-#define MOTOR_AEN 41  // A路 PWM 控制 (左轮速度)
-#define MOTOR_BIN 38  // B路方向控制 (右轮)
-#define MOTOR_BEN 21  // B路 PWM 控制 (右轮速度)
+// ================= Motor Pin Definitions =================
+#define MOTOR_AIN 40  // Motor A direction control (left wheel)
+#define MOTOR_AEN 41  // Motor A PWM control (left wheel speed)
+#define MOTOR_BIN 38  // Motor B direction control (right wheel)
+#define MOTOR_BEN 21  // Motor B PWM control (right wheel speed)
 
-// ================= 舵机引脚与状态 =================
-const int SERVO_PIN = 11; // 舵机信号引脚
-int servoAngle = 140;      // 舵机初始角度
+// ================= Servo Pin and State =================
+const int SERVO_PIN = 11; // Servo signal pin
+int servoAngle = 140;      // Initial servo angle (open state)
 
-// ================= 电机控制函数 =================
+// ================= Motor Control Functions =================
 
-// 设置左右电机的 PWM 速度 (0-255)
+// Set PWM speed for left and right motors (0-255)
 void setMotor(int leftSpeed, int rightSpeed) {
-  ledcWrite(MOTOR_AEN, leftSpeed);  // 写入左轮 PWM 值
-  ledcWrite(MOTOR_BEN, rightSpeed); // 写入右轮 PWM 值
+  ledcWrite(MOTOR_AEN, leftSpeed);  // Write left wheel PWM value
+  ledcWrite(MOTOR_BEN, rightSpeed); // Write right wheel PWM value
 }
 
-// 前进
+// Move forward
 void forward(int leftSpeed, int rightSpeed) {
-  digitalWrite(MOTOR_AIN, HIGH); // 左轮正转
-  digitalWrite(MOTOR_BIN, HIGH); // 右轮正转
+  digitalWrite(MOTOR_AIN, HIGH); // Left wheel forward
+  digitalWrite(MOTOR_BIN, HIGH); // Right wheel forward
   setMotor(leftSpeed, rightSpeed);
 }
 
-// 后退
+// Move backward
 void back(int leftSpeed, int rightSpeed) {
-  digitalWrite(MOTOR_AIN, LOW);  // 左轮反转
-  digitalWrite(MOTOR_BIN, LOW);  // 右轮反转
+  digitalWrite(MOTOR_AIN, LOW);  // Left wheel reverse
+  digitalWrite(MOTOR_BIN, LOW);  // Right wheel reverse
   setMotor(leftSpeed, rightSpeed);
 }
 
-// 左转 (左轮停止，右轮前进)
+// Turn left (left wheel stops, right wheel moves forward)
 void left(int leftSpeed, int rightSpeed) {
-  digitalWrite(MOTOR_AIN, LOW);  // 左轮停止
-  digitalWrite(MOTOR_BIN, HIGH); // 右轮正转
+  digitalWrite(MOTOR_AIN, LOW);  // Left wheel stop
+  digitalWrite(MOTOR_BIN, HIGH); // Right wheel forward
   setMotor(leftSpeed, rightSpeed);
 }
 
-// 右转 (左轮前进，右轮停止)
+// Turn right (left wheel moves forward, right wheel stops)
 void right(int leftSpeed, int rightSpeed) {
-  digitalWrite(MOTOR_AIN, HIGH); // 左轮正转
-  digitalWrite(MOTOR_BIN, LOW);  // 右轮停止
+  digitalWrite(MOTOR_AIN, HIGH); // Left wheel forward
+  digitalWrite(MOTOR_BIN, LOW);  // Right wheel stop
   setMotor(leftSpeed, rightSpeed);
 }
 
-// 停止电机
+// Stop motors
 void stop_Motor() {
-  setMotor(0, 0); // 速度设为 0
+  setMotor(0, 0); // Set speed to 0
 }
 
 
-// ================= Web 服务器请求处理 =================
+// ================= Web Server Request Handling =================
 
-// 处理控制指令
+// Handle control commands
 void handleCmd() {
-  // 获取 URL 参数中的 "move" 值
+  // Get the "move" value from URL parameters
   String moveCommand = server.arg("move");
 
-  // 根据指令执行对应动作
+  // Execute corresponding actions based on commands
   if (moveCommand == "forward") {
     forward(200, 200);
   } 
@@ -87,71 +87,71 @@ void handleCmd() {
     stop_Motor();
   } 
   else if (moveCommand == "claw_open") {
-    myServo.write(140);   // 机械爪张开
+    myServo.write(140);   // Mechanical claw opens (prepare to catch ball or reset)
   } 
   else if (moveCommand == "claw_close") {
-    myServo.write(90); // 机械爪闭合
+    myServo.write(90);    // Mechanical claw closes (squeeze soccer ball, trigger shooting action)
   }
 
-  // 向客户端返回成功响应
+  // Return success response to client
   server.send(200, "text/plain", "OK");
 }
 
-// ================= 初始化设置 =================
+// ================= Initialization Setup =================
 void setup() {
-  // 初始化串口，波特率 115200
+  // Initialize serial monitor with baud rate 115200
   Serial.begin(115200);
 
-  // 设置电机方向引脚为输出模式
+  // Set motor direction pins as output mode
   pinMode(MOTOR_AIN, OUTPUT);
   pinMode(MOTOR_BIN, OUTPUT);
 
-  // 配置 PWM 通道 (ESP32 Arduino Core 3.x 语法)
-  // 参数：引脚, 频率(1000Hz), 分辨率(8位，即0-255)
+  // Configure PWM channels (ESP32 Arduino Core 3.x syntax)
+  // Parameters: pin, frequency (1000Hz), resolution (8-bit, i.e., 0-255)
   ledcAttach(MOTOR_AEN, 1000, 8);
   ledcAttach(MOTOR_BEN, 1000, 8);
 
-  // 初始化舵机
+  // Initialize servo
   myServo.attach(SERVO_PIN);
-  myServo.write(servoAngle); // 设置初始角度
+  myServo.write(servoAngle); // Set initial angle to ensure claw is open upon power-on
 
-  // 开始连接 WiFi
-  Serial.print("正在连接 WiFi: ");
+  // Start connecting to WiFi
+  Serial.print("Connecting to WiFi: ");
   Serial.println(ssid);
   WiFi.begin(ssid, password);
   
-  // 等待 WiFi 连接成功
+  // Wait for WiFi connection to succeed
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
 
   Serial.println();
-  Serial.println("WiFi 连接成功！");
-  Serial.print("IP 地址：");
-  Serial.println(WiFi.localIP()); // 打印分配到的 IP 地址
+  Serial.println("WiFi connected successfully!");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP()); // Print assigned IP address for webpage access
 
-  // 配置 Web 服务器路由
-  // 访问根路径 "/" 时，发送网页 HTML 内容
+  // Configure Web server routes
+  // When accessing root path "/", send webpage HTML content
   server.on("/", []() {
     server.send_P(200, "text/html; charset=UTF-8", index_html);
   });
   
-  // 访问 "/cmd" 路径时，调用 handleCmd 函数处理指令
+  // When accessing "/cmd" path, call handleCmd function to process commands
   server.on("/cmd", handleCmd);
   
-  // 访问 "/distance" 路径时，返回超声波测距数据
+  // When accessing "/distance" path, return ultrasonic ranging data (reserved interface here, returns 0 by default)
   server.on("/distance", []() {
     server.send(200, "text/plain", String(0));
   });
 
-  // 启动 Web 服务器
+  // Start Web server
   server.begin();
-  Serial.println("Web 服务器已启动！");
+  Serial.println("Web server started!");
 }
 
-// ================= 主循环 =================
+// ================= Main Loop =================
 void loop() {
-  // 持续处理客户端请求
+  // Continuously handle client requests
   server.handleClient();
 }

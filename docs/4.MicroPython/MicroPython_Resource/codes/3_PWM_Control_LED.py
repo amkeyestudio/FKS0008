@@ -1,35 +1,35 @@
-# 从 machine 模块导入 Pin 和 PWM 类，Pin 用于指定引脚，PWM 用于输出可调亮度的脉冲
+# Import the Pin and PWM classes from the machine module; Pin is used to specify pins, and PWM is used to output adjustable-brightness pulses
 from machine import Pin, PWM
-# 导入 time 模块，用于控制呼吸灯的延时速度
+# Import the time module to control the delay speed of the breathing light
 import time
 
-# 创建 PWM 对象，使用 GPIO11，频率设置为 1000Hz（频率越高，LED 闪烁感越小）
+# Create a PWM object using GPIO11, with the frequency set to 1000Hz (higher frequency reduces LED flicker perception)
 led = PWM(Pin(11), freq=1000)
-# 将占空比设置为 0，初始状态为熄灭（占空比范围 0~65535，0 最暗，65535 最亮）
+# Set the duty cycle to 0, starting in the off state (duty cycle range is 0~65535, where 0 is darkest and 65535 is brightest)
 led.duty_u16(0)
 
-# 无限循环，让呼吸灯持续运行
+# Infinite loop to keep the breathing light running continuously
 while True:
-    # 渐亮循环：占空比从 0 开始，每次增加 256，直到接近 65535
+    # Brightening loop: Duty cycle starts from 0, increasing by 256 each time until close to 65535
     for duty in range(0, 65536, 256):
-        # 将当前占空比写入 PWM，控制 LED 亮度
+        # Write the current duty cycle to PWM to control LED brightness
         led.duty_u16(duty)
-        # 延时 5 毫秒，数值越大呼吸越慢，数值越小呼吸越快
+        # Delay for 5 milliseconds; larger values make the breathing slower, smaller values make it faster
         time.sleep_ms(5)
 
-    # 确保达到最大亮度 65535
+    # Ensure the maximum brightness of 65535 is reached
     led.duty_u16(65535)
-    # 全亮状态保持 200 毫秒
+    # Maintain full brightness state for 200 milliseconds
     time.sleep_ms(200)
 
-    # 渐灭循环：占空比从 65535 开始，每次减少 256，直到接近 0
+    # Dimming loop: Duty cycle starts from 65535, decreasing by 256 each time until close to 0
     for duty in range(65535, -1, -256):
-        # 将当前占空比写入 PWM，控制 LED 亮度
+        # Write the current duty cycle to PWM to control LED brightness
         led.duty_u16(duty)
-        # 延时 5 毫秒，与渐亮速度保持一致
+        # Delay for 5 milliseconds, keeping the same speed as the brightening phase
         time.sleep_ms(5)
 
-    # 确保达到最小亮度 0，完全熄灭
+    # Ensure the minimum brightness of 0 is reached, completely turning off
     led.duty_u16(0)
-    # 全灭状态保持 200 毫秒
+    # Maintain fully off state for 200 milliseconds
     time.sleep_ms(200)

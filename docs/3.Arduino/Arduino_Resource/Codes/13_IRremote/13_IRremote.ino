@@ -1,32 +1,32 @@
-#include <IRremote.hpp> // 引入 IRremote 红外遥控库
+#include <IRremote.hpp> // Include the IRremote infrared remote control library
 
-// 定义红外接收模块信号引脚连接的 GPIO 编号
+// Define the GPIO number connected to the infrared receiving module signal pin
 #define IR_RECEIVE_PIN 48 
 
 void setup()
 {
-    // 初始化串口通信，设置波特率为 115200
+    // Initialize serial communication and set the baud rate to 115200
     Serial.begin(115200);
-    delay(1000); // 延时 1 秒，等待串口稳定
+    delay(1000); // Delay for 1 second to let the serial port stabilize
 
     Serial.println("ESP32-S3 IR Receiver Start");
-    // 初始化红外接收器，指定引脚并禁用板载 LED 反馈闪烁
+    // Initialize the infrared receiver, specify the pin, and disable onboard LED feedback blinking
     IrReceiver.begin(IR_RECEIVE_PIN, DISABLE_LED_FEEDBACK);
     Serial.println("Waiting IR...");
 }
 
 void loop()
 {
-    // 检查是否成功解码到红外信号
+    // Check if an infrared signal has been successfully decoded
     if (IrReceiver.decode())
     {
         Serial.println("------ IR DATA ------");
         Serial.print("IR Value:");
-        // 以十进制格式打印解码后的命令码
+        // Print the decoded command code in decimal format
         Serial.println(IrReceiver.decodedIRData.command);
         Serial.println("---------------------");
         
-        // 恢复接收状态，清空缓存，准备接收下一个红外信号
+        // Resume receiving state, clear the buffer, and prepare to receive the next infrared signal
         IrReceiver.resume(); 
     }
 }

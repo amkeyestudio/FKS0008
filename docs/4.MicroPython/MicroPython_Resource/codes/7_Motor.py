@@ -1,87 +1,87 @@
-# 从名为 ESP32S3_4WD_Car 的文件（库）中，导入 Keyes_ESP32S3_4WD 这个工具包，它帮我们封装好了控制小车的复杂代码
+# From the file (library) named ESP32S3_4WD_Car, import the Keyes_ESP32S3_4WD toolkit, which encapsulates the complex code for controlling the robot car for us
 from ESP32S3_4WD_Car import Keyes_ESP32S3_4WD
 
-# 导入 time（时间）模块，这样我们就可以让程序“暂停”或“延时”了
+# Import the time module so that we can "pause" or "delay" the program
 import time
 
-# 创建一个名为 car（小车）的对象，相当于把刚才导入的工具包激活，准备控制小车
+# Create an object named car, which is equivalent to activating the imported toolkit to prepare for controlling the car
 car = Keyes_ESP32S3_4WD()
 
-# ================= 引脚定义 =================
-# 下面我们要告诉大脑（开发板），哪根手指（引脚）负责控制哪个动作
+# ================= Pin Definitions =================
+# Next, we tell the brain (development board) which finger (pin) is responsible for which action
 
-# 定义 A路电机的方向控制引脚为 40号引脚（控制左轮正反转）
+# Define the direction control pin for Motor A as pin 40 (controls the forward/reverse rotation of the left wheel)
 MOTOR_AIN = 40  
 
-# 定义 A路电机的速度控制引脚为 41号引脚（控制左轮转速，即PWM引脚）
+# Define the speed control pin for Motor A as pin 41 (controls the speed of the left wheel, i.e., the PWM pin)
 MOTOR_AEN = 41  
 
-# 定义 B路电机的方向控制引脚为 38号引脚（控制右轮正反转）
+# Define the direction control pin for Motor B as pin 38 (controls the forward/reverse rotation of the right wheel)
 MOTOR_BIN = 38  
 
-# 定义 B路电机的速度控制引脚为 21号引脚（控制右轮转速，即PWM引脚）
+# Define the speed control pin for Motor B as pin 21 (controls the speed of the right wheel, i.e., the PWM pin)
 MOTOR_BEN = 21  
 
-# 调用初始化函数，把上面定义的4个引脚号告诉小车程序，让它准备好使用这些引脚
+# Call the initialization function to pass the 4 pin numbers defined above to the car program, preparing it to use these pins
 car.Motor_init(MOTOR_AIN, MOTOR_AEN, MOTOR_BIN, MOTOR_BEN)
 
-# ================= 初始化与主循环 =================
+# ================= Initialization and Main Loop =================
 
-# 刚启动时，先让电机停下来，确保安全第一，防止一上电小车就乱跑
+# When starting up, first make the motors stop to ensure safety first and prevent the car from running around randomly as soon as power is applied
 car.stop_motor()
 
-# 在电脑屏幕上打印一句提示语，告诉我们系统已经准备就绪
-print("电机驱动系统初始化完成，开始运行！")
+# Print a prompt message on the computer screen to tell us that the system is ready
+print("Motor driver system initialization complete, starting operation!")
 
-# 这是一个“死循环”，意思是只要不断电，下面缩进的代码就会一直重复执行
+# This is an "infinite loop", meaning as long as power is not cut off, the indented code below will repeat continuously
 while True:
     
-    # 1. 全速前进 2 秒
-    # 在屏幕上打印“前进”，方便我们观察程序运行到了哪一步
-    print("前进")
+    # 1. Move forward at full speed for 2 seconds
+    # Print "Forward" on the screen so we can observe which step the program is currently running
+    print("Forward")
     
-    # 调用前进函数，两个255代表左右轮都输出最大速度（255是满速）
+    # Call the forward function, where the two 255s represent that both left and right wheels output maximum speed (255 is full speed)
     car.forward(255, 255)
     
-    # 让程序暂停（休息）2秒钟，让小车保持前进状态2秒
+    # Pause (rest) the program for 2 seconds, keeping the car moving forward for 2 seconds
     time.sleep(2)
 
-    # 2. 全速后退 2 秒
-    # 屏幕提示“后退”
-    print("后退")
+    # 2. Move backward at full speed for 2 seconds
+    # Prompt "Backward" on the screen
+    print("Backward")
     
-    # 调用后退函数，左右轮都以最大速度反转
+    # Call the backward function, with both left and right wheels reversing at maximum speed
     car.back(255, 255)
     
-    # 保持后退状态2秒钟
+    # Keep the backward state for 2 seconds
     time.sleep(2)
 
-    # 3. 原地左转 2 秒
-    # 屏幕提示“左转”
-    print("左转")
+    # 3. Turn left in place for 2 seconds
+    # Prompt "Turn Left" on the screen
+    print("Turn Left")
     
-    # 调用左转函数（通常是左轮后退，右轮前进，实现原地打转）
+    # Call the left turn function (usually the left wheel goes backward and the right wheel goes forward to achieve in-place spinning)
     car.left(255, 255)
     
-    # 保持左转状态2秒钟
+    # Keep the left turn state for 2 seconds
     time.sleep(2)
 
-    # 4. 原地右转 2 秒
-    # 屏幕提示“右转”
-    print("右转")
+    # 4. Turn right in place for 2 seconds
+    # Prompt "Turn Right" on the screen
+    print("Turn Right")
     
-    # 调用右转函数（通常是左轮前进，右轮后退）
+    # Call the right turn function (usually the left wheel goes forward and the right wheel goes backward)
     car.right(255, 255)
     
-    # 保持右转状态2秒钟
+    # Keep the right turn state for 2 seconds
     time.sleep(2)
 
-    # 5. 停止 2 秒，准备下一次循环
-    # 屏幕提示“停止”
-    print("停止")
+    # 5. Stop for 2 seconds, preparing for the next cycle
+    # Prompt "Stop" on the screen
+    print("Stop")
     
-    # 调用停止函数，让所有电机断电停止
+    # Call the stop function to cut power to all motors and stop them
     car.stop_motor()
     
-    # 原地休息2秒钟，然后回到 while True 的开头，重新开始下一轮动作
+    # Rest in place for 2 seconds, then return to the beginning of the while True loop to start the next round of actions
     time.sleep(2)

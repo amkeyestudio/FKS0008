@@ -1,15 +1,15 @@
-// 定义蜂鸣器控制引脚为 IO10
+// Define the buzzer control pin as IO10
 const int buzzerPin = 10; 
 
-// 定义音符频率数组（包含低、中、高音）
-// 索引 0-6 为低音，7-13 为中音，14-20 为高音
+// Define the note frequency array (including low, medium, and high pitches)
+// Indices 0-6 are low notes, 7-13 are medium notes, 14-20 are high notes
 int doremi[] = {
-  262, 294, 330, 349, 392, 440, 494,       // 低音 Do 到 Si 
-  523, 587, 659, 698, 784, 880, 988,       // 中音 Do 到 Si
-  1047, 1175, 1319, 1397, 1568, 1760, 1967 // 高音 Do 到 Si
+  262, 294, 330, 349, 392, 440, 494,       // Low Do to Si 
+  523, 587, 659, 698, 784, 880, 988,       // Medium Do to Si
+  1047, 1175, 1319, 1397, 1568, 1760, 1967 // High Do to Si
 };
 
-// 生日快乐歌简谱对应的音符索引（数组中的位置号，从1开始）
+// Note indices corresponding to the numbered musical notation of Happy Birthday (position numbers in the array, starting from 1)
 int happybirthday[] = {
   5, 5, 6, 5, 8, 7, 
   5, 5, 6, 5, 9, 8, 
@@ -17,7 +17,7 @@ int happybirthday[] = {
   11, 11, 10, 8, 9, 8
 };   
 
-// 节拍数组，数值代表相对节拍长度
+// Rhythm array, values represent relative note lengths
 int meter[] = {
   1, 1, 2, 2, 2, 4, 
   1, 1, 2, 2, 2, 4, 
@@ -26,29 +26,29 @@ int meter[] = {
 };    
 
 void setup() {
-  // 设置蜂鸣器引脚为输出模式
+  // Set the buzzer pin to output mode
   pinMode(buzzerPin, OUTPUT); 
 }
 
 void loop() {
-  // 遍历乐谱，数组长度为 25，索引从 0 到 24
+  // Iterate through the score, array length is 25, indices from 0 to 24
   for (int i = 0; i <= 24; i++) {       
-    // 获取当前音符的频率（数组索引需要减1）
+    // Get the frequency of the current note (array index needs to minus 1)
     int frequency = doremi[happybirthday[i] - 1];
     
-    // 使用 tone() 函数发出指定频率的方波信号
+    // Use the tone() function to output a square wave signal of the specified frequency
     tone(buzzerPin, frequency);
     
-    // 根据节拍计算延时时间（基础节拍 200ms）
+    // Calculate the delay time based on the rhythm (base rhythm 200ms)
     delay(meter[i] * 200); 
     
-    // 停止发声，准备播放下一个音符
+    // Stop sound, prepare to play the next note
     noTone(buzzerPin);
     
-    // 音符之间增加极短的停顿，使节奏更清晰
+    // Add a very short pause between notes to make the rhythm clearer
     delay(20); 
   }
   
-  // 整首歌曲播放完毕后，停顿 2 秒再循环
+  // After playing the whole song, pause for 2 seconds before looping
   delay(2000);
 }

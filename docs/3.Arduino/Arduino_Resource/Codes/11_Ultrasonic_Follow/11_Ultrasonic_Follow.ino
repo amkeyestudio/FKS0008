@@ -1,131 +1,134 @@
-// ================= 超声波引脚定义 =================
-const int trigPin = 13;  // 触发引脚连接到 IO13
-const int echoPin = 12;  // 回声引脚连接到 IO12
+// ================= Ultrasonic Pin Definitions =================
+const int trigPin = 13;  // Trigger pin connected to IO13
+const int echoPin = 12;  // Echo pin connected to IO12
 
-// ================= 距离阈值设定 =================
-// 设定距离的“警戒线”（单位：厘米）
-const long safeDistance = 30;   // 定义安全距离上限为 30 厘米。小于此距离停止或后退。
-const long closeDistance = 10;  // 定义危险距离下限为 10 厘米。低于此距离后退。
-const long maxDistance = 50;    // 定义最大跟随距离为 50 厘米。超过此距离小车停止，防止跑丢。
+// ================= Distance Threshold Settings =================
+// Set the "boundary lines" for distances (Unit: cm)
+const long safeDistance = 30;   // Define the upper limit of safe distance as 30 cm. Stop or reverse below this distance.
+const long closeDistance = 10;  // Define the lower limit of danger distance as 10 cm. Reverse below this distance.
+const long maxDistance = 50;    // Define the maximum following distance as 50 cm. Stop the car if it exceeds this distance to prevent it from running away.
 
-// ================= 电机引脚定义 =================
-#define MOTOR_AIN 40  // A路方向控制 (左轮)
-#define MOTOR_AEN 41  // A路 PWM 控制 (左轮速度)
-#define MOTOR_BIN 38  // B路方向控制 (右轮)
-#define MOTOR_BEN 21  // B路 PWM 控制 (右轮速度)
+// ================= Motor Pin Definitions =================
+#define MOTOR_AIN 40  // Path A direction control (Left wheel)
+#define MOTOR_AEN 41  // Path A PWM control (Left wheel speed)
+#define MOTOR_BIN 38  // Path B direction control (Right wheel)
+#define MOTOR_BEN 21  // Path B PWM control (Right wheel speed)
 
-// ================= 初始化函数 =================
+// ================= Initialization Function =================
 void setup() {
-  // 初始化串口通信，波特率设为 115200，这样数据显示更快更流畅
+  // Initialize serial communication with a baud rate of 115200 for faster and smoother data display
   Serial.begin(115200);
-  Serial.println("系统初始化完成，超声波跟随小车启动！");
+  Serial.println("System initialization complete, ultrasonic following car started!");
 
-  // 设置超声波引脚模式
-  pinMode(trigPin, OUTPUT);  // Trig 引脚作为输出，用来发送触发信号
-  pinMode(echoPin, INPUT);   // Echo 引脚作为输入，用来接收回声信号
+  // Set ultrasonic pin modes
+  pinMode(trigPin, OUTPUT);  // Trig pin as output to send trigger signals
+  pinMode(echoPin, INPUT);   // Echo pin as input to receive echo signals
 
-  // 配置电机方向控制引脚为输出模式
+  // Set motor direction pins to output mode
   pinMode(MOTOR_AIN, OUTPUT);
-  pinMode(MOTOR_AEN, OUTPUT);
   pinMode(MOTOR_BIN, OUTPUT);
-  pinMode(MOTOR_BEN, OUTPUT);
+
+  // Configure PWM channels (ESP32 Arduino Core 3.x syntax)
+  // Parameters: pin, frequency (1000Hz), resolution (8-bit, i.e., 0-255)
+  ledcAttach(MOTOR_AEN, 1000, 8);
+  ledcAttach(MOTOR_BEN, 1000, 8);
   
-  // 初始状态确保电机停止
+  // Ensure motors are stopped in the initial state
   stopMotor();
 }
 
-// ================= 主循环函数 =================
+// ================= Main Loop Function =================
 void loop() {
-  // 1. 获取前方距离
-  long distance = getDistance();  // 调用测距函数，把算出来的距离存到变量 distance 中。
+  // 1. Get the front distance
+  long distance = getDistance();  // Call the ranging function and store the calculated distance in the distance variable.
 
-  // 2. 在串口监视器打印距离，方便我们调试和观察。
-  Serial.print("当前距离: ");  // 打印提示文字。
-  Serial.print(distance);      // 打印具体的距离数字。
-  Serial.println(" cm");       // 打印单位 " cm"（厘米），并换行。
+  // 2. Print the distance in the Serial Monitor for debugging and observation.
+  Serial.print("Current Distance: ");  // Print prompt text.
+  Serial.print(distance);              // Print specific distance number.
+  Serial.println(" cm");               // Print unit " cm" (centimeters) and newline.
 
-  // 3. 根据距离控制小车动作（核心逻辑判断）
+  // 3. Control car actions based on distance (core logic judgment)
   if (distance > safeDistance && distance <= maxDistance) {  
-    // 如果测得的距离 大于 30厘米 并且 小于等于 50厘米
-    // 距离合适，追上去！
-    forward(150, 150);  // 调用“前进”函数，左右轮速度设为 150。
+    // If the measured distance is greater than 30 cm AND less than or equal to 50 cm
+    // Distance is appropriate, chase after it!
+    forward(150, 150);  // Call the "forward" function, set left and right wheel speeds to 150.
     
   } else if ((distance >= closeDistance && distance <= safeDistance) || distance > maxDistance) {  
-    // 否则如果 距离在 10厘米 到 30厘米 之间，或者 距离大于 50厘米
-    // 距离刚好保持跟随，或者超出最大范围防止跑丢
-    stopMotor();  // 调用“停止”函数。
+    // Otherwise, if the distance is between 10 cm and 30 cm, OR the distance is greater than 50 cm
+    // Maintain a proper following distance, or exceed the max range to prevent losing track
+    stopMotor();  // Call the "stop" function.
     
   } else if (distance < closeDistance && distance > 0) {  
-    // 否则如果 距离 小于 10厘米 并且 大于 0（排除传感器故障导致的0或负数）
-    // 距离太近，快后退！
-    back(105, 150);  // 调用“后退”函数，左轮105，右轮150（可微调防止跑偏）。
+    // Otherwise, if the distance is less than 10 cm AND greater than 0 (excluding 0 or negative values caused by sensor failures)
+    // Distance is too close, back up quickly!
+    back(105, 150);  // Call the "back" function, left wheel 105, right wheel 150 (can be fine-tuned to prevent veering off course).
   }
 
-  // 稍微延迟（暂停）100毫秒（0.1秒）。
-  // 让动作更平稳，不要一直疯狂发指令，也给传感器一点“喘息”和接收回声的时间。
+  // Slight delay (pause) of 100 milliseconds (0.1 seconds).
+  // Makes movements smoother, prevents spamming commands, and gives the sensor some "breathing room" to receive echoes.
   delay(100);
 }
 
-// ================= 超声波测距函数 =================
+// ================= Ultrasonic Ranging Function =================
 /*
- * 函数目的：将超声波测距的代码封装到函数中，简化主循环代码
- * 函数名：getDistance
- * 函数功能：返回整数的距离值（单位：厘米）
+ * Function Purpose: Encapsulate ultrasonic ranging code into a function to simplify the main loop code
+ * Function Name: getDistance
+ * Function Feature: Returns an integer distance value (Unit: cm)
 */
 int getDistance() {
-  // 定义变量存储时间和距离
-  long duration;  // 声波往返的时间（微秒）
-  int distance;   // 计算出的距离（厘米）
+  // Define variables to store time and distance
+  long duration;  // Round-trip time of sound waves (microseconds)
+  int distance;   // Calculated distance (centimeters)
 
-  // 第一步：确保 Trig 引脚是低电平，准备发射
+  // Step 1: Ensure Trig pin is LOW, preparing to transmit
   digitalWrite(trigPin, LOW);
-  delayMicroseconds(2);  // 等待 2 微秒，确保信号稳定
+  delayMicroseconds(2);  // Wait for 2 microseconds to ensure signal stability
 
-  // 第二步：给 Trig 引脚一个 10 微秒的高电平脉冲，触发传感器发射超声波
+  // Step 2: Give the Trig pin a 10-microsecond HIGH pulse to trigger the sensor to emit ultrasonic waves
   digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
 
-  // 第三步：读取 Echo 引脚的高电平持续时间
-  // pulseIn 函数会等待引脚变高，然后计时，直到引脚变低
+  // Step 3: Read the duration of the HIGH level on the Echo pin
+  // The pulseIn function waits for the pin to go HIGH, then starts timing until the pin goes LOW
   duration = pulseIn(echoPin, HIGH);
 
-  // 第四步：计算距离
-  // 声音在空气中的速度大约是 0.034 厘米/微秒
-  // 距离 = (时间 × 速度) / 2，因为声音走了来回
+  // Step 4: Calculate distance
+  // The speed of sound in air is approximately 0.034 cm/microsecond
+  // Distance = (Time × Speed) / 2, because the sound makes a round trip
   distance = duration * 0.034 / 2;
 
-  // 限制超声波测距范围，因为超过 3米 或者低于 2厘米 就不准了
+  // Limit the ultrasonic ranging range because values beyond 3 meters or below 2 cm are inaccurate
   if (distance < 2 || distance > 300) {
-    distance = 0; // 超出范围视为无效数据，返回 0
+    distance = 0; // Out-of-range values are treated as invalid data, returning 0
   }
   
   return distance;
 }
 
-// ================= 运动控制函数 =================
+// ================= Motor Control Functions =================
 
-// 前进：正转
+// Set PWM speeds for left and right motors (0-255)
+void setMotor(int leftSpeed, int rightSpeed) {
+  ledcWrite(MOTOR_AEN, leftSpeed);  // Write left wheel PWM value
+  ledcWrite(MOTOR_BEN, rightSpeed); // Write right wheel PWM value
+}
+
+// Move Forward
 void forward(int leftSpeed, int rightSpeed) {
-  Serial.println("状态：前进");
-  digitalWrite(MOTOR_AIN, HIGH);  // 左轮方向：正转
-  digitalWrite(MOTOR_BIN, HIGH);  // 右轮方向：正转
-  analogWrite(MOTOR_AEN, leftSpeed);   // 设置左轮速度 (PWM)
-  analogWrite(MOTOR_BEN, rightSpeed);  // 设置右轮速度 (PWM)
+  digitalWrite(MOTOR_AIN, HIGH); // Left wheel forward rotation
+  digitalWrite(MOTOR_BIN, HIGH); // Right wheel forward rotation
+  setMotor(leftSpeed, rightSpeed);
 }
 
-// 后退：反转
+// Move Backward
 void back(int leftSpeed, int rightSpeed) {
-  Serial.println("状态：后退");
-  digitalWrite(MOTOR_AIN, LOW);  // 左轮方向：反转
-  digitalWrite(MOTOR_BIN, LOW);  // 右轮方向：反转
-  analogWrite(MOTOR_AEN, leftSpeed);   // 设置左轮速度 (PWM)
-  analogWrite(MOTOR_BEN, rightSpeed);  // 设置右轮速度 (PWM)
+  digitalWrite(MOTOR_AIN, LOW);  // Left wheel reverse rotation
+  digitalWrite(MOTOR_BIN, LOW);  // Right wheel reverse rotation
+  setMotor(leftSpeed, rightSpeed);
 }
 
-// 停止：关闭 PWM 输出
+// Stop Motors
 void stopMotor() {
-  Serial.println("状态：停止");
-  analogWrite(MOTOR_AEN, 0);  // 左轮速度设为 0
-  analogWrite(MOTOR_BEN, 0);  // 右轮速度设为 0
+  setMotor(0, 0); // Set speeds to 0
 }

@@ -1,43 +1,43 @@
-// 定义蜂鸣器控制引脚为 IO10
+// Define the buzzer control pin as IO10
 const int buzzerPin = 10; 
 
-// 自定义播放音符函数，封装发声、延时、停声逻辑，使代码更简洁
+// Custom function to play notes, encapsulating sound generation, delay, and stop logic to make the code cleaner
 void playNote(int pin, int frequency, int duration) {
-  tone(pin, frequency);       // 以指定频率发声
-  delay(duration);            // 持续指定时间
-  noTone(pin);                // 停止发声
-  delay(50);                  // 音符间的短暂停顿，使声音更清晰
+  tone(pin, frequency);       // Generate sound at the specified frequency
+  delay(duration);            // Sustain for the specified duration
+  noTone(pin);                // Stop sound generation
+  delay(50);                  // Short pause between notes to make the sound clearer
 }
 
 void setup() {
-  // 初始化串口，波特率设置为 115200，用于调试输出
+  // Initialize serial communication with a baud rate of 115200 for debugging output
   Serial.begin(115200);
-  // 设置蜂鸣器引脚为输出模式
+  // Set the buzzer pin to output mode
   pinMode(buzzerPin, OUTPUT);
 }
 
 void loop() {
   Serial.println("Playing Alarm...");
-  // 1. 警报阶段：发出短促、尖锐的“滴-滴-滴”声
+  // 1. Alarm stage: Produce short, sharp "beep-beep-beep" sounds
   for (int i = 0; i < 3; i++) {
-    playNote(buzzerPin, 1000, 200); // 1000Hz 尖锐声音，持续 200ms
-    delay(200);                     // 停顿 200ms
+    playNote(buzzerPin, 1000, 200); // 1000Hz sharp sound, lasting 200ms
+    delay(200);                     // Pause for 200ms
   }
   
-  // 2. 休息阶段
+  // 2. Rest stage
   Serial.println("Resting...");
-  delay(1000); // 安静 1 秒钟
+  delay(1000); // Quiet for 1 second
 
   Serial.println("Playing Scale...");
-  // 3. 音乐阶段：演奏 Do-Re-Mi-Fa-Sol-La-Si 音阶
-  playNote(buzzerPin, 262, 500); // 低 Do
-  playNote(buzzerPin, 294, 500); // 低 Re
-  playNote(buzzerPin, 330, 500); // 低 Mi
-  playNote(buzzerPin, 349, 500); // 低 Fa
-  playNote(buzzerPin, 392, 500); // 低 Sol
-  playNote(buzzerPin, 440, 500); // 低 La
-  playNote(buzzerPin, 494, 500); // 低 Si
+  // 3. Music stage: Play the Do-Re-Mi-Fa-Sol-La-Si scale
+  playNote(buzzerPin, 262, 500); // Low Do
+  playNote(buzzerPin, 294, 500); // Low Re
+  playNote(buzzerPin, 330, 500); // Low Mi
+  playNote(buzzerPin, 349, 500); // Low Fa
+  playNote(buzzerPin, 392, 500); // Low Sol
+  playNote(buzzerPin, 440, 500); // Low La
+  playNote(buzzerPin, 494, 500); // Low Si
   
-  // 4. 循环前的长休息
-  delay(2000); // 安静 2 秒后重新开始
+  // 4. Long rest before looping
+  delay(2000); // Quiet for 2 seconds before restarting
 }

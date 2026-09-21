@@ -1,29 +1,29 @@
-// 定义 LED 连接的引脚号，这里我们用的是 io42
-const int ledPin = 42; 
+// Define the pin number connected to the LED, here we use io11
+const int ledPin = 11; 
 
 void setup() {
-  // 初始化串口通信，波特率设为 9600，方便我们在电脑上看到信息
+  // Initialize serial communication with a baud rate of 9600, making it easy to see messages on the computer
   Serial.begin(9600);
   
-  // 设置 ledPin (io42) 为输出模式，因为它要控制 LED 亮灭
+  // Set ledPin (io42) to output mode because it needs to control the LED on and off
   pinMode(ledPin, OUTPUT);
   
-  // 在串口监视器打印一条消息，告诉我们程序开始运行了
+  // Print a message to the serial monitor to tell us the program has started running
   Serial.println("LED Blink Experiment Started!");
 }
 
 void loop() {
-  // 1. 让 LED 亮起
+  // 1. Turn on the LED
   digitalWrite(ledPin, HIGH); 
-  Serial.println("LED is ON"); // 在电脑屏幕上显示 "LED is ON"
+  Serial.println("LED is ON"); // Display "LED is ON" on the computer screen
   
-  // 2. 等待 1000 毫秒（也就是 1 秒）
+  // 2. Wait for 1000 milliseconds (which is 1 second)
   delay(1000); 
   
-  // 3. 让 LED 熄灭
+  // 3. Turn off the LED
   digitalWrite(ledPin, LOW);  
-  Serial.println("LED is OFF"); // 在电脑屏幕上显示 "LED is OFF"
+  Serial.println("LED is OFF"); // Display "LED is OFF" on the computer screen
   
-  // 4. 再等待 1000 毫秒（1 秒）
+  // 4. Wait for another 1000 milliseconds (1 second)
   delay(1000); 
 }

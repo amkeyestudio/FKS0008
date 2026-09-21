@@ -1,40 +1,40 @@
-# 从厂家提供的“汽车/机器人”工具包里，拿出一个叫 Keyes_ESP32S3_4WD 的“魔法盒”（控制模块）
+# Take out a "magic box" (control module) named Keyes_ESP32S3_4WD from the "Car/Robot" toolkit provided by the manufacturer
 from ESP32S3_4WD_Car import Keyes_ESP32S3_4WD
-# 导入“时间”工具包，因为我们需要让程序“等一等”，控制时间节奏
+# Import the "time" toolkit, because we need the program to "wait" and control the rhythm of time
 import time
 
-# 给舵机的信号线分配一个“门牌号”（引脚号），这里我们选 42 号引脚
+# Assign a "house number" (pin number) to the servo's signal wire. Here we choose pin 42
 SERVO_PIN = 42
 
-# 把刚才拿出的“魔法盒”打开，创建一个叫 servo（舵机）的控制对象
+# Open the "magic box" just taken out and create a control object named servo
 servo = Keyes_ESP32S3_4WD()
 
-# 告诉魔法盒：“请初始化（准备）42号引脚，我们要开始控制舵机啦！”
+# Tell the magic box: "Please initialize (prepare) pin 42, we are going to start controlling the servo!"
 servo.Servo_init(SERVO_PIN)
 
-# 发出第一个指令：让舵机先转到 90 度（正中间位置）
+# Issue the first command: make the servo rotate to 90 degrees (the exact middle position) first
 servo.Servo_set_angle(90)
-# 让程序暂停 1 秒钟，给舵机一点时间慢慢转到 90 度并站稳
+# Pause the program for 1 second, giving the servo a little time to slowly rotate to 90 degrees and stand firmly
 time.sleep(1)
 
-# 开启一个“永远循环”的魔法阵，只要不断电，里面的代码就会一直重复执行
+# Start a magic circle of "infinite loop". As long as the power is not cut off, the code inside will keep repeating execution
 while True:
-    # 第一个阶段：让角度变量 angle 从 0 开始，每次加 1，一直增加到 180（包含180）
+    # First stage: make the angle variable start from 0, add 1 each time, all the way up to 180 (inclusive)
     for angle in range(0, 181, 1):
-        # 把当前的角度值发给舵机，命令它转到这个角度
+        # Send the current angle value to the servo, commanding it to rotate to this angle
         servo.Servo_set_angle(angle)
-        # 每次转动后，暂停 15 毫秒（千分之十五秒），让舵机有时间物理转动，实现平滑效果
+        # After each rotation, pause for 15 milliseconds (15/1000 of a second) to give the servo time to physically rotate for a smooth effect
         time.sleep_ms(15)
 
-    # 到达 180 度后，让舵机在这里休息（停顿） 1 秒钟
+    # After reaching 180 degrees, let the servo rest (pause) here for 1 second
     time.sleep(1)
 
-    # 第二个阶段：让角度变量 angle 从 180 开始，每次减 1，一直减少到 0（包含0）
+    # Second stage: make the angle variable start from 180, subtract 1 each time, all the way down to 0 (inclusive)
     for angle in range(180, -1, -1):
-        # 把当前的角度值发给舵机，命令它反向转到这个角度
+        # Send the current angle value to the servo, commanding it to rotate in reverse to this angle
         servo.Servo_set_angle(angle)
-        # 同样暂停 15 毫秒，保持平滑转动的节奏
+        # Also pause for 15 milliseconds to maintain the smooth rotation rhythm
         time.sleep_ms(15)
 
-    # 回到 0 度后，再让舵机休息 1 秒钟，然后重新开始下一轮循环
+    # After returning to 0 degrees, let the servo rest for another 1 second, then restart the next round of the loop
     time.sleep(1)

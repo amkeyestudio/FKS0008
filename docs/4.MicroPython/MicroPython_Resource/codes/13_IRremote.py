@@ -1,38 +1,38 @@
-# main.py - ESP32-S3 红外接收 (NEC协议)
-# 从 machine（机器）模块中导入 Pin（引脚）类，用来控制开发板上的金属接口
+# main.py - ESP32-S3 Infrared Reception (NEC Protocol)
+# Import the Pin class from the machine module to control the metal interfaces on the development board
 from machine import Pin
-# 从 ir_rx.nec 模块中导入 NEC_8 类，这是专门用来翻译 NEC 协议（8位地址）红外信号的“字典”
+# Import the NEC_8 class from the ir_rx.nec module, which is a "dictionary" specially used to translate NEC protocol (8-bit address) infrared signals
 from ir_rx.nec import NEC_8
-# 导入 time（时间）模块，用来让程序暂停或延时
+# Import the time module to pause or delay the program
 import time
 
-# 定义一个变量 IR_RX_PIN，它的值是 48。意思是告诉程序：红外接收器插在第 48 号接口上
+# Define a variable IR_RX_PIN with a value of 48. This tells the program: the infrared receiver is plugged into interface number 48
 IR_RX_PIN = 48
 
-# 定义一个“回调函数”（也就是一个备用小助手）。当成功听懂一个红外信号时，程序会自动叫它出来干活
+# Define a "callback function" (which is a backup assistant). When an infrared signal is successfully understood, the program will automatically call it to work
 def ir_callback(data, addr, ctrl):
-    # data 代表“命令数据”（也就是你按了哪个键）
-    # addr 代表“设备地址”（也就是这是哪个遥控器的信号）
-    # ctrl 代表“控制标志”（用来判断你是短按还是长按）
+    # data represents "command data" (which key you pressed)
+    # addr represents "device address" (whose remote control signal this is)
+    # ctrl represents "control flag" (used to determine whether you pressed it briefly or held it down)
     
-    # 如果 data 小于 0，通常表示你一直按着遥控器没松手（收到了重复码）
+    # If data is less than 0, it usually means you are holding down the remote control without releasing it (a repeat code is received)
     if data < 0:
-        # 在电脑屏幕上打印“长按中...”
-        print("长按中...")
+        # Print "Holding down..." on the computer screen
+        print("Holding down...")
     else:
-        # 如果不是长按，就在电脑屏幕上打印出你按下的“按键值”
-        print("按键值: ", data)
+        # If it is not a long press, print the "key value" you pressed on the computer screen
+        print("Key value: ", data)
 
-# 初始化红外接收对象（也就是正式雇佣这个翻译小助手）
-# Pin(IR_RX_PIN, Pin.IN) 的意思是：把第 48 号接口设置为“输入模式”（只接收信号，不发送信号）
-# ir_callback 的意思是：一旦翻译成功，就自动调用上面定义的那个小助手函数
+# Initialize the infrared receiving object (formally hiring this translation assistant)
+# Pin(IR_RX_PIN, Pin.IN) means: set interface number 48 to "input mode" (receive signals only, do not send signals)
+# ir_callback means: once translation is successful, automatically call the assistant function defined above
 ir = NEC_8(Pin(IR_RX_PIN, Pin.IN), ir_callback)
 
-# 在电脑屏幕上打印提示语，告诉你红外接收已经准备就绪
-print("红外接收已启动，请按下遥控器按键...")
+# Print a prompt on the computer screen to let you know that infrared reception is ready
+print("Infrared reception started, please press a remote control button...")
 
-# 开启一个无限循环（while True），让程序一直运行下去，不会中途停止
+# Start an infinite loop (while True) to keep the program running continuously without stopping halfway
 while True:
-    # 让程序每次休息 100 毫秒（0.1秒）。
-    # 为什么需要休息？因为红外接收是由后台自动处理的，主程序稍微休息一下，可以节省大脑（CPU）的算力
+    # Make the program rest for 100 milliseconds (0.1 seconds) each time.
+    # Why is a rest needed? Because infrared reception is automatically handled in the background, letting the main program rest slightly saves brain (CPU) processing power
     time.sleep_ms(100)

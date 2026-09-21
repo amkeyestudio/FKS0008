@@ -1,29 +1,29 @@
-# 从我们提前写好的小车工具包（ESP32S3_4WD_Car）里，拿出专门控制这辆小车的“魔法书”（模块 Keyes_ESP32S3_4WD）
+# From the car toolkit prepared in advance (ESP32S3_4WD_Car), fetch the "magic book" specifically used to control this car (module Keyes_ESP32S3_4WD)
 from ESP32S3_4WD_Car import Keyes_ESP32S3_4WD
-# 导入 time（时间）模块，因为它里面有很多控制时间的工具，比如让程序“等一等”
+# Import the time module, as it contains many tools to control time, such as making the program "wait"
 import time
 
-# 给小车创建一个“分身”（在编程中叫实例化对象），我们给它起名叫 line，以后就通过 line 来指挥小车的巡线功能
+# Create a "clone" for the car (called instantiating an object in programming), and name it line. From now on, we will command the car's line-tracking function through line
 line = Keyes_ESP32S3_4WD()
 
-# 告诉程序，我们要用开发板上的第 8 号引脚（io8）作为数据线（SDA）
+# Tell the program that we want to use pin number 8 (io8) on the development board as the data line (SDA)
 SDA = 8
-# 告诉程序，我们要用开发板上的第 9 号引脚（io9）作为时钟线（SCL）
+# Tell the program that we want to use pin number 9 (io9) on the development board as the clock line (SCL)
 SCL = 9
 
-# 使用刚才定义的 SCL 和 SDA 引脚，把巡线传感器“唤醒”并连接好（这个过程叫初始化）
+# Use the SCL and SDA pins defined just now to "wake up" the line-tracking sensor and connect it properly (this process is called initialization)
 line.Line_init(SCL, SDA)
 
-# 在电脑的串口监视器（聊天窗口）里打印出一句话，告诉我们准备工作做好了
-print("5路巡线传感器初始化完成！")
+# Print a sentence in the computer's serial monitor (chat window) to tell us that the preparation work is done
+print("5-channel line-tracking sensor initialization complete!")
 
-# 这是一个“死循环”（while True），意思是只要不断电，下面缩进的代码就会一直重复执行
+# This is an "infinite loop" (while True), meaning that as long as power is not cut off, the indented code below will repeat indefinitely
 while True:
-    # 让传感器去“看”一次路，并把5个探头的结果分别装进 A, B, C, D, E 这5个变量（装数据的小盒子）里
+    # Have the sensor "look" at the path once, and pack the results of the 5 probes into the 5 variables A, B, C, D, E (little data-storing boxes) respectively
     A, B, C, D, E = line.Line_get_data()
 
-    # 把 A, B, C, D, E 这5个盒子里的数据打印出来，中间用空格隔开，打印完自动换到下一行
+    # Print out the data in the 5 boxes A, B, C, D, E, separated by spaces, and automatically move to the next line after printing
     print(A,B,C,D,E)
 
-    # 让程序休息 500 毫秒（也就是半秒钟），防止数据刷新太快我们看不清，同时也让大脑（CPU）歇一会儿
+    # Let the program rest for 500 milliseconds (half a second) to prevent the data from refreshing too fast for us to see clearly, and also to give the brain (CPU) a short break
     time.sleep_ms(500)

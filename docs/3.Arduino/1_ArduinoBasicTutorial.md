@@ -1,192 +1,302 @@
-# 3.1 Arduino IDE Integration Tutorial
+# 3.1 Arduino IDE
 
-## 3.1.1 Introduction to Arduino IDE
+## 3.1.1 About Arduino IDE
 
-Arduino IDE is an integrated development environment specifically designed for Arduino hardware. It is renowned for its beginner-friendly interface and robust open-source code support. This tool not only simplifies the programming process and lowers the barrier to entry for development, but also provides an easy-to-use learning platform for beginners.
+Arduino IDE is an integrated development environment dedicated to Arduino which is an open-source electronics platform based on easy-to-read interface and simplified programming process, aimed at students without a background in electronics. 
 
-The Arduino IDE features a clean and intuitive user interface, supporting syntax highlighting, auto-completion, and other functions, making the programming process easy and enjoyable. More importantly, it is based on open-source code, which means users can freely access, modify, and distribute code, greatly expanding the possibilities for development.
+Its clear interface, syntax highlighting and auto-completion functions make the programming process easy and enjoyable. It also offers a wealth of tutorials, sample codes, and community support to help beginners get started quickly and solve practical  problems.
 
-For beginners, the Arduino IDE provides rich tutorials, sample codes, and community support to help them get started quickly and solve practical problems. At the same time, the open-source nature means that users can reference and learn from other people's code to accelerate their learning process.
+Importantly, it is published as an open source tool. Therefore,  it not only accelerates users own learning process by utilizing and referring others’ works, it is also available for extension experienced programmers to freely access, modify and distribute codes.
 
-In summary, with its beginner-friendly interface and powerful open-source support, the Arduino IDE has become an indispensable tool for Arduino developers. Both beginners and professionals can benefit greatly from it.
+In one word, Arduino IDE is easy-to-use for beginners, yet flexible enough for advanced users to take advantage of as well.
 
-## 3.1.2 Windows System
+## 3.1.2 Download Arduino IDE
 
-**Special Reminder: The Arduino IDE version used in this tutorial is 2.3.6. For other versions, successful compilation and uploading of the sample code provided in this tutorial cannot be guaranteed.** 
+### 3.1.2.1 For Windows
 
-### 3.1.2.1 Downloading Arduino IDE 
+Arduino official:[Software | Arduino](https://www.arduino.cc/en/software/)
 
-First, go to the official Arduino website: [Software | Arduino](https://www.arduino.cc/en/software/) to download the Arduino IDE.
+Arduino boasts multiple versions such as Widows, mac and Linux(as shown below), please ensure that the one you download is compatible with your computer.
 
-There are many versions of the Arduino software available for Windows, Mac, and Linux systems (as shown in the image below), as well as older versions. You only need to download the version suitable for your computer system.
+![](./media/a2.png)
 
-Here, we take downloading **Windows Win 10 or newer (64-bit)** as an example. You can also choose to download the **Windows ZIP file** according to your needs. The selection is shown in the image below.
+Here,  we will take Windows system as an example to introduce how to download and install it. Two versions are provided for Windows: for installing and for downloading(a zipped file, no need to install).
 
-![a2](./media/Arduino_2.3.6-a2.png)
+![a3](./media/a3.png)
 
-Here we take the Windows system as an example to introduce the download and installation steps. There are two versions for Windows: one is the installer version: **Windows Win 10 or newer (64-bit)**; the other is the portable version: **Windows ZIP file**, which does not require installation—simply download the file to your computer, extract it, and use it.
+Click **JUST DOWNLOAD** to download the software. 
 
-### 3.1.2.2 Installing Arduino IDE
+### 3.1.2.2 For MAC
 
-1. Save the `.exe` file downloaded from the software page to your hard drive, and then simply run the file.
+Its download method is similar to the Windows.
 
-![Arduino_2.3.6-a5](./media/Arduino_2.3.6-a5.png)
+![](./media/a4.png)
 
-2. Read and agree to the license agreement.
+Follow the prompts to install.
 
-![Arduino_2.3.6-a6](./media/Arduino_2.3.6-a6.png)
+### 3.1.2.3 Steps
 
-3. Choose installation options.
+1.Save the .exe file downloaded from the software page to your hard drive and simply run the file .
 
-![Arduino_2.3.6-a7](./media/Arduino_2.3.6-a7.png)
+![a5](./media/a5.png)
 
-4. Choose the installation location (select your preferred software installation path).
+2.Read the License Agreement and agree it.
 
-![Arduino_2.3.6-a8](./media/Arduino_2.3.6-a8.png)
+![a6](./media/a6.png)
 
-5. Click "Finish" and run the Arduino IDE.
+3.Choose the installation options.
 
-![Arduino_2.3.6-a9](./media/Arduino_2.3.6-a9.png)
+![a7](./media/a7.png)
 
-## 3.1.3 MacOS System
+4.Choose the install location.
 
-### 3.1.3.1 Downloading Arduino IDE
+![a8](./media/a8.png)
 
-First, go to the official Arduino website: [Software | Arduino](https://www.arduino.cc/en/software/) to download the Arduino IDE.
+5.Click finish and run Arduino IDE
 
-Different systems require different versions of the Arduino IDE, but the download method is similar to Windows. Here, we take downloading **macOS Intel 10.15 Catalina or newer (64-bit)** as an example. You can also choose to download **macOS Apple Silicon 11 Big Sur or newer (64-bit)** according to your needs. The selection is shown in the image below.
+![a9](./media/a9.png)
 
-![](./media/Arduino_2.3.6-a4.png)
+## 3.1.3 Install USB Driver
 
-### 3.1.3.2 Installing Arduino IDE
+Note that please connect the ESP32 board to your computer via USB cable before installing the USB driver. Or else, the driver may fail to be installed.
 
-After downloading the Arduino IDE, double-click the downloaded `arduino_ide_xxxx.dmg` file and follow the instructions to copy and paste **Arduino IDE.app** into the **Applications** folder. After a few seconds, you will see that the Arduino IDE has been successfully installed.
+### 3.1.3.1 For Windows
 
-![Img](./media/Arduino_2.3.6-Mac.png)
+Click to download [Windows CH340 driver](./Windows.zip).
 
-## 3.1.4 Setting the Arduino IDE Language
+![a51](./media/a51.png)
 
-⚠️ **Special Reminder: The method for setting the language in the Arduino IDE is similar across different systems like Windows and macOS, and can be referenced mutually.**
+For Windows 10 and later versions, the driver will be automatically installed. 
 
-1. First, open the Arduino IDE.
+Connect the control board to computer via USB, click Computer–Attributes–Device Manager. As is shown in the picture, the driver has already exist.
 
-![Img](./media/Arduino_2.3.6-ArduinoIDE.png)
+![](./media/a10.png)
 
-2. Click "**File** -> **Preferences...**". In the **Preferences** dialog box, click the option next to "**Language**", select your preferred language, and then click "**OK**".
+If there is a yellow exclamation mark, you should install it manually.
 
-![Arduino_2.3.6-a29-1](./media/Arduino_2.3.6-a29-1.png)
+![](./media/a11.png)
 
-## 3.1.5 Arduino IDE Interface Description
+Tap ![a12](./media/a12.png) to choose “Update drive…” to update the driver.
 
-![Arduino_2.3.6-a35](./media/Arduino_2.3.6-a35.png)
+![](./media/a13.png)
 
-1. The "File" menu includes functions such as New Sketch, Open, Open Recent, Open Examples, Close IDE, Save, Preferences, and Advanced Settings.
-2. The "Edit" menu includes functions like Copy, Paste, Auto Format, and Font Size. These are generally operated using keyboard shortcuts. (It is recommended to stick to shortcuts; it will become second nature the more you use them.)
-3. Common functions in the "Sketch" menu include Verify/Compile, Upload, and Include Library.
-4. Common functions in the "Tools" menu include Board selection and Port selection. These two are very important.
-5. Click "Help" to view the IDE version and official reference documents.
-6. "Serial Plotter" displays serial data in the form of a line graph.
-7. "Serial Monitor" allows you to print and display data that you need to inspect.
-8. Verify (Compile) button.
-9. Verify and Upload button.
-10. "Sketchbook / Cloud" allows you to create new projects, and synchronize and edit using Arduino Cloud.
-11. "Board Manager" allows you to add or remove boards.
-12. "Library Manager" is used to add and remove libraries.
-13. "Debugger" allows code monitoring and breakpoint debugging.
-14. Search box.
-15. Code editing area.
+Click “Browse my computer for drivers”.
 
-This concludes the Arduino IDE tutorial. Please learn how to add library files to the Arduino IDE, as the IDE will throw an error if library files are missing.
+![](./media/a14.png)
 
-3.1.6 Installing Library Files to the Arduino IDE (**Important**)
+Enter“Browse…” to find the folder `usb_ch341_3.1.2009.06` , and then “Next”.
 
-⚠️ **Special Reminder: The method for installing library files is similar across different systems like Windows and macOS and can be referenced mutually; here we use the Windows system as an example.**
+![](./media/a15.png)
 
-## 3.1.6 What is a Library File?
+Close the page after installation, and then the serial port number appears.
 
-A library is a collection of code that makes it easy for you to read or control sensor modules to perform the functions you want.
+![](./media/a16.png)
 
-When compiling or uploading code, if an error message "No such file or directory" appears, it means the corresponding library file is missing. The image below shows an error caused by a missing library file when uploading code. Below, we take adding the rotary encoder library file as an example.
+Finally, click Computer–Attributes–Device Manager:
 
-![Arduino_2.3.6-a44](./media/Arduino_2.3.6-a44.png)
+![](./media/a10.png)
 
-## 3.1.7 How to Install Library Files
+### 3.1.3.2 For MAC
 
-Here, we will introduce the easiest way to add a library. We take adding the "Encoder" library file as an example.
+Click to download [MAC CH340 driver](./MAC.zip).
 
-1. First, click sequentially on the top-left menu: **"Sketch" --> "Include Library" --> "Add .ZIP Library..."**
+![a50](./media/a50.png)
 
-![Arduino_2.3.6-a45](./media/Arduino_2.3.6-a45.png)
+**Step 1:** Download the driver from the Website and extract the file to the local installation directory.
 
-2. Navigate to the directory where the library file is located (unzip the ZIP file downloaded in `2.1 Code and Library File Download`), open the `Arduino Library Files` folder, and select the `Encoder.zip` file.
+![](./media/a17.png)
 
-![Arduino_2.3.6-a46](./media/Arduino_2.3.6-a46.png)
+**Step 2:** For details about how to install the driver in pkg format by default, see Step 3. If OS X 11.0 or later does not support Rosetta, refer to Step 4 to install the dmg driver.
 
-3\. After the installation is complete, you will receive a notification (Library successfully installed from `Encoder.zip` archive), and the output box will display "**Library installed**", confirming that the library has been successfully added to the Arduino IDE. The next time you need to use this library, you do not need to repeat the installation process.
+Before installation, please forward to “System Preferences”->“Security & Privacy”->“General” page, below the title “Allow apps downloaded from:” choose the choice 2->“Mac App Store and identified developers”, then the driver will work normally.
 
-![Arduino_2.3.6-a47](./media/Arduino_2.3.6-a47.png)
+![a18](./media/a18.png)
 
-4\. All library files are installed in the same way. You just need to follow these steps to install the library files one by one.
+**Step 3:** To install the driver in pkg format, tap the driver file → Continue→ Install
 
-**Operation Flow GIF:**
+![](./media/a19.png)
 
-![Arduino_2.3.6-a48](./media/Arduino_2.3.6-a48.gif)
+![a20](./media/a20.png)
 
-## 3.1.8 Uploading Your First Program Using Arduino IDE
+Then the installation will be successful
 
-First, connect the Keyes UNO R3 development board to your computer via a USB cable.
+![a21](./media/a21.png)
 
-![Arduino_2.3.6-a36](./media/Arduino_2.3.6-a36.png)
+![a22](./media/a22.png)
 
-Open the Arduino IDE and select the corresponding Arduino UNO board model.
+To install the pkg format driver on OS X 11.0 and later: Open “LaunchPad”→“CH34xVCPDriver”→Install
 
-![Arduino_2.3.6-a37](./media/Arduino_2.3.6-a37.png)
+![a23](./media/a23.png)
 
-After selecting the development board, choose the USB port. In the "**Tools**" menu, select "**Port**" and then select "**COM30 (Arduino Uno)**".
+When using OS X 10.9 to OS X 10.15, click “Restart” to restart your computer, and perform the following steps after the restart.
 
-![Arduino_2.3.6-a38](./media/Arduino_2.3.6-a38.png)
+![a24](./media/a24.png)
 
-Once the development board is connected, both of these places will display the connected status. Next, add the code: here we provide sample code whose function is to print "Hello Keyes!" in the serial monitor every second.
+**Step 4:** To install the dmg driver, tap the dmg file and drag “CH34xVCPDriver” to enter the application folder in the operating system.
 
-Click `File` --> `New Sketch`, then copy and paste the following code into the Arduino IDE code area:
+![a25](./media/a25.png)
+
+Then open “LaunchPad”→“CH34xVCPDriver”→Install
+
+![a26](./media/a26.png)
+
+Then the installation will be successful
+
+![a27](./media/a27.png)
+
+When inserting the CH340 control board into the USB port, open System Report -> Hardware ->USB. On the right is USB Device Tree. If the USB device is working properly, you will find a device whose “Vendor ID” is [0x1a86].
+
+![a28](./media/a28.png)
+
+Open “Terminal” program under Applications-Utilities folder and type the command “ls /dev/tty*”.
+
+![a29](./media/a29.png)
+
+You should see the “tty.wchusbserialx” where “x” is the assigned device number similar to Windows COM port assignment.
+
+## 3.1.4 Install ESP32 Board
+
+Open Arduino IDE and click “Tools” → “Board”. But we cannot find ESP32, so we need to install it manually.
+
+![a30](./media/a30.png)
+
+**Installation Steps of the ESP32:**
+
+Open Arduino IDE.
+
+Click “**File → Preferences**”, add the link `https://espressif.github.io/arduino-esp32/package_esp32_index.json` in Additional boards manager URLs and click **OK**.
+
+![a31](./media/a31.png)
+
+Select the icon of board manager to open the the board options.
+
+![a32](./media/a32.png)
+
+Search for **ESP32** in the search box and install the latest version. You can check its process in the lower right corner. **During installation, keep the network stable. If the installation fails, repeat the above steps.**
+
+<span style="color:red; font-size:20px;">Note: We adopt ESP32 version 3.2.0 in this tutorial. Please keep it consistent to avoid code incompatibilities.</span>
+
+![a33](./media/a33.png)
+
+Installed:
+
+![a34](./media/a34.png)
+
+## 3.1.5 Use Arduino IDE
+
+![](./media/a35.png)
+
+1. **File** - includes new Sketch, open Sketch, open recently used code, open sample code, close the IDE, save code, preferences, advanced Settings, etc.
+2. **Edit** - includes copy, paste, automatic formatting, font size, etc. (shortcut keys are recommended).
+3. **Sketch** - includes verify\compile, upload code, import library and so on.
+4. **Tools** - The most important two are development board and port.
+5. **Help** - Views the IDE version and official reference documents.
+6. **Open Serial Plotter** - displays serial data in a method of line graph
+7. **Open Serial Monitor** - opens the Serial Monitor tool, as a new tab in the console.
+8. **Verify** - compiles your code to your Arduino Board.
+9. **Verify / Upload** - compiles and uploads your code to your Arduino Board.
+10. **Sketchbook** - here you will find all of your sketches locally stored on your computer. Additionally, you can sync with the Arduino Cloud, and also obtain your sketches from the online environment.
+11. **Boards Manager** - install or remove Arduino Boards .
+12. **Library Manager** - browse through thousands of Arduino libraries or import local libraries
+13. **Debugger** - test and debug programs in real time.
+14. **Search** - search for keywords in your code.
+15. **Code editing area**
+16. **IDE prompt area** (Uploading fails or succeeds) & **Serial monitor display area**
+
+## 3.1.6 Upload Code on Arduino IDE
+
+Connect the board to your computer via the USB cable.
+
+![image-20260921094335825](./media/image-20260921094335825.png)
+
+
+
+Connect the the corresponding ESP32 board model in Arduino IDE.
+
+![image-20260921095313307](./media/image-20260921095313307.png)
+
+
+
+Choose COM port. You may check your port number at Device Manager. If there are many COM ports, unplug the cable of board to see which port disappears. Then that one is the port ready to use. If there is no COM port, please check whether driver is installed.
+
+![](./media/a10.png)
+
+Herein, our COM port is COM3. Click “Tools” → “Port” → “COM3”.
+
+![image-20260921095921269](./media/image-20260921095921269.png)
+
+
+
+When the board is connected, both of these places appear its model. Here we provide a sample code that prints “Hello Keyestudio!” once per second in the serial monitor.
+
+Copy and paste the following code to Arduino IDE.
 
 ```c
 /*
-  keyes 
-  “Hello Keyes!”
-  http://www.keyesrobot.com
+  keyestudio 
+  Print “Hello Keyestudio!”
+  http://www.keyestudio.com
 */
 void setup() {  
-    Serial.begin(9600);
+    // put your setup code here, to run once:
+    Serial.begin(9600);  //Set the serial port baud rate to 9600
 }
 
 void loop() {  
-    Serial.println("Hello Keyes!");
- 	delay(1000); 
+    // put your main code here, to run repeatedly:
+    Serial.println("Hello Keyestudio!");  //Serial port printing
+ 	delay(1000);  //Delay of 1 second
 }
 ```
 
+![image-20260921100722896](./media/image-20260921100722896.png)
 
+Click ![a40](./media/a40.png) to compile and upload code. Two prompts will appear after upload is successful:
 
-![Arduino_2.3.6-a39](./media/Arduino_2.3.6-a39.png)
+![image-20260921100949785](./media/image-20260921100949785.png)
 
-Then click ![a40](./media/Arduino_2.3.6-a40.png) to compile and upload the code. After successful upload, the IDE will show two prompt messages, as shown in the figure:
+After that, click ![a42](./media/a42.png) to show serial monitor and set baud rate to 9600. You will see “Hello Keyestudio!” on the monitor.
 
-![Arduino_2.3.6-a41](./media/Arduino_2.3.6-a41.png)
+![](./media/a43.png)
 
-Next, click the "Serial Monitor" icon in the upper right corner ![a42](./media/Arduino_2.3.6-a42.png) to open the serial monitor. Set the baud rate to **9600**, and you will see the serial port print the string "**Hello Keyes!**"
+1. **Toggle Auto-scroll** - Sets whether the prints scroll automatically
+2. **Toggle Timestamp** - Sets whether to display print time
+3. **Clear Output** - Clears printed messages
+4. **Serial Input**
+5. **Serial Output Format**
+6. **Baud Rate** - Sets the baud rate you need
+7. **Printing Window**
 
-![Arduino_2.3.6-a43](./media/Arduino_2.3.6-a43.png)
+Now that you’re familiar with the steps of uploading code, please continue to learn how to import libraries to Arduino IDE. They are indispensable, as the IDE will report an error if library files are not added.
 
-1. "Toggle autoscroll": Sets whether the print window follows the output.
-2. "Toggle timestamps": Sets whether to display the print timestamp.
-3. "Clear output": Clears the data in the print window.
-4. Serial input box.
-5. Serial sending format.
-6. Set the baud rate; click to select the required baud rate.
-7. Print window.
+## 3.1.7 Import Library
 
+### 3.1.7.1 What are Libraries?
 
-## 3.1.9 Introduction to Basic Arduino Code
+A library is a collection of codes, and it facilitates the connection of sensors, displays and modules. 
 
-For more detailed explanations, please refer to the official link: [Language Reference | Arduino Documentation](https://docs.arduino.cc/language-reference/)
+For instance, the LiquidCrystal_I2C library simplifies the communication with LCD1602 display. Moreover, hundreds of libraries are available on Internet. In the reference, in-built and manually-added libraries are listed.
+
+When you see “No such file or directory”, oops, libraries are missing! For instance, we do not include LiquidCrystal_I2C before uploading related codes:
+
+![a44](./media/a44.png)
+
+### 3.1.7.2 How to Install the Libraries?
+
+We still take LiquidCrystal_I2C as an example.
+
+Click **Skerch>Include Library>Add .Zip Library...**
+
+![a45](./media/a45.png)
+
+Select the zipped files you need and click ok to add a library. If success, the message bar will show “**Library installed**”.
+
+![a46](./media/a46.png)
+
+![a47](./media/a47.png)
+
+**Operation demo:**
+
+![a48](./media/a48.gif)
+
+For how to install libraries, MAC and WINDOWS are the same.

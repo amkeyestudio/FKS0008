@@ -1,49 +1,49 @@
-// 定义引脚
-const int trigPin = 13;   // 触发引脚连接到 io13
-const int echoPin = 12;  // 回声引脚连接到 io12
+// Define pins
+const int trigPin = 13;   // Trigger pin connected to io13
+const int echoPin = 12;  // Echo pin connected to io12
 
-// 定义变量存储时间和距离
-long duration;   // 声波往返的时间（微秒）
-int distance;    // 计算出的距离（厘米）
+// Define variables to store time and distance
+long duration;   // Round-trip time of sound wave (microseconds)
+int distance;    // Calculated distance (centimeters)
 
 void setup() {
-  // 初始化串口通信，波特率设为 115200，这样数据显示更快更流畅
+  // Initialize serial communication with baud rate set to 115200 for faster and smoother data display
   Serial.begin(115200);
   
-  // 设置引脚模式
-  pinMode(trigPin, OUTPUT); // Trig 引脚作为输出，用来发送信号
-  pinMode(echoPin, INPUT);  // Echo 引脚作为输入，用来接收信号
+  // Set pin modes
+  pinMode(trigPin, OUTPUT); // Trig pin as output to send signals
+  pinMode(echoPin, INPUT);  // Echo pin as input to receive signals
 }
 
 void loop() {
-  // 第一步：确保 Trig 引脚是低电平，准备发射
+  // Step 1: Ensure Trig pin is LOW, preparing for transmission
   digitalWrite(trigPin, LOW);
-  delayMicroseconds(2); // 等待 2 微秒，确保信号稳定
+  delayMicroseconds(2); // Wait for 2 microseconds to ensure stable signal
 
-  // 第二步：给 Trig 引脚一个 10 微秒的高电平脉冲，触发传感器发射超声波
+  // Step 2: Send a 10-microsecond HIGH pulse to the Trig pin to trigger the sensor to emit ultrasonic waves
   digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
 
-  // 第三步：读取 Echo 引脚的高电平持续时间
-  // pulseIn 函数会等待引脚变高，然后计时，直到引脚变低
+  // Step 3: Read the high-level duration of the Echo pin
+  // The pulseIn function waits for the pin to go high, then times until the pin goes low
   duration = pulseIn(echoPin, HIGH);
 
-  // 第四步：计算距离
-  // 声音在空气中的速度大约是 0.034 厘米/微秒
-  // 距离 = (时间 × 速度) / 2，因为声音走了来回
+  // Step 4: Calculate the distance
+  // The speed of sound in air is approximately 0.034 cm/microsecond
+  // Distance = (time × speed) / 2, because the sound makes a round trip
   distance = duration * 0.034 / 2;
-
-  //限制超声波测距范围，因为超过3m或者低于2cm就不准了
+    
+  // Limit the ultrasonic ranging range, as values beyond 3m or below 2cm are inaccurate
   if(distance < 2 || distance > 300){
     distance = 0;
   }
 
-  // 第五步：通过串口打印结果
+  // Step 5: Print the result via serial
   Serial.print("Distance: ");
   Serial.print(distance);
   Serial.println(" cm");
 
-  // 等待 1 秒再进行下一次测量，避免数据刷新太快看不清
-  delay(500);
+  // Wait for 1 second before the next measurement to avoid data refreshing too fast to read
+  delay(1000);
 }

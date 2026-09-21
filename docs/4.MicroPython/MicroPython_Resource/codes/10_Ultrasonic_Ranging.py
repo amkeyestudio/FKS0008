@@ -1,25 +1,25 @@
-# 从 ESP32S3_4WD_Car 文件中，导入 Keyes_ESP32S3_4WD 这个工具包，它包含了控制小车的各种功能
+# Import the Keyes_ESP32S3_4WD toolkit from the ESP32S3_4WD_Car file, which contains various functions to control the car
 from ESP32S3_4WD_Car import Keyes_ESP32S3_4WD
-# 导入 time（时间）模块，用来让程序暂停、延时
+# Import the time module to pause and delay the program
 import time
 
-# 定义引脚（也就是告诉程序，我们的线插在哪个编号的接口上）
-TRIG_PIN = 13   # 触发引脚（Trig）连接到开发板的 IO13 接口
-ECHO_PIN = 12   # 回声引脚（Echo）连接到开发板的 IO12 接口
+# Define the pins (telling the program which numbered interface our wires are plugged into)
+TRIG_PIN = 13   # Trigger pin (Trig) connected to the IO13 interface of the development board
+ECHO_PIN = 12   # Echo pin (Echo) connected to the IO12 interface of the development board
 
-# 创建一个名为 ultrasonic（超声波）的对象，相当于把传感器功能激活
+# Create an object named ultrasonic, which is equivalent to activating the sensor function
 ultrasonic = Keyes_ESP32S3_4WD()
 
-# 初始化超声波传感器，告诉它 Trig 和 Echo 分别接在 13 和 12 号引脚上
+# Initialize the ultrasonic sensor, telling it that Trig and Echo are connected to pins 13 and 12 respectively
 ultrasonic.Ultrasonic_init(TRIG_PIN, ECHO_PIN)
 
-# 主循环：while True 意思是“当条件为真时”，因为 True 永远为真，所以下面的代码会像钟表一样一直反复执行
+# Main loop: while True means "when the condition is true", since True is always true, the code below will repeat endlessly like a clock
 while True:
-    # 调用测量函数，让传感器测一次距离，并把结果存到 distance（距离）这个变量中
+    # Call the measurement function to make the sensor measure the distance once, and store the result in the distance variable
     distance = ultrasonic.Ultrasonic_measure_distance()
 
-    # 通过串口（电脑上的聊天窗口）打印出测量结果，带上单位 cm（厘米）
+    # Print the measurement result through the serial port (chat window on the computer) with the unit cm (centimeters)
     print("Distance:", distance, "cm")
 
-    # 让程序休息（等待）1秒，再进行下一次测量，避免数据刷新太快眼睛看不清
+    # Let the program rest (wait) for 1 second before the next measurement to prevent the data from refreshing too fast for the eyes to see
     time.sleep(1)

@@ -1,32 +1,32 @@
-// 定义 LED 连接的引脚为 io42
-const int ledPin = 42; 
+// Define the LED connection pin as io11
+const int ledPin = 11; 
 
-// 定义亮度变量，初始值为 0（最暗）
+// Define the brightness variable with an initial value of 0 (dimmest)
 int brightness = 0;    
 
-// 定义每次变化的步长，数值越小变化越平滑，但速度越慢
+// Define the step size for each change; smaller values mean smoother changes but slower speed
 int fadeAmount = 5;    
 
 void setup() {
-  // 设置 ledPin 为输出模式
+  // Set ledPin as an output mode
   pinMode(ledPin, OUTPUT);
 }
 
 void loop() {
-  // 1. 设置当前引脚的亮度
-  // analogWrite 可以输出 PWM 信号，value 范围 0-255
+  // 1. Set the brightness of the current pin
+  // analogWrite can output a PWM signal, with a value range of 0-255
   analogWrite(ledPin, brightness);
 
-  // 2. 改变下一次的亮度值
+  // 2. Change the brightness value for the next iteration
   brightness = brightness + fadeAmount;
 
-  // 3. 判断是否达到了最亮或最暗的边界
-  // 如果亮度到了 0 或者 255，就反转变化方向
+  // 3. Check if the boundary of maximum or minimum brightness has been reached
+  // If brightness reaches 0 or 255, reverse the direction of change
   if (brightness <= 0 || brightness >= 255) {
     fadeAmount = -fadeAmount; 
   }
 
-  // 4. 等待 30 毫秒，让人眼能看清变化过程
-  // 如果这个时间太短，灯会闪得太快；太长，呼吸感不连贯
+  // 4. Wait for 30 milliseconds so the human eye can see the changing process clearly
+  // If this time is too short, the light will flicker too fast; if too long, the breathing effect will feel disconnected
   delay(30);          
 }

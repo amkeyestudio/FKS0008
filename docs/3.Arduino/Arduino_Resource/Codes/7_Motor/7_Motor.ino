@@ -1,94 +1,91 @@
-// ================= 引脚定义 =================
-#define MOTOR_AIN 40  // A路方向控制 (左轮)
-#define MOTOR_AEN 41  // A路 PWM 控制 (左轮)
-#define MOTOR_BIN 38  // B路方向控制 (右轮)
-#define MOTOR_BEN 21  // B路 PWM 控制 (右轮)
+// ================= Pin Definitions =================
+#define MOTOR_AIN 40  // Motor A direction control (left wheel)
+#define MOTOR_AEN 41  // Motor A PWM control (left wheel)
+#define MOTOR_BIN 38  // Motor B direction control (right wheel)
+#define MOTOR_BEN 21  // Motor B PWM control (right wheel)
 
-// ================= 运动控制函数 =================
+// ================= Motor Control Functions =================
 
-// 前进：双轮正转
+// Set PWM speeds for left and right motors (0-255)
+void setMotor(int leftSpeed, int rightSpeed) {
+  ledcWrite(MOTOR_AEN, leftSpeed);  // Write PWM value for left wheel
+  ledcWrite(MOTOR_BEN, rightSpeed); // Write PWM value for right wheel
+}
+
+// Move Forward
 void forward(int leftSpeed, int rightSpeed) {
-  Serial.println("状态：前进");
-  digitalWrite(MOTOR_AIN, HIGH);  // 左轮方向：正转
-  digitalWrite(MOTOR_BIN, HIGH);  // 右轮方向：正转
-  analogWrite(MOTOR_AEN, leftSpeed);
-  analogWrite(MOTOR_BEN, rightSpeed);
+  digitalWrite(MOTOR_AIN, HIGH); // Left wheel forward
+  digitalWrite(MOTOR_BIN, HIGH); // Right wheel forward
+  setMotor(leftSpeed, rightSpeed);
 }
 
-// 后退：双轮反转
+// Move Backward
 void back(int leftSpeed, int rightSpeed) {
-  Serial.println("状态：后退");
-  digitalWrite(MOTOR_AIN, LOW);  // 左轮方向：反转
-  digitalWrite(MOTOR_BIN, LOW);  // 右轮方向：反转
-  analogWrite(MOTOR_AEN, leftSpeed);
-  analogWrite(MOTOR_BEN, rightSpeed);
+  digitalWrite(MOTOR_AIN, LOW);  // Left wheel reverse
+  digitalWrite(MOTOR_BIN, LOW);  // Right wheel reverse
+  setMotor(leftSpeed, rightSpeed);
 }
 
-// 左转：左轮反转，右轮正转（差速转向）
+// Turn Left (Left wheel stops, right wheel moves forward)
 void left(int leftSpeed, int rightSpeed) {
-  Serial.println("状态：左转");
-  digitalWrite(MOTOR_AIN, LOW);   // 左轮方向：反转
-  digitalWrite(MOTOR_BIN, HIGH);  // 右轮方向：正转
-  analogWrite(MOTOR_AEN, leftSpeed);
-  analogWrite(MOTOR_BEN, rightSpeed);
+  digitalWrite(MOTOR_AIN, LOW);  // Left wheel stops
+  digitalWrite(MOTOR_BIN, HIGH); // Right wheel forward
+  setMotor(leftSpeed, rightSpeed);
 }
 
-// 右转：左轮正转，右轮反转（差速转向）
+// Turn Right (Left wheel moves forward, right wheel stops)
 void right(int leftSpeed, int rightSpeed) {
-  Serial.println("状态：右转");
-  digitalWrite(MOTOR_AIN, HIGH);  // 左轮方向：正转
-  digitalWrite(MOTOR_BIN, LOW);   // 右轮方向：反转
-  analogWrite(MOTOR_AEN, leftSpeed);
-  analogWrite(MOTOR_BEN, rightSpeed);
+  digitalWrite(MOTOR_AIN, HIGH); // Left wheel forward
+  digitalWrite(MOTOR_BIN, LOW);  // Right wheel stops
+  setMotor(leftSpeed, rightSpeed);
 }
 
-// 停止：关闭 PWM 输出
+// Stop Motors
 void stopMotor() {
-  Serial.println("状态：停止");
-  analogWrite(MOTOR_AEN, 0);
-  analogWrite(MOTOR_BEN, 0);
+  setMotor(0, 0); // Set speed to 0
 }
-
-// ================= 初始化与主循环 =================
+// ================= Initialization and Main Loop =================
 
 void setup() {
-  // 初始化串口通信，波特率 115200
+  // Initialize serial communication with a baud rate of 115200
   Serial.begin(115200);
-  Serial.println("电机驱动系统初始化...");
+  Serial.println("Motor driver system initializing...");
 
-  // 设置 PWM 分辨率为 8 位 (0-255)
+  // Set PWM resolution to 8-bit (0-255)
   // analogWriteResolution(8);
 
-  // 配置方向控制引脚为输出模式
+  // Set motor direction pins to output mode
   pinMode(MOTOR_AIN, OUTPUT);
-  pinMode(MOTOR_AEN, OUTPUT);
   pinMode(MOTOR_BIN, OUTPUT);
-  pinMode(MOTOR_BEN, OUTPUT);
 
-
-  // 初始状态：停止电机
+  // Configure PWM channels (ESP32 Arduino Core 3.x syntax)
+  // Parameters: pin, frequency (1000Hz), resolution (8-bit, i.e., 0-255)
+  ledcAttach(MOTOR_AEN, 1000, 8);
+  ledcAttach(MOTOR_BEN, 1000, 8);
+  
+  // Initial state: Stop motors
   stopMotor();
-  Serial.println("初始化完成，开始运行！");
+  Serial.println("Initialization complete, starting execution!");
 }
 
 void loop() {
-  // 1. 全速前进 2 秒
-  forward(100, 100);
+  // 1. Move forward at full speed for 2 seconds
+  forward(255, 255);
   delay(2000);
 
-  // 2. 全速后退 2 秒
-  back(100, 100);
+  // 2. Move backward at full speed for 2 seconds
+  back(255, 255);
   delay(2000);
-
-  // 3. 原地左转 2 秒
+  
+  // 3. Spin left in place for 2 seconds
   left(255, 255);
   delay(2000);
-
-  // 4. 原地右转 2 秒
+  
+  // 4. Spin right in place for 2 seconds
   right(255, 255);
   delay(2000);
-
-  // 5. 停止 2 秒，准备下一次循环
+  
+  // 5. Stop for 2 seconds, preparing for the next loop
   stopMotor();
   delay(2000);
 }

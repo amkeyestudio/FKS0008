@@ -1,21 +1,21 @@
-# 导入 machine 模块中的 Pin 类，用于控制 GPIO 引脚的输入输出
+# Import the Pin class from the machine module, used for controlling GPIO pin input and output
 from machine import Pin
-# 导入 time 模块，用于实现程序的延时功能
+# Import the time module, used to implement program delay functions
 import time
 
-# 创建 LED 控制对象，指定连接到 GPIO11 (即 io11)，并设置为输出模式 (Pin.OUT)
+# Create an LED control object, specify connection to GPIO11 (i.e., io11), and set it to output mode (Pin.OUT)
 led = Pin(11, Pin.OUT)
 
-# 使用无限循环，让 LED 持续不断地闪烁
+# Use an infinite loop to make the LED blink continuously
 while True:
-    # 将 GPIO11 设置为高电平 (1)，点亮 LED 
-    # (注：如果你的模块是低电平点亮的，请将此处的 1 改为 0)
+    # Set GPIO11 to high level (1) to light up the LED 
+    # (Note: If your module lights up on a low level, change 1 here to 0)
     led.value(1)
-    # 保持当前点亮状态 1 秒钟
+    # Keep the current lit state for 1 second
     time.sleep(1)
     
-    # 将 GPIO11 设置为低电平 (0)，熄灭 LED 
-    # (注：如果是低电平点亮模块，请将此处的 0 改为 1)
+    # Set GPIO11 to low level (0) to turn off the LED 
+    # (Note: If it is a low-level lighting module, change 0 here to 1)
     led.value(0)
-    # 保持当前熄灭状态 1 秒钟
+    # Keep the current off state for 1 second
     time.sleep(1)

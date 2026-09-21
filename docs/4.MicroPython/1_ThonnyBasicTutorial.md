@@ -1,270 +1,269 @@
-# 3.1 Thonny 软件基础教程
+# 4.1 Thonny Basic Tutorial
 
-MicroPython是Python 3语言的精简实现，包括Python标准库的一小部分，经过优化可在微控制器和受限环境中运行。以下是MicroPython的主要特点：
+MicroPython is a streamlined implementation of the Python 3 language, which includes a small part of the Python standard library and is optimized to run in microcontrollers and restricted environments. Here are the main features of MicroPython:
 
-1. **兼容性**：MicroPython努力与普通的Python（称为CPython）尽可能兼容，这意味着如果你了解Python，就已经掌握了MicroPython的基础知识。
-2. **硬件访问**：除了实现一系列核心Python库之外，MicroPython还包括用于访问低级硬件的“机器”等模块，使得开发者能够直接控制微控制器的硬件资源。
-3. **交互式提示符（REPL）**：MicroPython提供了一个交互式提示符（REPL），允许用户直接在嵌入式平台上从桌面计算机执行命令。这对于嵌入式系统的快速实时测试和调试非常有用。
-4. **多线程支持**：MicroPython固件支持多线程功能，这使得单个微控制器能够同时处理多个嵌入式任务，从而加速嵌入式应用程序的执行。
-5. **开源项目**：MicroPython是一个开源项目，其源代码可在Github上获取。它遵循MIT许可证，可免费用于教育和商业目的。
-6. **广泛支持**：MicroPython支持多种微控制器板和RTOS（实时操作系统），如ESP32、ESP8266、STM32，Pico等。此外，它还提供了丰富的库和模块，以满足不同开发需求。
+1. **Compatibility** : MicroPython strives to be as compatible as possible with regular Python (referred to as CPython), which means that if you know Python, you have already mastered the basics of MicroPython.
+2. **Hardware Access** : In addition to implementing a series of core Python libraries, MicroPython also includes modules such as “machines” for accessing low-level hardware, enabling developers to directly control the hardware resources of microcontrollers.
+3. **Interactive Prompt (REPL)** : MicroPython offers an interactive prompt (REPL) that enables users to execute commands directly from a desktop computer on an embedded platform. This is very useful for the rapid real-time testing and debugging of embedded systems.
+4. **Multi-threading support** : The MicroPython firmware supports multi-threading functionality, which enables a single microcontroller to handle multiple embedded tasks simultaneously, thereby accelerating the execution of embedded applications.
+5. **Open-source Project** : MicroPython is an open-source project, and its source code can be obtained on Github. It follows the MIT license and can be used freely for educational and commercial purposes.
+6. **Wide Support** : MicroPython supports a variety of microcontroller boards and RTOS (Real-time Operating System), such as ESP32, ESP8266, STM32, ESP32S3, etc. In addition, it also offers a rich library and modules to meet different development needs.
 
-## 3.2 软件下载
+## 4.1.1 Download Thonny
 
-### 3.2.1 Windows系统 软件下载
+### 4.1.1.1 For Windows
 
-**操作系统：Windows 10**
+**Operating System: Windows 10**
 
-软件下载链接：[Thonny软件官网](https://thonny.org)
+Enter [Thonny IDE official](https://thonny.org) to download the Thonny for Windows version. 
 
-鼠标触碰到箭头所示处，会出现Windows官方下载的版本选择。
+![1101](./media/thonny-1-1789957334188-1.png)
 
-![1101](./media/thonny-1.png)
+![1102](./media/thonny-2-1789957334188-2.png)
 
-![1102](./media/thonny-2.png)
+### 4.1.1.2 For MAC
 
-### 3.2.2 MAC系统
+Please refer to Windows.
 
-请参考Windows系统教程。
+![1103](./media/thonny-3-1789957334189-6.png)
 
-![1103](./media/thonny-3.png)
+![1104](./media/thonny-4-1789957334189-3.png)
 
-![1104](./media/thonny-4.png)
+## 4.1.2 Install Thonny
 
-## 3.3 软件安装
+Thonny supports two installation methods:
 
-Thonny应用程序安装支持两种安装方式：
+- Thonny+Python package
 
-- 安装Thonny+Python捆绑包
+  Python IDE and Thonny are packaged together and can be directly installed and used. It is fast and easy so is recommended for beginners. There are also two ways to install this package:
 
-  这种方式本质是将Python环境和Thonny打包在一起，即可一键安装使用，快捷方便，推荐新手使用此方式。捆绑包的方式安装又分为两种：
+  - Installer
 
-  - Installer安装
+    ![1201](./media/thonny-5-1789957334189-4.png)
 
-    ![1201](./media/thonny-5.png)
+  - Portable variant
 
-  - 免安装版本
+    ![1202](./media/thonny-6-1789957334189-5.png)
 
-    ![1202](./media/thonny-6.png)
+- Thonny only
 
-- 单独安装Thonny
+  Thonny is actually a package of python. When the user already has a python environment, click `pip install thonny` to install Thonny only, which is more suitable for developers.
 
-  Thonny应用本质是以python包的形式存在，当用户已经具备python环境，即可通过`pip install thonny`单独安装Thonny。这种方式更适合开发者。
+  ![1203](./media/thonny-7-1789957334189-7.png)
 
-  ![1203](./media/thonny-7.png)
+Please download the corresponding version according to your requirements.
 
-请根据您的需求选择下载相应版本的压缩包。
+### 4.1.2.1 Installer
 
-### 3.3.1 Installer安装
+Download the app according to your operation system. Here we demonstrate under <span style="background:#ff0;color:#000">64bit Windows 10</span> to download `Installer with 64-bit Python 3.10`.
 
-请根据您的操作系统选择对应的程序下载。以 <span style="background:#ff0;color:#000">64bit Windows 10</span> 环境下，安装程序`Installer with 64-bit Python 3.10` 为例。
+(1) Click ![1204](./media/thonny-8-1789957334189-8.png) and you will see “Select Setup Install Mode”. Choose **Install for me only**.
 
-（1）下载完成后双击![1204](./media/thonny-8.png) 。弹出 Select Setup Install Mode 窗口，选择 **Install for me only** 。
+![1205](./media/thonny-9-1789957334189-9.png)
 
-![1205](./media/thonny-9.png)
+(2) **Next**.
 
-（2）单击 **Next** 。
+![1206](./media/thonny-10-1789957334189-10.png)
 
-![1206](./media/thonny-10.png)
+(3) Tick **I accept the agreement** and Click **Next**.
 
-（3）选中 **I accept the agreement** ，单击 **Next** 。
+![1207](./media/thonny-11-1789957334189-11.png)
 
-![1207](./media/thonny-11.png)
+(4) The default installation path is in Disk C. You may click **Browse...** to choose another disk. And then click **Next**.
 
-（4）Thonny软件的安装路径，默认安装在C盘。单击 Browse... 可以选择其他安装位置，单击 **Next** 进行下一步。
+![1208](./media/thonny-12-1789957334189-12.png)
 
-![1208](./media/thonny-12.png)
+(5) By default, a shortcut to the program is created in the Start menu folder. Click **Browse...** to set another path for the shortcut and **Next**.
 
-（5）默认将在下面的开始菜单文件夹中创建程序的快捷方式。单击 Browse... 可以选择其他安装位置，单击 **Next** 进行下一步。
+![1209](./media/thonny-13-1789957334189-13.png)
 
-![1209](./media/thonny-13.png)
+(6) Tick **Create desktop icon** and **Next**.
 
-（6）勾选 **Creat desktop icon** ，单击 **Next** 。
+![1210](./media/thonny-14-1789957334189-14.png)
 
-![1210](./media/thonny-14.png)
+(7) Install.
 
-（7）单击 Inatall 进行安装。
+![1211](./media/thonny-15-1789957334189-15.png)
 
-![1211](./media/thonny-15.png)
+(8) “**Finish**”!
 
-（8）单击“**Finish**”结束安装,安装完成。
+![1212](./media/thonny-16-1789957334189-16.png)
 
-![1212](./media/thonny-16.png)
+(9) Back to the desktop and start Thonny to choose a language.
 
-（9）回到桌面，双击 Thonny 图标。选择语言，即可开始运行。
+![1213](./media/thonny-17-1789957334189-17.png)
 
-![1213](./media/thonny-17.png)
+(10) Done.
 
-（10）安装完成。
+![1214](./media/thonny-18-1789957334189-18.png)
 
-![1214](./media/thonny-18.png)
+### 4.1.2.2 Portable Variant
 
-### 3.3.2 免安装版本
+Download the app according to your operation system. Here we demonstrate under <span style="background:#ff0;color:#000">64bit Windows 10</span> to download `Installer with 64-bit Python 3.10`.
 
-请根据您的操作系统选择对应的程序下载。以 <span style="background:#ff0;color:#000">64bit Windows 10</span> 环境下，安装程序`Portable variant with 64-bit Python 3.10` 为例。
+(1) Click ![1105](./media/thonny-19-1789957334189-19.png) to start Thonny and choose a language.
 
-（1）下载完成后解压，双击![1105](./media/thonny-19.png)，选择语言，即可开始运行。
+![1213](./media/thonny-17-1789957334189-17.png)
 
-![1213](./media/thonny-17.png)
+(2) Done.
 
-（2）安装完成。
+![1214](./media/thonny-18-1789957334189-18.png)
 
-![1214](./media/thonny-18.png)
+## 4.1.3 Burn Firmware (Important)
 
+To run MicroPython code on ESP32S3, it is necessary to burn MicroPython firmware to ESP32S3.
 
+A. 将ESP32S3开发板通过USB线连接到电脑
 
-### 3.3.3 语言设置
+B.点击`Tools`-->`Options...`
 
-点击`Tools`然后再点击`Options...`
+![image-20260921103027794](./media/image-20260921103027794.png)
 
-![thonny-56](./media/thonny-56.png)
+C. 点击`lnterpreter`选项，然后选择MicroPython版本为`MicroPython（ESP32）`
 
-点击`General`
+![image-20260921103359047](./media/image-20260921103359047.png)
 
-![thonny-57](./media/thonny-57.png)
+D. 选择串口COM10，请注意你的串口不一定是COM10，请根据实际串口选择
 
-下拉语言选择框，找到`简体中文`，选中后点击`OK`
+![image-20260921103541448](./media/image-20260921103541448.png)
 
-![thonny-58](./media/thonny-58.png)
+E. 点击`lnstall or update MicroPython(esptool)`进入固件选择页面（请注意这一步一定要有串口）
 
-设置成功后，需要关闭软件重新打开才能显示中文。
+![image-20260921103724617](./media/image-20260921103724617.png)
 
-![thonny-59](./media/thonny-59.png)
+F. 按照下方图片选择好各个选线，`version`尽量选择`1.28.0`版本因为教程是基于这个版本制作的，选择完成后点击`lnstall`
 
-## 3.4 烧录固件（重要）
+![image-20260921103926309](./media/image-20260921103926309.png)
 
-要想在Pico上运行MicroPython代码，就必须要给Pico烧录MicroPython 固件。
+G. 等待下载完成即可
 
-![thonny-22](./media/thonny-22.png)
+![image-20260921104115510](./media/image-20260921104115510.png)
 
-A.连接microUSB线一端到你的电脑USB口。
+H. 下载完成后返回编程页面，点击![image-20260921104240910](./media/image-20260921104240910.png)图标即可连接上ESP32S3开发板，连接成功会在左下角出现一个MciroPython device的功能框如下图：
 
-B.按住“Raspberry Pi Pico”上的白色按钮（BOOTSEL）。然后，通过microUSB线另一端将Raspberry Pi Pico与电脑连接。
+![image-20260921104343156](./media/image-20260921104343156.png)
 
-![thonny-23](./media/thonny-23.png)
+我们就成功烧录固件了！！
 
-C.松开按钮，当连接成功时，在你的电脑上打开[设备管理器]，电脑将自动识别可移动磁盘(RPI-RP2)，如下所示:
+## 4.1.4 Homepage
 
-![thonny-24](./media/thonny-24.png)
+Click **View** and tick **Files** to open the file manager.
 
-D.复制"Firmware"文件夹中的`RPI_PICO-20250809-v1.26.0.uf2`文件到可移动磁盘(RPI-RP2)，并等待它完成，就像复制文件到U盘一样。
+![1401](./media/thonny-26-1789957334190-24.png)
 
-![thonny-25](./media/thonny-25.gif)
+![1402](./media/thonny-27-1789957334190-25.png)
 
-E.当固件烧入完成后，Raspberry Pi Pico会自动重启。之后，你可以运行Micropython。
+## 4.1.5 Toolbar
 
-## 3.5 页面介绍
+![1403](./media/thonny-28-1789957334190-26.png)
 
-单击 **视图** ，勾选 **文件** ，打开文件路径管理，方便使用。
+|              Icon              |       Function       |
+| :----------------------------: | :------------------: |
+| ![1404](./media/thonny-29.png) |         New          |
+| ![1405](./media/thonny-30.png) |       Open...        |
+| ![1406](./media/thonny-31.png) |         Save         |
+| ![1407](./media/thonny-32.png) |  Run current script  |
+| ![1408](./media/thonny-33.png) | Debug current script |
+| ![1409](./media/thonny-34.png) |      Step over       |
+| ![1410](./media/thonny-35.png) |      Step into       |
+| ![1411](./media/thonny-36.png) |       Step out       |
+| ![1412](./media/thonny-37.png) |        Resume        |
+| ![1413](./media/thonny-38.png) | Stop/Restart backend |
 
-![1401](./media/thonny-26.png)
 
-![1402](./media/thonny-27.png)
 
-## 3.6 工具栏介绍:
+## 4.1.6 Connect ESP32S3 to Thonny
 
-![1403](./media/thonny-28.png)
+Connect the ESP32S3development board to the computer, then set the development board to ESP32S3and select the port. 
 
-|              按钮              |       功能        |
-| :----------------------------: | :---------------: |
-| ![1404](./media/thonny-29.png) |     新建页面      |
-| ![1405](./media/thonny-30.png) |      打开...      |
-| ![1406](./media/thonny-31.png) |       保存        |
-| ![1407](./media/thonny-32.png) |   运行当前脚本    |
-| ![1408](./media/thonny-33.png) |   调试当前脚本    |
-| ![1409](./media/thonny-34.png) |       步过        |
-| ![1410](./media/thonny-35.png) |       步进        |
-| ![1411](./media/thonny-36.png) |       步出        |
-| ![1412](./media/thonny-37.png) |     恢复执行      |
-| ![1413](./media/thonny-38.png) | 停止/重启后端进程 |
+Click `Tools`-->`Options...`
 
+![thonny-42](./media/thonny-42-1789957334190-27.png)
 
+Select `Interpreter` , then set the development board to `MicroPython(Raspberry Pi ESP32S3)`, and choose the ports automatically recognized, and click `OK`.
 
-## 3.7 如何将Pico连接到Thonny软件
+![image-20260921105415779](./media/image-20260921105415779.png)
 
-将Pico开发板连接到电脑，然后设置开发板为Pico并且选择端口。步骤如下：点击`工具`-->`选项...`
+After connection, “ MicroPython device” will appear on the left side of Thonny and there will also be a prompt in the lower right corner.
 
-![thonny-42](./media/thonny-42.png)
+![image-20260921105433844](./media/image-20260921105433844.png)
 
-选择`解释器`，然后设置开发板为`MicroPython(Raspberry Pi Pico)`，端口则选择自动识别到的端口（如果你有多个端口不确认是哪个时你可以拔掉Pico开发板与电脑的连接看哪个端口消失了来确认），选择好后点击`确认`
+## 4.1.7 Load Code from Computer
 
-![thonny-43](./media/thonny-43.png)
 
-连接成功后，Thonny的左边会出现“Raspberry Pi Pico”的区域并且右下角也会有提示
 
-![thonny-44](./media/thonny-44.png)
+Click Files –> This computer, open the file `MicroPython_Resources`-->`codes`.
 
-## 3.8 如何打开代码文件
+![image-20260921105900734](./media/image-20260921105900734.png)
 
-<span style="color:red;">注意：需要再`1.代码和库文件下载`中下载项目所需的资料文件，然后解压到电脑桌面以便于寻找。</span>
 
-在 文件区单击 “此电脑” ，按照电脑桌面的路径找到文件`资料`
 
-![thonny-39](./media/thonny-39.png)
+Enter `codes` and you can see the codes. Click it to open the file in Thonny.
 
-再进入`codes`文件夹便能看到代码文件了，鼠标双击代码文件即可在Thonny软件中打开。
+![image-20260921110111092](./media/image-20260921110111092.png)
 
-![thonny-40](./media/thonny-40.png)
 
-## 3.9 如何将库文件保存到Pico中（重要）
 
-没有保存库文件到Pico开发板时运行代码报错现象如下：
+## 4.1.8 Upload Library to ESP32S3
 
-![thonny-46](./media/thonny-46.png)
+Errors may be reported during running code without saving the library to ESP32S3.
 
+![image-20260921110343623](./media/image-20260921110343623.png)
 
 
-**添加库文件方法：** 在文件区打开`资料`文件中的`lib`文件便能看到库文件了
 
-![thonny-41](./media/thonny-41.png)
+**Add library:** 
 
-鼠标右击`Sengo1.py`文件然后选择"上传到 / "
+In Files, open `MicroPython_Resources` –> `lib` to check library:
 
-![thonny-45](./media/thonny-45.png)
+![image-20260921110410995](./media/image-20260921110410995.png)
 
-上传成功后会在"Raspberry Pi Pico"区域内显示`Sengo1.py`文件，剩下的`neopixel.py`也是用同样的方法添加。
 
-![thonny-47](./media/thonny-47.png)
 
-## 3.10 如何在线运行代码
+Choose `Sengo1.py` to “Upload to/”.
 
-我们以运行代码"4_1Color.py"代码文件为例
+![image-20260921110442246](./media/image-20260921110442246.png)
 
-首先在"Files"区选中"4_1Color.py"文件并打开，然后点击做上交的运行按键![1407](./media/thonny-32.png)即可运行代码（注意：需要将Sengo1 AI视觉模块正确的连接到Pico开发板否则将会报错)，如果我们不想运行当前代码时我们只需要点击停止按键![1413](./media/thonny-38.png)。
 
-![thonny-48](./media/thonny-48.png)
 
-## 3.11 如何离线运行代码
+After that, `ESP32S3_4WD_Car.py` is displayed in “MicroPython device”.
 
-我们也以"4_1Color.py"代码文件为例
+![image-20260921110637324](./media/image-20260921110637324.png)
 
-首先点击"Raspberry Pi Pico"后方的![thonny-50](./media/thonny-50.png)然后点击"新建文件..."
+## 4.1.9 Online Running
 
-![thonny-49](./media/thonny-49.png)
+Here we take code file “4_1_Buzzer.py” as an example to run online.
 
-命名为`main.py`然后点击确认（注意：这个名称不能变更也不能输入错必须保证是`main.py`）
+Open “4_1_Buzzer.py” in Files and click ![1407](./media/thonny-32-1789957334190-36.png). Note that wrong wiring of Sengo1 AI and ESP32S3will cause errors in output. If you want to stop current run, just click ![1413](./media/thonny-38-1789957334190-37.png).
 
-![thonny-51](./media/thonny-51.png)
+![thonny-48](./media/thonny-48-1789957334190-38.png)
 
-创建文件成功
+## 4.1.10 Offline Running
 
-![thonny-52](./media/thonny-52.png)
+Here we use “4_1_Buzzer.py” again. 
 
+Click ![thonny-50](./media/thonny-50-1789957334190-39.png) followed by “MicroPython device” and select “New file...”.
 
+![image-20260921110913513](./media/image-20260921110913513.png)
 
-打开"4_1Color.py"代码文件然后“Ctrl + A”全选 “Ctrl + C”复制 ，打开"main.py"代码文件 “Ctrl + V”粘贴
 
-![thonny-53](./media/thonny-53.png)
 
-点击保存按键进行保存
+Name it to `boot.py`. (Note: It must be `boot.py`. This name cannot be changed or entered incorrectly.)
 
-![thonny-54](./media/thonny-54.png)
+![image-20260921111102122](./media/image-20260921111102122.png)
 
-保存成功，这样当Pico开发板重新上电后就会自动运行`main.py`中的代码（注意：保存时需要停止在线代码的运行，否则将魂保存不成功）
+The file was created successfully.
 
-![thonny-55](./media/thonny-55.png)
+![image-20260921111124912](./media/image-20260921111124912.png)
 
+Open the “4_1_Buzzer.py” code file and then press “Ctrl + A” and “Ctrl + C”. Open “main.py” to “Ctrl + V” in it.
 
+![image-20260921111142693](./media/image-20260921111142693.png)
 
+Click Save.
 
+![image-20260921111203367](./media/image-20260921111203367.png)
 
+Saved successfully. Now, when the ESP32S3development board is powered on again, the code in `boot.py` will run automatically. (Note: When saving, you need to stop the running of the online code; otherwise, it may fail to be saved.)
+
+![image-20260921111244913](./media/image-20260921111244913.png)
