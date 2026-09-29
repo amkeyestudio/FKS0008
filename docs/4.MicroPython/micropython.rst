@@ -17,30 +17,30 @@ MicroPython course
 .. toctree::
     :maxdepth: 1
 	
-    1_ThonnyBasicTutorial
-    2_点亮LED灯
-    3_呼吸灯
-    4_蜂鸣器
-    5_LED点阵
-    6_舵机控制
-    7_电机驱动与调速
-    8_5路巡线传感器
-    9_巡线小车
-    10_超声波传感器
-    11_超声波跟随小车
-    12_超声波避障小车
-    13_红外遥控接收传感器
-    14_红外遥控小车
-    15_ESP32S3 WiF基础
-    16_WiFi控制小车
+    1_ArduinoBasicTutorial
+    2_LED
+    3_PWM_LED
+    4_Buzzer
+    5_LED_Matrix
+    6_Servo
+    7_Motor
+    8_Line_Tracking
+    9_Line_Tracking_Car
+    10_Ultrasonic
+    11_Following_Car
+    12_Avoidance_Car
+    13_IR
+    14_IR_Car
+    15_WiFi_Basic
+    16_WiFi_Car
 	
 Extended Tutorial
 ------------------------------------
 
 .. toctree::
     :maxdepth: 1
-	
-    扩展教程/扩展教程
+
+    Extension
 
 
 
