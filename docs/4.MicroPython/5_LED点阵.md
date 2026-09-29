@@ -34,9 +34,6 @@ You can think of the LED matrix as a giant chessboard. A small LED light soldier
 
 However, if we want to light up many lights at once, direct wiring would turn the wires into a tangled mess (128 lights theoretically require 128 control lines, plus power and ground, making an alarming number of wires). Therefore, smart engineers hired a "head housekeeper" for this matrix module—the **AiP1640 chip**.
 
-![Internal Structure Diagram of the Chip](placeholder)
-*The AiP1640 chip acts like a head housekeeper, helping us manage all the light beads. We only need to give it instructions through a simple serial interface (requiring just two wires), which greatly simplifies the wiring.*
-
 ### 4.5.4.2 AiP1640 Driving Principle
 
 AiP1640 is a chip specifically designed to drive LED matrices. It internally includes **video memory** (a "small blackboard" for temporarily storing screen data), a **decoder** (a "translator" that translates digital commands into light on/off states), and a **dynamic scanning circuit** (a "switch operator" that rapidly and alternately lights up the lights), which greatly simplifies the control logic of the microcontroller (our development board).

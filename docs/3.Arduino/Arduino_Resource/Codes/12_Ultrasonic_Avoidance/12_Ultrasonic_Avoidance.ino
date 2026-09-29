@@ -90,10 +90,10 @@ void loop() {
     // Compare left and right distances to decide steering direction
     if (leftDistance > rightDistance) {
       // Left distance is further, turn left
-      left(200, 200);
+      left(255, 255);
     } else {
       // Right distance is further (or equal), turn right
-      right(200, 200);
+      right(255, 255);
     }
     delay(500);
 

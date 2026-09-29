@@ -56,105 +56,9 @@ Follow the prompts to install.
 
 ![a9](./media/a9.png)
 
-## 3.1.3 Install USB Driver
 
-Note that please connect the ESP32 board to your computer via USB cable before installing the USB driver. Or else, the driver may fail to be installed.
 
-### 3.1.3.1 For Windows
-
-Click to download [Windows CH340 driver](./Windows.zip).
-
-![a51](./media/a51.png)
-
-For Windows 10 and later versions, the driver will be automatically installed. 
-
-Connect the control board to computer via USB, click Computer–Attributes–Device Manager. As is shown in the picture, the driver has already exist.
-
-![](./media/a10.png)
-
-If there is a yellow exclamation mark, you should install it manually.
-
-![](./media/a11.png)
-
-Tap ![a12](./media/a12.png) to choose “Update drive…” to update the driver.
-
-![](./media/a13.png)
-
-Click “Browse my computer for drivers”.
-
-![](./media/a14.png)
-
-Enter“Browse…” to find the folder `usb_ch341_3.1.2009.06` , and then “Next”.
-
-![](./media/a15.png)
-
-Close the page after installation, and then the serial port number appears.
-
-![](./media/a16.png)
-
-Finally, click Computer–Attributes–Device Manager:
-
-![](./media/a10.png)
-
-### 3.1.3.2 For MAC
-
-Click to download [MAC CH340 driver](./MAC.zip).
-
-![a50](./media/a50.png)
-
-**Step 1:** Download the driver from the Website and extract the file to the local installation directory.
-
-![](./media/a17.png)
-
-**Step 2:** For details about how to install the driver in pkg format by default, see Step 3. If OS X 11.0 or later does not support Rosetta, refer to Step 4 to install the dmg driver.
-
-Before installation, please forward to “System Preferences”->“Security & Privacy”->“General” page, below the title “Allow apps downloaded from:” choose the choice 2->“Mac App Store and identified developers”, then the driver will work normally.
-
-![a18](./media/a18.png)
-
-**Step 3:** To install the driver in pkg format, tap the driver file → Continue→ Install
-
-![](./media/a19.png)
-
-![a20](./media/a20.png)
-
-Then the installation will be successful
-
-![a21](./media/a21.png)
-
-![a22](./media/a22.png)
-
-To install the pkg format driver on OS X 11.0 and later: Open “LaunchPad”→“CH34xVCPDriver”→Install
-
-![a23](./media/a23.png)
-
-When using OS X 10.9 to OS X 10.15, click “Restart” to restart your computer, and perform the following steps after the restart.
-
-![a24](./media/a24.png)
-
-**Step 4:** To install the dmg driver, tap the dmg file and drag “CH34xVCPDriver” to enter the application folder in the operating system.
-
-![a25](./media/a25.png)
-
-Then open “LaunchPad”→“CH34xVCPDriver”→Install
-
-![a26](./media/a26.png)
-
-Then the installation will be successful
-
-![a27](./media/a27.png)
-
-When inserting the CH340 control board into the USB port, open System Report -> Hardware ->USB. On the right is USB Device Tree. If the USB device is working properly, you will find a device whose “Vendor ID” is [0x1a86].
-
-![a28](./media/a28.png)
-
-Open “Terminal” program under Applications-Utilities folder and type the command “ls /dev/tty*”.
-
-![a29](./media/a29.png)
-
-You should see the “tty.wchusbserialx” where “x” is the assigned device number similar to Windows COM port assignment.
-
-## 3.1.4 Install ESP32 Board
+## 3.1.3 Install ESP32 Board
 
 Open Arduino IDE and click “Tools” → “Board”. But we cannot find ESP32, so we need to install it manually.
 
@@ -182,7 +86,7 @@ Installed:
 
 ![a34](./media/a34.png)
 
-## 3.1.5 Use Arduino IDE
+## 3.1.4 Use Arduino IDE
 
 ![](./media/a35.png)
 
@@ -203,7 +107,7 @@ Installed:
 15. **Code editing area**
 16. **IDE prompt area** (Uploading fails or succeeds) & **Serial monitor display area**
 
-## 3.1.6 Upload Code on Arduino IDE
+## 3.1.5 Upload Code on Arduino IDE
 
 Connect the board to your computer via the USB cable.
 
@@ -269,9 +173,9 @@ After that, click ![a42](./media/a42.png) to show serial monitor and set baud ra
 
 Now that you’re familiar with the steps of uploading code, please continue to learn how to import libraries to Arduino IDE. They are indispensable, as the IDE will report an error if library files are not added.
 
-## 3.1.7 Import Library
+## 3.1.6 Import Library
 
-### 3.1.7.1 What are Libraries?
+### 3.1.6.1 What are Libraries?
 
 A library is a collection of codes, and it facilitates the connection of sensors, displays and modules. 
 
@@ -281,7 +185,7 @@ When you see “No such file or directory”, oops, libraries are missing! For i
 
 ![a44](./media/a44.png)
 
-### 3.1.7.2 How to Install the Libraries?
+### 3.1.6.2 How to Install the Libraries?
 
 We still take LiquidCrystal_I2C as an example.
 

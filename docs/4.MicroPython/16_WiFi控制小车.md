@@ -42,8 +42,6 @@ In this lesson, we use the **HTTP protocol**. You can think of HTTP as a standar
 
 Traditional remote controls require infrared rays and dedicated receivers, which have short ranges and directional limitations. By using a Web Server (a "micro-website host" that provides webpage content), the ESP32S3 Pro transforms into a tiny website host. We write the HTML page in the code (HTML is the "layout language" used to write webpage content, containing elements like buttons), and when a phone visits, the ESP32 sends this page to the phone. When you click a button on the webpage, your phone sends a specific URL (such as `/cmd?move=forward`) back to the ESP32. Detecting this URL, the ESP32 knows you want it to move forward, thereby controlling the motor rotation.
 
-![WiFi Network Communication and Control Diagram (How a phone commands the car)](placeholder)
-
 ## 4.16.5 Wiring Instructions
 
 Before starting the wiring, **make sure all devices are powered off** (disconnect the battery or USB cable) to prevent short circuits from burning out components. We will focus on connecting the motor driver module, ultrasonic module, and servo to the ESP32S3 Pro development board (or via an expansion board).

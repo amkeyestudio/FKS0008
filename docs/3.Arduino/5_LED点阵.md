@@ -23,7 +23,6 @@ In this lesson, we will use the ESP32S3 Pro development board to control an 8x16
 | :----------- | :-------------------- | :--- | :----------------------------------------------------------- |
 | Master Board | ESP32S3 Pro Dev Board | 1    | Based on ESP32-S3 chip, supports Wi-Fi and Bluetooth         |
 | LED Matrix   | 8x16 AiP1640 Driver   | 1    | Blue light emission, with serial interface, built-in driver chip |
-
 | Connecting wire | HX2.54 double-ended jumper wire | 4 | Used to connect the module and development board. It is recommended to use different colors to distinguish power from signals |
 | USB data cable | Type-C interface | 1 | Used for power supply and code uploading; must support data transmission functions |
 

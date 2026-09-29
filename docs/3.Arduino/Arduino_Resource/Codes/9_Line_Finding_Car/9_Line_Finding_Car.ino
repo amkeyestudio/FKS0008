@@ -24,33 +24,31 @@ PCF8574 pcf8574(0x20);
 
 // ===================================================
 
-// Set the PWM speed for the left and right motors (0-255)
+// Set PWM speeds for left and right motors (0-255)
 void setMotor(int leftSpeed, int rightSpeed) {
-  ledcWrite(MOTOR_AEN, leftSpeed);  // Write left wheel PWM value
-  ledcWrite(MOTOR_BEN, rightSpeed); // Write right wheel PWM value
+  ledcWrite(MOTOR_AEN, leftSpeed);  // Write PWM value for left wheel
+  ledcWrite(MOTOR_BEN, rightSpeed); // Write PWM value for right wheel
 }
 
-// Move forward
+// Move Forward
 void forward(int leftSpeed, int rightSpeed) {
-  digitalWrite(MOTOR_AIN, HIGH); // Left wheel forward rotation
-  digitalWrite(MOTOR_BIN, HIGH); // Right wheel forward rotation
+  digitalWrite(MOTOR_AIN, HIGH); // Left wheel forward
+  digitalWrite(MOTOR_BIN, HIGH); // Right wheel forward
   setMotor(leftSpeed, rightSpeed);
 }
 
-
-
-// Turn left function (left wheel stops/slows down, right wheel speeds up)
-void turnLeft(int leftSpeed, int rightSpeed) {
-  digitalWrite(MOTOR_AIN, LOW); // Left wheel forward rotation
-  digitalWrite(MOTOR_BIN, HIGH); // Right wheel forward rotation
-  setMotor(0, rightSpeed);
+// Turn Left (Left wheel stops, right wheel moves forward)
+void left(int leftSpeed, int rightSpeed) {
+  digitalWrite(MOTOR_AIN, LOW);  // Left wheel stops
+  digitalWrite(MOTOR_BIN, HIGH); // Right wheel forward
+  setMotor(leftSpeed, rightSpeed);
 }
 
-// Turn right function (left wheel speeds up, right wheel stops/slows down)
-void turnLeft(int leftSpeed, int rightSpeed) {
-  digitalWrite(MOTOR_AIN, LOW); // Left wheel forward rotation
-  digitalWrite(MOTOR_BIN, HIGH); // Right wheel forward rotation
-  setMotor(leftSpeed, 0);
+// Turn Right (Left wheel moves forward, right wheel stops)
+void right(int leftSpeed, int rightSpeed) {
+  digitalWrite(MOTOR_AIN, HIGH); // Left wheel forward
+  digitalWrite(MOTOR_BIN, LOW);  // Right wheel stops
+  setMotor(leftSpeed, rightSpeed);
 }
 
 // Stop motors
@@ -82,7 +80,7 @@ void setup() {
   pcf8574.pinMode(OUTE, INPUT);
 
   // Stop motors in initial state
-  motorStop();
+  stopMotor();
 
   Serial.println("Line Tracking Start");
 }
@@ -121,13 +119,13 @@ void loop() {
     case 0b11100: // Left sensors detect the black line, meaning the car is drifting left and needs to turn right
     case 0b11000:
     case 0b10000:
-      turnRight(BASE_SPEED, TURN_SPEED);
+      right(BASE_SPEED, TURN_SPEED);
       break;
 
     case 0b00111: // Right sensors detect the black line, meaning the car is drifting right and needs to turn left
     case 0b00011:
     case 0b00001:
-      turnLeft(BASE_SPEED, TURN_SPEED);
+      left(BASE_SPEED, TURN_SPEED);
       break;
       
     case 0b00000: // All sensors fail to detect the black line, meaning the car has strayed off the track, stop

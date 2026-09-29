@@ -4,7 +4,7 @@
 #include "webpage.h" // Include external webpage HTML code file
 
 // ================= WiFi Configuration =================
-const char* ssid = "KS0567";         // Replace with your WiFi name
+const char* ssid = "FKS0008";         // Replace with your WiFi name
 const char* password = "88888888";   // Replace with your WiFi password
 
 // ================= Global Objects =================
