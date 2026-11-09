@@ -154,12 +154,12 @@ The first line is "borrowing a tool," telling the compiler that we want to use t
 **2. Initialization Settings (`setup`)**
 
 ```cpp
-myServo.attach(servoPin, 500, 2400);
+myServo.attach(SERVO_PIN);
 myServo.write(90);
 ```
 
 
-`attach()` is like connecting a telephone line, telling the library function which pin the servo is connected to, and setting the upper and lower limits of the pulse width. `write(90)` is for safety: right after power-on, if the servo was originally at 0 degrees, running the program directly might cause it to jerk violently. Having it move to the middle position at 90 degrees first makes the movement much gentler.
+`attach()` is like connecting a telephone line, telling the library function which pin the servo is connected to. Here only the pin is passed, so the library applies its default pulse width range (544~2400 μs) to map `write(0)`~`write(180)`. `write(90)` is for safety: right after power-on, if the servo was originally at 0 degrees, running the program directly might cause it to jerk violently. Having it move to the middle position at 90 degrees first makes the movement much gentler.
 
 **3. The `for` Loop in Loop Control (`loop`)**
 

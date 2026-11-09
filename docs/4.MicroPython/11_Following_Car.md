@@ -1,4 +1,4 @@
-# 4.11 Ultrasonic Tracking Car
+# 4.11 Ultrasonic Following Car
 
 ## 4.11.1 Course Introduction
 
@@ -129,7 +129,7 @@ After uploading the code, we need to check whether the car truly "sees" things.
 **How to view data?** 
 At the top of the programming software, find and open the **Serial Monitor** (the "dialog box" where the computer and development board chat). The **Baud rate** (the "speech speed" of the car and computer chatting) must be set to **115200** (consistent with the code, otherwise mismatched speeds are like a Chinese person listening to French—all they hear is gibberish).
 
-You should see lines of jumping numbers displaying the current distance value, such as `当前距离: 45 cm` (Current distance: 45 cm).
+You should see lines of jumping numbers displaying the current distance value, such as `Distance: 45 cm` (Current distance: 45 cm).
 
 **Observing the car's actions:**
 

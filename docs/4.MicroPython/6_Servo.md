@@ -186,7 +186,7 @@ Beginners inevitably run into pitfalls when starting out. Don't be discouraged; 
 **Problem 3: An error occurs when uploading the code.**
 
 *   **Cause**: If you are using MicroPython code, it might be because the development board hasn't had the MicroPython firmware flashed, or the wrong serial port (the communication channel between the computer and the development board) / board model was selected in the IDE (Integrated Development Environment, the software used for writing code).
-*   **Solution**: Confirm that the MicroPython firmware has been correctly flashed to the development board. Check whether the serial port selection in the IDE is correct, ensuring no other program is occupying the serial port. If using the Arduino IDE environment, ensure the code syntax is switched to C++ and the corresponding library is installed.
+*   **Solution**: Confirm that the MicroPython firmware has been correctly flashed to the development board. Check whether the serial port selection in the IDE (for example, Thonny's **Run → Configure interpreter...**) is correct, ensuring no other program is occupying the serial port. Also make sure the `ESP32S3_4WD_Car.py` library has been uploaded to the board's `/lib` directory, because `Servo_init()` and `Servo_set_angle()` come from it.
 
 **Problem 4: The servo stops halfway, or the angle is incorrect.**
 

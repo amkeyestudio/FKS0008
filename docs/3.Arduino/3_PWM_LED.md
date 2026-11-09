@@ -65,7 +65,7 @@ Previously we used `digitalWrite()`, which can only output HIGH (high level/on) 
 
 Note: On the ESP32S3 Pro, almost all GPIO pins support PWM functionality, which is much more powerful than the traditional Arduino UNO! In this experiment, we will use the **io11** pin.
 
-## 3.3.4.4 Wiring Instructions
+### 3.3.4.4 Wiring Instructions
 
 Before wiring, make sure the ESP32S3 Pro development board is disconnected from computer power, or unplug the USB cable first, so that even if there is a wiring error, the components will not be burned out.
 
@@ -182,7 +182,7 @@ Let's break down this magical piece of code step by step to see how it commands 
 
 Congratulations! When you click the "Upload" button and wait for the progress bar to finish, the magic happens:
 
-1.  **Visual Observation**: The red LED connected to the io42 pin does not turn on suddenly, but starts from a completely off state and gradually, smoothly, and evenly becomes brighter.
+1.  **Visual Observation**: The red LED connected to the io11 pin does not turn on suddenly, but starts from a completely off state and gradually, smoothly, and evenly becomes brighter.
 2.  **Reaching the Peak**: The LED slowly brightens until it reaches its maximum state, lingering for a split second.
 3.  **Gradual Fading**: Then, it begins to gently and evenly dim until it turns completely off.
 4.  **Continuous Loop**: This process continues indefinitely, just like smooth breathing in your sleep—inhaling and exhaling with a strong sense of rhythm.
@@ -196,7 +196,7 @@ Congratulations! When you click the "Upload" button and wait for the progress ba
 
 **Problem: The LED light does not turn on at all.**
 Cause: The wiring may be loose, or the positive and negative terminals of the LED might be reversed.
-Solution: First, check whether the jumper wires are plugged in securely. Next, try swapping the two wires of the LED (since LEDs are polarized, they won't conduct electricity if reversed). Make sure the positive terminal is connected to io42 and the negative terminal to GND.
+Solution: First, check whether the jumper wires are plugged in securely. Next, try swapping the two wires of the LED (since LEDs are polarized, they won't conduct electricity if reversed). Make sure the positive terminal is connected to io11 and the negative terminal to GND.
 
 **Problem: The LED light is very bright, but there is no "breathing" effect; it just stays on.**
 Cause: You might have mistakenly used `digitalWrite` in the code, or the `delay` time is too short for the human eye to distinguish the change.
@@ -208,7 +208,7 @@ Solution: Change `int fadeAmount = 5;` to `int fadeAmount = 1;` so that it chang
 
 **Problem: An error occurs when uploading the code, indicating a pin error.**
 Cause: The pin naming of the ESP32S3 Pro may require a specific format, or the wrong board model was selected.
-Solution: Make sure "ESP32S3 Dev Module" or the corresponding SunFounder option is selected under "Tools" -> "Board" in the Arduino IDE. The pin definition `const int ledPin = 42;` in the code is a generic GPIO number and is usually fine.
+Solution: Make sure "ESP32S3 Dev Module" is selected under "Tools" -> "Board" in the Arduino IDE. The pin definition `const int ledPin = 11;` in the code is a generic GPIO number and is usually fine.
 
 ## 3.3.9 Safety Tips
 

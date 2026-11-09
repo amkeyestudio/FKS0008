@@ -61,8 +61,8 @@ Before starting the wiring, **make sure all devices are powered off** (disconnec
 |                             | Speed Control (AEN)     | GPIO 41                          | Uses a PWM signal to control the speed of the left motor, determining how fast it spins. |
 | **Right Motor (Channel B)** | Direction Control (BIN) | GPIO 38                          | Controls the forward/reverse rotation of the right motor.    |
 |                             | Speed Control (BEN)     | GPIO 21                          | Uses a PWM signal to control the speed of the right motor.   |
-| **Ultrasonic Module**       | Trigger Pin (TRIG)      | GPIO 12                          | Sends out the ultrasonic signal, acting like the mouth "shouting" out a sound. |
-|                             | Echo Pin (ECHO)         | GPIO 13                          | Receives the reflected ultrasonic signal, acting like the ear "hearing" the echo. |
+| **Ultrasonic Module**       | Trigger Pin (TRIG)      | GPIO 13                          | Sends out the ultrasonic signal, acting like the mouth "shouting" out a sound. |
+|                             | Echo Pin (ECHO)         | GPIO 12                          | Receives the reflected ultrasonic signal, acting like the ear "hearing" the echo. |
 | **Servo**                   | Signal Line (Signal)    | GPIO 42                          | Receives the PWM control signal, telling the servo what angle to turn to. |
 | **Power Supply**            | Positive (VCC/VM)       | Battery Box Positive             | Provides power for the motor driver, giving the motors the strength to spin. |
 |                             | Negative (GND)          | Battery Box Negative / Board GND | **Must share a common ground**, ensuring consistent signal reference voltage levels, otherwise control signals cannot be recognized. |
@@ -92,10 +92,10 @@ from ESP32S3_4WD_Car import Keyes_ESP32S3_4WD, INDEX_HTML
 car = Keyes_ESP32S3_4WD()
 
 # ==================== WiFi Configuration ====================
-# Fill in the name of the WiFi you want to connect to, e.g., "FKS0008"
-SSID = "FKS0008"         
-# Fill in the password of the WiFi you want to connect to, e.g., "88888888"
-PASSWORD = "88888888"   
+# Please modify "your_SSID" to your Wi-Fi name (be sure to keep the English double quotes)
+SSID = "your_SSID"
+# Please modify "your_PASSWORD" to your Wi-Fi password (be sure to keep the English double quotes)
+PASSWORD = "your_PASSWORD"
 
 # ==================== Motor Pin Definitions ====================
 # Define the interface number connected to the left wheel direction control as 40
@@ -332,13 +332,13 @@ It is normal to encounter minor setbacks on the path of exploration. Here are so
 
 **Problem: The webpage displays garbled text or weird button styles**
 
-*   **Cause**: Character encoding is not set in the HTML header, or the `webpage.h` file is missing/malformed.
-*   **Solution**: Check if `<meta charset="UTF-8">` exists in the code. The sample code already includes this line, so this usually doesn't happen. Ensure that the `webpage.h` file is in the same directory as the `.ino` file.
+*   **Cause**: Character encoding is not set in the HTML header, or the `INDEX_HTML` string is missing or malformed.
+*   **Solution**: Check if `<meta charset="UTF-8">` exists in the code. The sample code already includes this line, so this usually doesn't happen. In the MicroPython version the page is stored in the `INDEX_HTML` string inside `ESP32S3_4WD_Car.py`, so make sure that the library on the board is the matching version — re-upload it to `/lib` if you changed the HTML.
 
 **Problem: After clicking a button, the smart car doesn't respond, but the webpage is normal**
 
 *   **Cause**: Wiring error, mismatched pin definitions, or motor power is not turned on.
-*   **Solution**: Check whether IN1-IN4 of the motor driver module are securely connected to the corresponding GPIOs of the ESP32S3 Pro. Check whether the GND of the motor driver module is connected to the GND of the ESP32S3 Pro (common ground). Check if the battery pack has power. You can use a simple LED to test whether the pins have high/low level outputs.
+*   **Solution**: Check whether the AIN / AEN / BIN / BEN pins of the motor driver module are securely connected to the corresponding GPIOs of the ESP32S3 Pro. Check whether the GND of the motor driver module is connected to the GND of the ESP32S3 Pro (common ground). Check if the battery pack has power. You can use a simple LED to test whether the pins have high/low level outputs.
 
 ### 🚨 Common Pitfalls for Beginners (Additional Notes)
 
@@ -346,7 +346,7 @@ It is normal to encounter minor setbacks on the path of exploration. Here are so
 2.  **Remembering the IP address incorrectly**: Every time the development board restarts, the IP address assigned by the router may change. If you could control it before, but suddenly can't, first check if the new IP address in the serial monitor has changed.
 3.  **Mobile data interference**: Sometimes when the phone's WiFi signal is poor, it will automatically switch to 4G/5G mobile data. At this point, the phone and the development board are no longer on the same network. It is recommended to temporarily turn off mobile data on your phone during testing.
 
-## Safety Tips
+## 4.16.10 Safety Tips
 
 Finally, safety always comes first! Please make sure to follow these rules:
 

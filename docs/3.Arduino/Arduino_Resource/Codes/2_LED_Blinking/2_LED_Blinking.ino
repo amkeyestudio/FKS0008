@@ -5,7 +5,7 @@ void setup() {
   // Initialize serial communication with a baud rate of 9600, making it easy to see messages on the computer
   Serial.begin(9600);
   
-  // Set ledPin (io42) to output mode because it needs to control the LED on and off
+  // Set ledPin (io11) to output mode because it needs to control the LED on and off
   pinMode(ledPin, OUTPUT);
   
   // Print a message to the serial monitor to tell us the program has started running

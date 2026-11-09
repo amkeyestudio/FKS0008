@@ -13,10 +13,10 @@ from ESP32S3_4WD_Car import Keyes_ESP32S3_4WD, INDEX_HTML
 car = Keyes_ESP32S3_4WD()
 
 # ==================== WiFi Configuration ====================
-# Fill in the name of the WiFi you want to connect to, e.g., "FKS0008"
-SSID = "FKS0008"         
-# Fill in the password of the WiFi you want to connect to, e.g., "88888888"
-PASSWORD = "88888888"   
+# Please modify "your_SSID" to your Wi-Fi name (be sure to keep the English double quotes)
+SSID = "your_SSID"         
+# Please modify "your_PASSWORD" to your Wi-Fi password (be sure to keep the English double quotes)
+PASSWORD = "your_PASSWORD"   
 
 # ==================== Motor Pin Definitions ====================
 # Define the interface number connected to the left wheel direction control as 40

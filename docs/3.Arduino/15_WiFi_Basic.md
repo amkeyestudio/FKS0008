@@ -268,7 +268,7 @@ After successfully uploading the code, open the Arduino IDE Serial Monitor to vi
 
 ![Browser displaying Hello World web page](./media/a70.png)
 
-## FAQ
+## 3.15.7 FAQ
 
 **Issue: Serial Monitor displays garbled text or strange symbols**
 

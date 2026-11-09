@@ -72,8 +72,10 @@ This code implements the following functions: connects to WiFi, starts a Web ser
 #include "webpage.h" // Include external webpage HTML code file
 
 // ================= WiFi Configuration =================
-const char* ssid = "KS0567";         // Replace with your WiFi name
-const char* password = "88888888";   // Replace with your WiFi password
+// Please modify "your_SSID" to your Wi-Fi name (be sure to keep the English double quotes)
+const char* ssid = "your_SSID";
+// Please modify "your_PASSWORD" to your Wi-Fi password (be sure to keep the English double quotes)
+const char* password = "your_PASSWORD";
 
 // ================= Global Objects =================
 WebServer server(80); // Create Web server instance, listening on port 80
@@ -323,14 +325,14 @@ Awesome! You just controlled real hardware with code!
 **Issue: Clicking buttons causes no response from the car, but the webpage works normally**
 
 *   **Cause**: Wiring errors, pin definitions mismatch, or motor power not turned on.
-*   **Solution**: Check whether IN1-IN4 of the motor driver module are securely connected to the corresponding GPIOs of the ESP32S3 Pro. Check whether the GND of the motor driver module is connected to the GND of the ESP32S3 Pro (common ground). Check if the battery holder has power. You can use a simple LED to test whether the pins have high/low level outputs.
+*   **Solution**: Check whether the AIN / AEN / BIN / BEN pins of the motor driver module are securely connected to the corresponding GPIOs of the ESP32S3 Pro. Check whether the GND of the motor driver module is connected to the GND of the ESP32S3 Pro (common ground). Check if the battery holder has power. You can use a simple LED to test whether the pins have high/low level outputs.
 
 **Issue: Compilation error prompts that `ESP32Servo.h` or `webpage.h` cannot be found**
 
 *   **Cause**: Missing necessary library files or custom header files.
 *   **Solution**: Search for and install `ESP32Servo` via "Tools" -> "Manage Libraries" in the Arduino IDE. Ensure the `webpage.h` file is correctly placed in the project folder.
 
-## Safety Tips
+## 3.16.10 Safety Tips
 
 *   **Avoid Short Circuits**: Be extremely careful when wiring. Do not let the positive and negative power terminals touch directly to avoid burning out the development board or motor driver module.
 *   **Power Supply Safety**: Do not use a power supply exceeding 12V to directly power the motor driver module. Never connect high voltages (such as 12V/24V) directly to the GPIO pins of the ESP32S3 Pro, or it will instantly break down the chip.

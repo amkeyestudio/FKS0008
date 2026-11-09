@@ -38,3 +38,5 @@ while True:
 
     # After returning to 0 degrees, let the servo rest for another 1 second, then restart the next round of the loop
     time.sleep(1)
+ 
+    

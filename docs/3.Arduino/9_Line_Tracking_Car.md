@@ -237,12 +237,12 @@ In the `loop()` function, we use `pcf8574.digitalRead()` to read the voltage lev
 The core of the code is a `switch-case` structure that determines the car's actions based on the state code `state` generated in the previous step.
 
 *   When the state is `0b01110`, it means the middle probe C as well as the surrounding probes B and D have detected the black line, indicating that the car is traveling in the center of the track. At this time, `forward()` is called to move straight.
-*   When the state is `0b11100` or similar situations where the left probes detect the black line, it means the car is leaning to the left overall. At this time, `turnRight()` is called to make a right correction.
-*   When the state is `0b00111` or similar situations where the right probes detect the black line, it means the car is leaning to the right overall. At this time, `turnLeft()` is called to make a left correction.
-*   When the state is `0b00000`, it means none of the probes can see the black line, and the car has gone off track. At this time, `motorStop()` is called for an emergency stop.
+*   When the state is `0b11100` or similar situations where the left probes detect the black line, it means the car is leaning to the left overall. At this time, `right()` is called to make a right correction.
+*   When the state is `0b00111` or similar situations where the right probes detect the black line, it means the car is leaning to the right overall. At this time, `left()` is called to make a left correction.
+*   When the state is `0b00000`, it means none of the probes can see the black line, and the car has gone off track. At this time, `stopMotor()` is called for an emergency stop.
 
 **4. Motor Control Functions**
-We have encapsulated four functions: `forward()`, `left()`, `right()`, and `stopMotor()`. Taking `turnLeft()` as an example, to achieve a left turn, we need to slow down or stop the left wheel while keeping the right wheel at a high speed. Therefore, we set the left wheel direction pin `MOTOR_AIN` to `LOW`, and the PWM value of the speed pin `MOTOR_AEN` to `0`; at the same time, we set the right wheel direction pin `MOTOR_BIN` to `HIGH`, and keep the speed pin `MOTOR_BEN` at the passed speed value. Through this differential speed control, the car can complete the turn smoothly.
+We have encapsulated four functions: `forward()`, `left()`, `right()`, and `stopMotor()`. Taking `left()` as an example, to achieve a left turn, we need to slow down or stop the left wheel while keeping the right wheel at a high speed. Therefore, we set the left wheel direction pin `MOTOR_AIN` to `LOW`, and the PWM value of the speed pin `MOTOR_AEN` to `0`; at the same time, we set the right wheel direction pin `MOTOR_BIN` to `HIGH`, and keep the speed pin `MOTOR_BEN` at the passed speed value. Through this differential speed control, the car can complete the turn smoothly.
 
 ## 3.9.8 Experimental Phenomena
 
@@ -262,7 +262,7 @@ Open the Serial Monitor (baud rate 115200), and you will see a string of numbers
 **Issue: The car keeps spinning in place and doesn't move forward**
 
 *   **Cause**: The wiring of the left and right motors might be reversed, or the left/right logic in the code is reversed. For example, the code says "turn left", but actually the left wheel turns and the right wheel doesn't, resulting in a right turn.
-*   **Solution**: Observe the serial data. When the black line is on the left (the left side of the state code is 1), check whether the car turns right. If it turns left, please swap the motor control logic inside the `turnLeft` and `turnRight` functions in the code, or physically swap the wiring of the left and right motors.
+*   **Solution**: Observe the serial data. When the black line is on the left (the left side of the state code is 1), check whether the car turns right. If it turns left, please swap the motor control logic inside the `left` and `right` functions in the code, or physically swap the wiring of the left and right motors.
 
 **Issue: The car drives crookedly, like it's dancing**
 

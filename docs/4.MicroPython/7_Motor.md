@@ -1,4 +1,4 @@
-# 4.7 Motor Control and Speed Regulation
+# 4.7 Motor Driving and Speed Control
 
 ## 4.7.1 Course Introduction
 
@@ -196,7 +196,7 @@ Let's break down this code to see how it commands our "mighty worker." Don't be 
     *   `time.sleep(2)`: Let time "fly" for 2 seconds. During these 2 seconds, the car keeps its current action unchanged.
     *   The subsequent moving backward, turning left, turning right, and stopping follow the exact same logic: perform an action first, then maintain it for a period of time. By changing the combinations of speed and direction of the left and right wheels, various fancy actions are achieved!
 
-## 4.8 Experimental Phenomena
+## 4.7.8 Experimental Phenomena
 
 After uploading the code and connecting the external power supply, please observe your motor (or car):
 
@@ -209,14 +209,14 @@ If you open the **Serial Monitor (a window on the computer used to display text 
 
 **Awesome! If you see the motor running smoothly at this rhythm, congratulations! You have successfully controlled real mechanical power!**
 
-## 4.9 Common Errors and Solutions (Beginner's Pitfall Guide)
+## 4.7.9 Common Errors and Solutions (Beginner's Pitfall Guide)
 
 As a beginner starting out, it is inevitable to encounter some minor situations. Don't panic; the traps that everyone is most likely to step into and their solutions are listed here:
 
 **Problem 1: The motor only hums, but does not rotate.**
 
 *   **Cause**: It may be due to insufficient power supply. The current provided by the USB may not be enough to drive the motor to start, especially at low speeds where the torque (rotational force) is smaller, or the battery power is exhausted.
-*   **解决方法**: Try using brand new or fully charged batteries connected to the VMOT input of the DRV8835, and ensure that GND shares a strict common ground with the ESP32S3. Also, check if the motor is physically stuck (stalled).
+*   **Solution**: Try using brand new or fully charged batteries connected to the VMOT input of the DRV8835, and ensure that GND shares a strict common ground with the ESP32S3. Also, check if the motor is physically stuck (stalled).
 
 **Problem 2: The motor rotation direction is opposite to expectations (e.g., the code writes forward, but it actually goes backward).**
 
@@ -243,7 +243,7 @@ As a beginner starting out, it is inevitable to encounter some minor situations.
 *   **Cause**: Forgot to turn on the physical small switch on the battery box, or installed the battery positive and negative poles backward leading to a lack of power.
 *   **Solution**: Check whether the battery box switch is flipped to "ON", use a multimeter or the substitution method to confirm whether the batteries have power, and ensure the positive and negative poles are installed correctly.
 
-## 4.10 Precautions and Safety Tips
+## 4.7.10 Precautions and Safety Tips
 
 Safety always comes first! Before letting the car "speed up", please make sure to keep the following points in mind:
 

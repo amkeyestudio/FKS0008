@@ -1,4 +1,4 @@
-# 4.9 Line Tracking Smart Car
+# 4.9 Line-Tracking Car
 
 ## 4.9.1 Course Introduction
 

@@ -4,7 +4,7 @@
 
 ![4ae992e1debe12b5aef52fc67dbb6f15](./media/4ae992e1debe12b5aef52fc67dbb6f15-1790642501781-2.jpg)
 
-## 1. Color Sorting Smart Car
+## 1. Color Sorting Car
 
 ![afd4g56df1](./media/afd4g56df1.jpg)
 
@@ -115,7 +115,7 @@ while True:
 
 
 
-## 2. Vision Line-Following Smart Car
+## 2. Vision Line-Following Car
 
 ![a4fgd5fg5ds1g](./media/a4fgd5fg5ds1g.jpg)
 
@@ -196,7 +196,7 @@ while True:
 - **Cornering**: When the car approaches a curve, `angleVal` or `offsetVal` will exceed the threshold (such as >25), and the car will automatically trigger the `right` or `left` function, smoothly negotiating the curve through the speed difference between the left and right wheels.
 - **Line Loss**: If the car accidentally deviates from the track causing `validVal` to not be 5, it will move forward briefly for 0.3 seconds and then stop completely to prevent running off the track entirely.
 
-## 3. Soccer Car
+## 3. Soccer Smart Car
 
 ![asfas4fdas1f564](./media/asfas4fdas1f564.jpg)
 
@@ -236,10 +236,10 @@ from ESP32S3_4WD_Car import Keyes_ESP32S3_4WD, INDEX_HTML
 car = Keyes_ESP32S3_4WD()
 
 # ==================== WiFi Configuration ====================
-# Fill in the name of the Wi-Fi you want to connect to here, e.g., "FKS0008"
-SSID = "FKS0008"         
-# Fill in the password of the Wi-Fi you want to connect to here, e.g., "88888888"
-PASSWORD = "88888888"   
+# Please modify "your_SSID" to your Wi-Fi name (be sure to keep the English double quotes)
+SSID = "your_SSID"
+# Please modify "your_PASSWORD" to your Wi-Fi password (be sure to keep the English double quotes)
+PASSWORD = "your_PASSWORD"
 
 # ==================== Motor Pin Definitions ====================
 # Define the interface number connected to the left wheel direction control as 40
@@ -415,9 +415,10 @@ while True:
 
 ### 3.4 Experimental Verification
 
-1. Compile and upload the code to the ESP32-S3 car.
-2. Open the Serial Monitor (set the baud rate to 115200).
-3. Power on the car and observe the serial output.
-4. Use a phone or computer to connect to the WiFi named "FKS0008".
-5. Open a browser and enter the IP address printed in the serial monitor (for example, `192.168.4.1` or the IP assigned by the router).
-6. Click the servo open and close buttons on the webpage, and observe the car's ovements.
+1. **Check the Wi-Fi settings in the code first.** At the top of the code you will find `SSID = "your_SSID"` and `PASSWORD = "your_PASSWORD"`. Replace them with your own router's Wi-Fi name and password, otherwise the car cannot join your network.
+2. Run the code on the ESP32-S3 car.
+3. Power on the car and watch the **Shell window in Thonny** (MicroPython has no separate Serial Monitor). The car first prints `Connecting to WiFi: <your SSID>`, then a row of dots while it tries to connect.
+4. Wait until it prints `WiFi Connected Successfully!` and then `IP Address: 192.168.1.105` (your number may differ). **Write this IP address down** — it is the address you will type into the browser, and it may change after every restart.
+5. Make sure your phone or computer is connected to the **same Wi-Fi network** as the car.
+6. Open a browser on your phone, type that IP address into the address bar, and the control page will load.
+7. Click the servo open and servo close buttons on the webpage, and observe the car's movements.

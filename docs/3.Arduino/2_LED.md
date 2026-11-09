@@ -1,4 +1,4 @@
-#     3.2 Lighting Up an LED
+# 3.2 Lighting Up an LED
 
 ## 3.2.1 Lesson Introduction
 
@@ -27,7 +27,7 @@ To complete today's experiment, please prepare the following items:
 | Sensor Module      | LED Module                        | 1        | Usually has three pins: S, V, G          |
 | Connection Wire    | Female-to-Female 3Pin Jumper Wire | 1        | Used to connect the board and module     |
 | Data Cable         | Type-C Data Cable                 | 1        | Used for power supply and uploading code |
-| Computer           | Installed with Arduino IDE        | 1        | Where code is written                    |
+| Computer           | Installed with Arduino IDE        | 1        | Where code is written (see 3.1 for installation steps) |
 
 ## 3.2.4 Lesson Principles
 
@@ -39,7 +39,7 @@ The full name of LED is "Light Emitting Diode". You can think of it as a one-way
 
 Ordinary LED bulbs only have two thin pins, which easily break, and connecting them directly to a battery might burn them out due to excessive current. Therefore, we use an "LED module". This module has already integrated a resistor (used to limit current and protect the LED) and the LED together, and breaks out three convenient pins, making it very suitable for beginners.
 
-### 2.2.4.3 How Does the Development Board Control the LED?
+### 3.2.4.3 How Does the Development Board Control the LED?
 
 The ESP32S3 Pro development board is like a room with many switches. Each pin acts as a switch.
 
@@ -88,7 +88,7 @@ void setup() {
   // Initialize serial communication with a baud rate of 9600, making it easy to see messages on the computer
   Serial.begin(9600);
   
-  // Set ledPin (io42) to output mode because it needs to control the LED on and off
+  // Set ledPin (io11) to output mode because it needs to control the LED on and off
   pinMode(ledPin, OUTPUT);
   
   // Print a message to the serial monitor to tell us the program has started running
@@ -137,7 +137,7 @@ void setup() {
 `setup()` is like the preparation work we do after waking up; it only runs once.
 
 *   `Serial.begin(9600)`: Opens the "telephone line" between the development board and the computer, allowing us to see what the development board says on the computer.
-*   `pinMode(ledPin, OUTPUT)`: Tells the development board: "Hey, I'm going to use the io42 pin to output current to control the LED, please get ready!" If you don't write this sentence, the LED might not light up.
+*   `pinMode(ledPin, OUTPUT)`: Tells the development board: "Hey, I'm going to use the io11 pin to output current to control the LED, please get ready!" If you don't write this sentence, the LED might not light up.
 
 **Part 3: The loop() Function**
 
@@ -152,9 +152,9 @@ void loop() {
 
 `loop()` is the main loop, and the code inside will repeat over and over again, never stopping.
 
-*   `digitalWrite(ledPin, HIGH)`: Sends a high level to io42, which is equivalent to pressing a switch, and the LED turns on.
+*   `digitalWrite(ledPin, HIGH)`: Sends a high level to io11, which is equivalent to pressing a switch, and the LED turns on.
 *   `delay(1000)`: The program "daydreams" here for 1000 milliseconds (1 second). Without this sentence, the LED would switch on and off too fast, and the human eye would perceive it as being constantly on.
-*   `digitalWrite(ledPin, LOW)`: Sends a low level to io42, which is equivalent to turning off the switch, and the LED turns off.
+*   `digitalWrite(ledPin, LOW)`: Sends a low level to io11, which is equivalent to turning off the switch, and the LED turns off.
 *   Another `delay(1000)`: Keeps the LED off for 1 second.
 
 Awesome! You just used code to control real hardware!
@@ -177,7 +177,7 @@ Awesome! You just used code to control real hardware!
 
    This shows that the code is not only controlling the light, but also "chatting" with you!
 
-If the LED does not flash, but stays constantly on or off, please check whether the wiring is secure, or whether the pin number `42` in the code matches the pin you actually connected to.
+If the LED does not flash, but stays constantly on or off, please check whether the wiring is secure, or whether the pin number `11` in the code matches the pin you actually connected to.
 
 ## 3.2.9 FAQ
 
@@ -187,7 +187,7 @@ Solution:
 
 1. Check if the jumper wires are firmly inserted.
 2. Confirm that the `+` of the LED module is connected to `5V` of the development board, and `-` is connected to `GND`.
-3. Confirm that the signal wire `S` is connected to `io42`.
+3. Confirm that the signal wire `S` is connected to `io11`.
 
 **Problem: The LED stays on all the time and doesn't flash**
 Cause: The `delay()` time in the code is too short, or `digitalWrite` was written incorrectly.

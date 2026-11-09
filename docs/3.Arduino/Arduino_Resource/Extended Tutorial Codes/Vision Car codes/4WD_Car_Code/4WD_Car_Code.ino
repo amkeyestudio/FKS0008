@@ -59,7 +59,7 @@ void setup() {
   
   // Initialize USB virtual serial port for connecting to computer to view debug info
   Serial.begin(115200);  
-  Serial.println("UNO ready"); // Print startup prompt
+  Serial.println("Car ready"); // Print startup prompt
 
   // Set motor direction control pins to output mode
   pinMode(MOTOR_AIN, OUTPUT);

@@ -4,8 +4,10 @@
 #include "webpage.h" // Include external webpage HTML code file
 
 // ================= WiFi Configuration =================
-const char* ssid = "FKS0008";         // Replace with your WiFi name
-const char* password = "88888888";   // Replace with your WiFi password
+// Please modify "your_SSID" to your Wi-Fi name (be sure to keep the English double quotes)
+const char* ssid = "your_SSID";
+// Please modify "your_PASSWORD" to your Wi-Fi password (be sure to keep the English double quotes)
+const char* password = "your_PASSWORD";
 
 // ================= Global Objects =================
 WebServer server(80); // Create Web server instance, listening on port 80

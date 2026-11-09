@@ -213,7 +213,7 @@ To help you not only know *what* the code does, but *why* it does it, let's brea
     *   Calculates the distance using physics formulas, and includes abnormal value filtering for values `< 2` or `> 300` to prevent the car from making wrong moves when the sensor is interfered with.
 5.  **Motion Control Functions**:
     *   `forward()` and `back()` switch motor directions by changing the high/low states of the direction pins (AIN/BIN).
-    *   Outputs a PWM (Pulse Width Modulation) signal via `analogWrite()` to control the motor speed. The parameter range is 0-255, with larger values corresponding to faster speeds.
+    *   Outputs a PWM (Pulse Width Modulation) signal via `ledcWrite()` to control the motor speed. The parameter range is 0-255, with larger values corresponding to faster speeds.
 
 ## 3.11.8 Experimental Phenomena and Testing
 

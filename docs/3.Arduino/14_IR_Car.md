@@ -177,7 +177,7 @@ In the `setup` function, the serial port is first initialized for debugging prin
 The `loop` function runs continuously. When `IrReceiver.decode()` returns `true`, it means an infrared signal has been successfully received and decoded. The program prints the command code and raw data for debugging purposes. Next, a `switch` statement evaluates the key and calls the corresponding motion function. **Special Note**: After the `switch` statement finishes, `IrReceiver.resume()` must be called; this clears the reception buffer and prepares the receiver for the next signal.
 
 **5. Motor Control Functions**
-Five motion control functions are defined at the bottom. `forward` and `back` control the forward and reverse rotation of the motors by setting direction pins to `HIGH` or `LOW`, and output PWM waves via `analogWrite` to control the speed. The `left` and `right` functions utilize the **differential steering** principle: for example, when turning left, the left wheel reverses while the right wheel goes forward, causing the car to turn left on the spot or within a very small radius. `stopMotor` sets the PWM value to 0, cutting off power to the motors.
+Five motion control functions are defined at the bottom. `forward` and `back` control the forward and reverse rotation of the motors by setting direction pins to `HIGH` or `LOW`, and output PWM waves via `ledcWrite` to control the speed. The `left` and `right` functions utilize the **differential steering** principle: for example, when turning left, the left wheel reverses while the right wheel goes forward, causing the car to turn left on the spot or within a very small radius. `stopMotor` sets the PWM value to 0, cutting off power to the motors.
 
 ## 3.14.8 Experimental Phenomena and Debugging
 
@@ -218,7 +218,7 @@ Five motion control functions are defined at the bottom. `forward` and `back` co
 *   **Cause**: The infrared receiving library needs to be manually reset after processing a signal, or the battery power is insufficient, causing a voltage drop.
 *   **Solution**: Ensure the battery has sufficient charge. Additionally, make sure to check whether `IrReceiver.resume()` is called at the end of the `loop` function. Without this line of code, the receiver enters a suspended state after processing a single signal, resulting in it only responding to a single button press.
 
-## Safety and Precautions
+## 3.14.10 Safety and Precautions
 
 *   Please test the car on open, flat ground to prevent it from falling from heights and damaging the hardware.
 *   Do not let the car stall for a long time (wheels jammed while the motor is still powered); this will cause excessive current, overheating, and potential damage to the motor or driver module.

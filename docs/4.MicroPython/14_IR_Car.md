@@ -1,8 +1,8 @@
-# 4.14 Infrared Remote Control Smart Car
+# 4.14 Infrared Remote Control Car
 
 ## 4.14.1 Course Introduction
 
-Remember the "ultrasonic obstacle avoidance smart car" we learned about earlier? It is like a blindfolded little robot walking around, relying only on "touching" (emitting ultrasonic waves) to avoid obstacles. Today, we are going to equip the car with "ears" and a "brain" so that it can understand your remote commands! This is what we are going to make—the **Infrared Remote Control Smart Car**.
+Remember the "ultrasonic obstacle avoidance car" we learned about earlier? It is like a blindfolded little robot walking around, relying only on "touching" (emitting ultrasonic waves) to avoid obstacles. Today, we are going to equip the car with "ears" and a "brain" so that it can understand your remote commands! This is what we are going to make—the **Infrared Remote Control Car**.
 
 Imagine holding a TV remote control in your hand, pressing "Forward," and the car obediently runs forward; pressing "Turn Left," and it flexibly turns. This is just like playing a video game, except this time you are controlling the real physical world!
 
@@ -17,7 +17,7 @@ In this lesson, we will combine the motor driving knowledge we learned previousl
 
 *   Correctly connect the **infrared receiving module** (the component responsible for receiving remote control signals) to the specified **pin** (the small metal interface on the chip used to connect external devices) of the ESP32S3 Pro development board.
 *   Understand the basic principle of infrared remote control: the remote control acts like a "telegraph transmitter" sending signals, and the receiver acts like an "antenna" receiving signals.
-*   Use the `IRremote` library (a code toolbox written by someone else specifically for processing infrared signals) to read the **hexadecimal code** corresponding to the buttons on the remote control (the "digital ID card" exclusive to each button).
+*   Use the `ir_rx` library (a code toolbox written by someone else specifically for processing infrared signals) to read the **hexadecimal code** corresponding to the buttons on the remote control (the "digital ID card" exclusive to each button).
 *   Write programs to make the car execute forward, backward, left turn, right turn, and stop actions when different buttons on the remote control are pressed.
 *   Learn how to debug code and solve problems such as unresponsive remote controls or incorrect car actions.
 
@@ -148,7 +148,7 @@ For absolute beginners, this code might look a bit long. Don't worry, let's brea
 
 ## 4.14.9 Experimental Phenomena and Debugging
 
-1.  **Upload the Code**: Compile the code (translating human-readable code into machine-understandable instructions) and upload it to the ESP32S3 Pro development board.
+1.  **Run the Code**: Open `14_IR_Remote_Control_Robot.py` in Thonny and click **Run** (the green ▶ button). MicroPython runs the script directly on the board, so there is no separate "compile" step.
 2.  **Open the Monitor**: Open the "Serial Monitor" in the programming software (the **Serial port** is the "chat box" where the computer and the car talk, and the **Monitor** is the screen showing the chat history).
 3.  **Test the Buttons**: Pick up the infrared remote control, point it at the receiving head on the car (usually a black, small dome-like part), and press the "Up" button.
     *   **Serial Output**: You should see text similar to `Button value: 70`.
@@ -187,7 +187,7 @@ It is completely normal for beginners to run into problems during the build proc
 *   **Cause**: The infrared receiver library needs to be manually reset after processing a signal, or insufficient battery power has caused a voltage drop.
 *   **Solution**: Ensure the battery is fully charged. In addition, make sure to check whether the program gets a rest at the end of the main loop.
 
-## Safety and Precautions
+## 4.14.11 Safety and Precautions
 
 *   **Anti-Drop**: Please test the car on an open and flat floor to prevent hardware damage from falls from high places.
 *   **Anti-Stall**: Do not let the car **stall** for a long time (wheels are stuck and cannot turn, but the motor is still powered and trying hard), as this will cause excessive current, generate heat, and potentially burn out the motor or driver module. If you hear a "humming" sound from the car but it does not move, please press the stop button or turn off the power immediately.

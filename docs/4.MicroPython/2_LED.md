@@ -1,4 +1,4 @@
-# 4.2 Lighting up an LED
+# 4.2 Lighting Up an LED
 
 ## 4.2.1 Lesson Introduction
 
@@ -26,7 +26,7 @@ To successfully complete today's experiment, please prepare the following items 
 | Sensor Module      | LED Module                        | 1        | Usually labeled with S (Signal), V/+ (Power), G/- (Ground)   |
 | Connection Wire    | Female-to-Female 3Pin DuPont Wire | 1        | Used to connect the development board and sensor module      |
 | Data Cable         | Type-C Data Cable                 | 1        | Used for device power supply and code upload (must support data transmission) |
-| Computer | Installed Thonny IDE | 1 | Terminal for writing, uploading code, and debugging |
+| Computer | Installed Thonny IDE | 1 | Terminal for writing, uploading code, and debugging (see 4.1 for installation steps) |
 
 ## 4.2.4 Course Principles
 

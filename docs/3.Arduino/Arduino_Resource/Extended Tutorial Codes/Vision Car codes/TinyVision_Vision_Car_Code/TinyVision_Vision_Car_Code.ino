@@ -69,17 +69,19 @@ void setupCamera() {
 }
 
 
-#define UNO_TX_PIN 20
-#define UNO_RX_PIN 19
-#define UNO_BAUD 9600
+#define CAR_TX_PIN 20
+#define CAR_RX_PIN 19
+#define CAR_BAUD 9600
 
-void sendToUNO(const String &cmd) {
-  Serial.printf("UNO TX -> %s\n", cmd.c_str());
+void sendToCar(const String &cmd) {
+  Serial.printf("Car TX -> %s\n", cmd.c_str());
   Serial1.println(cmd);
 }
 
-const char *ssid = "KS0567";
-const char *password = "88888888";
+// Please modify "your_SSID" to your Wi-Fi name (be sure to keep the English double quotes)
+const char *ssid = "your_SSID";
+// Please modify "your_PASSWORD" to your Wi-Fi password (be sure to keep the English double quotes)
+const char *password = "your_PASSWORD";
 
 
 AsyncWebServer server(80);
@@ -184,7 +186,7 @@ void handleControl(AsyncWebServerRequest *request) {
   String cmd = request->getParam("cmd")->value();
   for (auto valid : VALID_CMDS) {
     if (cmd == valid) {
-      sendToUNO(cmd);
+      sendToCar(cmd);
       request->send(200, "text/plain", "OK");
       return;
     }
@@ -244,8 +246,8 @@ void setup() {
   Serial.println("================================");
   Serial.printf("PSRAM: %u, Free Heap: %u\n", ESP.getPsramSize(), ESP.getFreeHeap());
   tinyVisionTftInit();
-  Serial1.begin(UNO_BAUD, SERIAL_8N1, UNO_RX_PIN, UNO_TX_PIN);
-  Serial.printf("UNO Serial1: TX=GPIO%d, RX=GPIO%d\n", UNO_TX_PIN, UNO_RX_PIN);
+  Serial1.begin(CAR_BAUD, SERIAL_8N1, CAR_RX_PIN, CAR_TX_PIN);
+  Serial.printf("Car Serial1: TX=GPIO%d, RX=GPIO%d\n", CAR_TX_PIN, CAR_RX_PIN);
   setupCamera();
   tinyVisionTftStatus("TinyVision", "Camera: OK", "WiFi: Connecting", "");
   WiFi.begin(ssid, password);

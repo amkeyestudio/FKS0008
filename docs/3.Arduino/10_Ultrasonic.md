@@ -140,7 +140,6 @@ void loop() {
 }
 ```
 
-```markdown
 ## 3.10.7 Code Explanation
 
 **1. Pin Definitions and Variable Declaration**
@@ -224,7 +223,7 @@ Solution: First check whether 115200 is selected in the lower right corner of th
 
 **Problem: The distance values jump around significantly and are unstable.**
 Cause: Ultrasonic waves are easily affected by absorption from soft objects (such as clothes, curtains), or there is other ultrasonic interference in the environment.
-Solution: Try testing facing hard, flat surfaces (such as walls, books). You can also add a simple filtering algorithm in the code (such as taking the average of 5 measurements), but this is advanced content and beginners can ignore it for now.
+Solution: Try testing facing hard, flat surfaces (such as walls,    w books). You can also add a simple filtering algorithm in the code (such as taking the average of 5 measurements), but this is advanced content and beginners can ignore it for now.
 
 **Problem: No matter how you move your hand, the distance shows the same fixed value.**
 Cause: The Trig or Echo pins might be swapped, or the pin numbers were written incorrectly in the code.
@@ -234,7 +233,7 @@ Solution: Check the wiring table to confirm that Trig is connected to io5 and Ec
 Cause: VCC and GND were reversed, causing a short circuit.
 Solution: **Immediately disconnect the USB connection!** Check if the red wire is connected to VCC and the black wire is connected to GND. Reconnect power only after confirming everything is correct.
 
-### 3.10.10 Safety Tips
+## 3.10.10 Safety Tips
 
 *   **Strictly Prohibit Short Circuits**: Be very careful when wiring, do not let VCC and GND touch directly.
 *   **Do Not Stare Directly**: Although ultrasonic waves are invisible to the human eye, do not point them closely at your ears for long periods of time. Although the power is very low, maintaining good habits is important.

@@ -1,8 +1,8 @@
-# 4.12 Ultrasonic Obstacle-Avoiding Smart Car
+# 4.12 Ultrasonic Obstacle-Avoiding Car
 
 ## 4.12.1 Course Introduction
 
-Imagine you are walking blindfolded; if there is a wall in front of you, what would you do? You might reach out your hands to touch it, or probe the way with a blind cane. Our "Ultrasonic Obstacle-Avoiding Smart Car" does the same thing! Although it has no eyes, it has magical "bat ears"—an **ultrasonic sensor** (a component that can emit and receive ultrasound waves to measure distance). This sensor can emit sounds we cannot hear. When the sound bounces back after hitting an obstacle, the car knows something is ahead.
+Imagine you are walking blindfolded; if there is a wall in front of you, what would you do? You might reach out your hands to touch it, or probe the way with a blind cane. Our "Ultrasonic Obstacle-Avoiding Car" does the same thing! Although it has no eyes, it has magical "bat ears"—an **ultrasonic sensor** (a component that can emit and receive ultrasound waves to measure distance). This sensor can emit sounds we cannot hear. When the sound bounces back after hitting an obstacle, the car knows something is ahead.
 
 Not only that, to make the car smarter, we also installed a rotatable "neck"—a **servo pan-tilt** (a servo is a small motor that can precisely control the rotation angle, and the pan-tilt is the base it mounts on). When the car finds an obstacle ahead, it will turn its head left and right like a human, observing the road conditions on both sides to choose the safest direction to avoid it.
 

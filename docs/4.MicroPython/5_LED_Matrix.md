@@ -1,6 +1,8 @@
-# 4.5 LED Matrix: Light Up Your Exclusive Pixel Art
+# 4.5 LED Matrix
 
 ## 4.5.1 Lesson Introduction
+
+**Light Up Your Exclusive Pixel Art!**
 
 ![image-20260920082909105](./media/image-20260920082909105.png)
 

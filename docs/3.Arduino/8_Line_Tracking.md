@@ -147,7 +147,7 @@ To help everyone better understand how the code works, we will break it down int
 
 2.  **Object Instantiation and Pin Definition**:
     *   `PCF8574 pcf8574(0x20);`: Creates an object named `pcf8574` and specifies its I2C address as `0x20`. This is the factory default address of the module.
-    *   Macro definitions like `#define OUTA P3`: Map the physical pins (P0~P4) on the PCF8574 chip to easy-to-understand probe names (`OUTA`~`OUTE`) in our code, improving code readability.
+    *   Macro definitions like `#define OUTA P4`: Map the physical pins (P0~P4) on the PCF8574 chip to easy-to-understand probe names (`OUTA`~`OUTE`) in our code, improving code readability.
 
 3.  **Initialization Settings (`setup` Function)**:
     *   `Serial.begin(115200);`: Starts serial communication, sets the baud rate to 115200, and ensures consistency with the serial monitor settings.
@@ -195,7 +195,7 @@ After uploading the code, open the **Serial Monitor** in the upper right corner 
 *   **Cause**: The sensor is moving too fast, or the serial port refreshes too quickly causing visual persistence.
 *   **Solution**:
     1.  Move the sensor slowly and steadily.
-    2.  You can appropriately increase the `delay(500)` in the code, such as `delay(1000)`, to make the data jump more slowly and facilitate observation.
+    2.  If you only want the numbers to be easier to read by eye, you can increase the `delay(500)` in the code, such as `delay(1000)`. Note that this lowers the sampling rate further (from 2 Hz to 1 Hz), so it slows down the display for visual reading only — it does not make the sensor more responsive, and a fast swipe will be missed even more easily.
 
 **Issue 4: Compilation error "Wire.h: No such file or directory"**
 

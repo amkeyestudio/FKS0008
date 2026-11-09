@@ -20,7 +20,7 @@ After completing this lesson, you will master the core networking skills of the 
 | :----------------- | :---------------------------- | :------- | :-------------------------------------------------- |
 | Main Control Board | ESP32S3 Pro Development Board | 1        | Core brain, comes with built-in Wi-Fi functionality |
 | Data Cable         | Type-C Data Cable             | 1        | Used for power supply and uploading code            |
-| Computer           | Windows / Mac                 | 1        | With Arduino IDE and ESP32 drivers installed        |
+| Computer           | Windows / Mac                 | 1        | With Thonny installed and MicroPython firmware flashed |
 
 **Note**: This lesson does not require extra sensors or jumper wires (jumper wires are connection wires with plugs on both ends) because the ESP32S3 Pro development board has a built-in Wi-Fi chip. However, please make sure to **snap the Wi-Fi antenna onto the antenna port of the development board**, otherwise, the network signal will become extremely poor, resulting in failure to connect! We only need a data cable to connect to the computer to start the experiment.
 
@@ -34,7 +34,7 @@ Imagine Wi-Fi as an invisible "air post office." In the past, transmitting lette
 
 ### 4.15.4.2 ESP32-S3 Wi-Fi Capabilities
 
-The ESP32S3 Pro development board we use is very powerful; it has a dedicated wireless communication module built-in. The Arduino IDE (the software where we write code) provides the `<WiFi.h>` library file (a library file is like a "toolbox" written by someone else that we can use directly), which supports configuring and monitoring ESP32's Wi-Fi networking functions. This module supports the 2.4GHz frequency band (currently the most popular home Wi-Fi frequency band), which is the same as most home routers. It can play several roles:
+The ESP32S3 Pro development board we use is very powerful; it has a dedicated wireless communication module built-in. MicroPython provides the built-in `network` module (a built-in module is like a "toolbox" that ships with the firmware, ready to use without installing anything); its `network.WLAN` class supports configuring and monitoring ESP32's Wi-Fi networking functions. This module supports the 2.4GHz frequency band (currently the most popular home Wi-Fi frequency band), which is the same as most home routers. It can play several roles:
 
 *   **Station Mode (STA Mode / Wi-Fi Client Mode)**: In this mode, the ESP32 acts as a client and connects to an existing Wi-Fi hotspot (AP, i.e., a router), just like a mobile phone connecting to a home router.
 *   **AP Mode (Soft-AP Mode / Wi-Fi Hotspot Mode)**: In this mode, the ESP32 itself acts as a hotspot, allowing other Wi-Fi devices (such as mobile phones and computers) to connect to it. It is just like turning on a phone's "Personal Hotspot" for others to use.
@@ -115,7 +115,7 @@ print("IP Address:", ip_address)
 
 In this code, you need to replace `SSID` and `PASSWORD` with your actual Wi-Fi name and password.
 
-```cpp
+```python
 # Please modify "your_SSID" to your Wi-Fi name (be sure to keep the English double quotes)
 SSID = "your_SSID"
 # Please modify "your_PASSWORD" to your Wi-Fi password (be sure to keep the English double quotes)
@@ -221,7 +221,6 @@ while True:
         conn.close()
 ```
 
-```markdown
 ### 4.15.6.3 Code Explanation
 
 > Building upon the Wi-Fi connection, this code adds a "web waiter" (an HTTP server):
@@ -233,7 +232,7 @@ while True:
 
 In this code, you need to replace `SSID` and `PASSWORD` with your actual Wi-Fi name and password.
 
-```cpp
+```python
 # Please replace the following information with your network credentials (your Wi-Fi name and password)
 SSID = "your_SSID"          # Change to your Wi-Fi name
 PASSWORD = "your_PASSWORD"  # Change to your Wi-Fi password
@@ -245,7 +244,7 @@ After successfully uploading the code, open the Serial Monitor, and you will see
 
 ![Effect diagram of a mobile phone or computer browser displaying the Hello World webpage](./media/a70.png)
 
-## Common Issues (Common Errors and Solutions)
+## 4.15.7 Common Issues (Common Errors and Solutions)
 
 For zero-foundation beginners, these are the most common "pitfalls" encountered when tinkering with Wi-Fi. Don't panic, just look them up and resolve them accordingly:
 
@@ -260,9 +259,9 @@ For zero-foundation beginners, these are the most common "pitfalls" encountered 
     *   **Cause 3**: The browser automatically added `https://`. *Solution*: Our simple server does not support encrypted https. Please manually type `http://` followed by your IP address in the browser's address bar, for example, `http://192.168.1.105`.
 
 3.  **Error: Code upload failed, prompting that the board cannot be found.**
-    *   **Cause**: The data cable can only charge and cannot transmit data, or the wrong port was selected. *Solution*: Switch to a Type-C cable confirmed to support data transmission; re-select the correct COM port in Arduino IDE under "Tools" -> "Port".
+    *   **Cause**: The data cable can only charge and cannot transmit data, or the wrong port was selected. *Solution*: Switch to a Type-C cable confirmed to support data transmission; re-select the correct COM port in Thonny under **Run → Configure interpreter...** (the "Port" dropdown).
 
-## Safety Tips
+## 4.15.8 Safety Tips
 
 *   **Electrical Safety**: When using a data cable to connect the computer and the development board, ensure that the computer's USB port provides stable power. Do not use inferior or damaged data cables to avoid short circuits.
 *   **Antenna Plugging Safety**: When attaching or detaching the Wi-Fi antenna, gently pinch the base of the antenna connector and **do not pull directly on the antenna cable**, as this may break the internal fine wires and ruin the antenna.

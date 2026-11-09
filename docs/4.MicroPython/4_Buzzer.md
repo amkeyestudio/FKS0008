@@ -180,13 +180,13 @@ Find the low, medium, and high pitches by referring to the chart above, and then
 
 |    Note     | Frequency(Hz) |      Note      | Frequency(Hz) |     Note     | Frequency(Hz) |
 | :---------: | :-----------: | :------------: | :-----------: | :----------: | :-----------: |
-| Flat  1  Do |      262      | Natural  1  Do |      523      | Sharp  1  Do |     1047      |
-| Flat  2  Re |      294      | Natural  2  Re |      587      | Sharp  2  Re |     1175      |
-| Flat  3  Mi |      330      | Natural  3  Mi |      659      | Sharp  3  Mi |     1319      |
-| Flat  4  Fa |      349      | Natural  4  Fa |      698      | Sharp  4  Fa |     1397      |
-| Flat  5  So |      392      | Natural  5  So |      784      | Sharp  5  So |     1568      |
-| Flat  6  La |      440      | Natural  6  La |      880      | Sharp  6  La |     1760      |
-| Flat  7  Si |      494      | Natural  7  Si |      988      | Sharp  7  Si |     1967      |
+| Low   1  Do |      262      | Mid      1  Do |      523      | High   1  Do |     1047      |
+| Low   2  Re |      294      | Mid      2  Re |      587      | High   2  Re |     1175      |
+| Low   3  Mi |      330      | Mid      3  Mi |      659      | High   3  Mi |     1319      |
+| Low   4  Fa |      349      | Mid      4  Fa |      698      | High   4  Fa |     1397      |
+| Low   5  So |      392      | Mid      5  So |      784      | High   5  So |     1568      |
+| Low   6  La |      440      | Mid      6  La |      880      | High   6  La |     1760      |
+| Low   7  Si |      494      | Mid      7  Si |      988      | High   7  Si |     1967      |
 
 ### 4.4.9.3 Code
 

@@ -353,8 +353,10 @@ Before starting assembly and programming, please ensure you have prepared the fo
 #include "webpage.h" // Include external webpage HTML code file
 
 // ================= WiFi Configuration =================
-const char* ssid = "FKS0008";         // Replace with your WiFi name
-const char* password = "88888888";   // Replace with your WiFi password
+// Please modify "your_SSID" to your Wi-Fi name (be sure to keep the English double quotes)
+const char* ssid = "your_SSID";
+// Please modify "your_PASSWORD" to your Wi-Fi password (be sure to keep the English double quotes)
+const char* password = "your_PASSWORD";
 
 // ================= Global Objects =================
 WebServer server(80); // Create Web server instance, listening on port 80
@@ -508,12 +510,13 @@ void loop() {
 
 ### 3.4 Experimental Verification
 
-1. Compile and upload the code to the ESP32S3 car.
-2. Open the Serial Monitor (set the baud rate to 115200).
-3. Power on the car and observe the serial output.
-4. Use a phone or computer to connect to the Wi-Fi named "FKS0008".
-5. Open a browser and enter the IP address printed on the serial monitor (e.g., `192.168.4.1` or the IP assigned by the router).
-6. Click the servo open and servo close buttons on the web page to observe the car's movements.
+1. **Check the Wi-Fi settings in the code first.** At the top of the code you will find `const char* ssid = "your_SSID";` and `const char* password = "your_PASSWORD";`. Replace them with your own router's Wi-Fi name and password, otherwise the car cannot join your network.
+2. Compile the code and upload it to the ESP32S3 car.
+3. Power on the car and open the Serial Monitor, setting the baud rate to **115200**. The car first prints `Connecting to WiFi: <your SSID>`, then a row of dots while it tries to connect.
+4. Wait until the output reads `WiFi connected successfully!` followed by `IP address: 192.168.1.105` (your number may differ). **Write this IP address down** — it is the address you will type into the browser, and it may change every time the car restarts.
+5. Make sure your phone or computer is connected to the **same Wi-Fi network** as the car.
+6. Open a browser on your phone, type that IP address into the address bar, and the control page will load.
+7. Click the servo open and servo close buttons on the web page to observe the car's movements.
 
 
 
@@ -525,7 +528,7 @@ void loop() {
 
 This project aims to use TinyVision's Wi-Fi communication capabilities and camera module to build a Wi-Fi video smart car with real-time image transmission. The system adopts a dual-core architecture: TinyVision acts as the "brain" and "eyes", responsible for camera video stream capture, Wi-Fi network establishment, and Web server setup; the ESP32S3 development board acts as the "cerebellum" and "limbs", responsible for underlying motor driving and motion control.
 
-TinyVision connects to the Wi-Fi hotspot it creates via a mobile phone or tablet. Users can view real-time video footage in the browser and send control commands through virtual buttons on the web page. After receiving the commands, TinyVision sends the data for the car's forward, backward, left turn, right turn, and 4 other custom function buttons to the ESP32S3 development board via the UART serial port. The ESP32S3 parses the commands and drives the motors, thereby achieving smooth remote control of the Wi-Fi video smart car.
+The car and your phone or tablet join the same Wi-Fi network (your home router). Users can view real-time video footage in the browser and send control commands through virtual buttons on the web page. After receiving the commands, TinyVision sends the data for the car's forward, backward, left turn, right turn, and 4 other custom function buttons to the ESP32S3 development board via the UART serial port. The ESP32S3 parses the commands and drives the motors, thereby achieving smooth remote control of the Wi-Fi video smart car.
 
 ### 4.2 Required Items
 
@@ -601,7 +604,7 @@ void setup() {
   
   // Initialize USB virtual serial port for connecting to computer to view debug info
   Serial.begin(115200);  
-  Serial.println("UNO ready"); // Print startup prompt
+  Serial.println("Car ready"); // Print startup prompt
 
   // Set motor direction control pins to output mode
   pinMode(MOTOR_AIN, OUTPUT);
@@ -798,19 +801,21 @@ void setupCamera() {
 }
 
 // ================= Serial Communication Definitions =================
-#define UNO_TX_PIN 20       // TinyVision transmit pin, connects to ESP32S3's RX
-#define UNO_RX_PIN 19       // TinyVision receive pin, connects to ESP32S3's TX
-#define UNO_BAUD 9600       // Serial baud rate
+#define CAR_TX_PIN 20       // TinyVision transmit pin, connects to ESP32S3's RX
+#define CAR_RX_PIN 19       // TinyVision receive pin, connects to ESP32S3's TX
+#define CAR_BAUD 9600       // Serial baud rate
 
-// Send control commands to ESP32S3 (UNO)
-void sendToUNO(const String &cmd) {
-  Serial.printf("UNO TX -> %s\n", cmd.c_str()); // Debug print
+// Send control commands to ESP32S3
+void sendToCar(const String &cmd) {
+  Serial.printf("Car TX -> %s\n", cmd.c_str()); // Debug print
   Serial1.println(cmd);                         // Send via hardware serial
 }
 
 // ================= Wi-Fi Configuration =================
-const char *ssid = "FKS0008";         // Wi-Fi hotspot name
-const char *password = "88888888";    // Wi-Fi password
+// Please modify "your_SSID" to your Wi-Fi name (be sure to keep the English double quotes)
+const char *ssid = "your_SSID";
+// Please modify "your_PASSWORD" to your Wi-Fi password (be sure to keep the English double quotes)
+const char *password = "your_PASSWORD";
 
 // Create asynchronous Web Server instance, listening on port 80
 AsyncWebServer server(80);
@@ -939,7 +944,7 @@ void handleControl(AsyncWebServerRequest *request) {
   // Verify if command is in the whitelist
   for (auto valid : VALID_CMDS) {
     if (cmd == valid) {
-      sendToUNO(cmd); // Valid command, forward to ESP32S3
+      sendToCar(cmd); // Valid command, forward to ESP32S3
       request->send(200, "text/plain", "OK");
       return;
     }
@@ -1005,14 +1010,12 @@ void setup() {
   tinyVisionTftInit(); // Initialize screen
   
   // Initialize serial port for communication with ESP32S3 car control
-  Serial1.begin(UNO_BAUD, SERIAL_8N1, UNO_RX_PIN, UNO_TX_PIN);
-  Serial.printf("UNO Serial1: TX=GPIO%d, RX=GPIO%d\n", UNO_TX_PIN, UNO_RX_PIN);
+  Serial1.begin(CAR_BAUD, SERIAL_8N1, CAR_RX_PIN, CAR_TX_PIN);
+  Serial.printf("Car Serial1: TX=GPIO%d, RX=GPIO%d\n", CAR_TX_PIN, CAR_RX_PIN);
   
   setupCamera(); // Initialize camera
   tinyVisionTftStatus("TinyVision", "Camera: OK", "WiFi: Connecting", "");
   
-  // Start Wi-Fi connection (AP mode or STA mode; code here looks like STA, but cars usually act as AP. If AP, change to WiFi.softAP)
-  // Note: Original code uses WiFi.begin, indicating it connects to a router as STA. If direct phone connection is needed, change to WiFi.softAP(ssid, password)
   WiFi.begin(ssid, password); 
   WiFi.setSleep(false); // Disable Wi-Fi sleep to ensure low-latency video streaming
   Serial.print("WiFi connecting");
@@ -1057,13 +1060,13 @@ void loop() {
 3. Ensure the car motor wires are correctly connected to the driver board, and the battery has sufficient charge.
 
 #### 2. Flashing and Running Steps
-1. Use a Type-C data cable to connect the ESP32S3 development board to the computer, select the correct COM port, and flash the ESP32S3 code from **Section 1.4**.
-2. Connect the TinyVision module to the computer, **making sure that the `index_html.h` file is in the same directory as the code**, and flash the TinyVision code from **Section 1.5**.
+1. Use a Type-C data cable to connect the ESP32S3 development board to the computer, select the correct COM port, and flash the ESP32S3 code from **Section 4.3**.
+2. Connect the TinyVision module to the computer, **making sure that the `index_html.h` file is in the same directory as the code**, and flash the TinyVision code from **Section 4.4**.
 3. After flashing is complete, power on the car.
 
 #### 3. Expected Phenomena Description
-- **Screen Display**: The TinyVision TFT screen will sequentially display the startup status and finally stay on the `TinyVision Ready` interface, showing the assigned IP address (e.g., `192.168.1.100`).
-- **Wi-Fi Connection**: Open the Wi-Fi settings on your phone or tablet, find the Wi-Fi hotspot named `FKS0008`, and connect to it (password `88888888`).
+- **Screen Display**: The TinyVision TFT screen will sequentially display the startup status and finally stay on the `TinyVision Ready` interface, showing the IP address assigned by your router (e.g., `192.168.1.105`).
+- **Wi-Fi Connection**: Make sure your phone or tablet is connected to the **same Wi-Fi network** as the car.
 - **Web Access**: Open the browser on your phone and enter the IP address displayed on the screen into the address bar.
 - **Video and Control**:
   - After the web page loads, you should see the real-time video feed from the camera (there may be a 1-2 second delay).
@@ -1076,7 +1079,7 @@ This experiment successfully verifies the feasibility of the dual-core architect
 ### 4.6 Common Issues and Troubleshooting (FAQ)
 
 **Q1: Compiling the TinyVision code throws an error `index_html.h: No such file or directory`?**
-**A**: This is because the front-end web header file is missing. Please check your downloaded code materials package and ensure that the `index_html.h` file is placed in the same folder directory as the `.ino` or `.c` code file. If you are using graphical software like KidsBlock, make sure to check "Export Web Files" or manually rename the generated web file to `index_html.h` and place it into the project directory.
+**A**: This is because the front-end web header file is missing. Please check your downloaded code materials package and ensure that the `index_html.h` file is placed in the same folder directory as the `.ino` or `.c` code file.
 
 **Q2: The video stream is extremely lagging, has high latency, or frequently turns black?**
 **A**:
@@ -1092,5 +1095,4 @@ This experiment successfully verifies the feasibility of the dual-core architect
 2. **Direction Reversed**: If moving forward results in moving backward, you can swap `HIGH` and `LOW` in the `forward` function within the ESP32S3 code; or directly swap the two wires of the corresponding motor in hardware.
 
 **Q4: The TinyVision screen keeps displaying "WiFi: Connecting" and fails to obtain an IP address?**
-**A**: Check whether the `ssid` and `password` in the code match your router's Wi-Fi name and password exactly (case-sensitive). If you are using it in a router-free environment, modify `WiFi.begin(ssid, password);` in the code to `WiFi.softAP(ssid, password);` to enable AP hotspot mode.
-```
+**A**: Check whether the `ssid` and `password` in the code match your router's Wi-Fi name and password exactly (case-sensitive). Also make sure your router is broadcasting on 2.4 GHz (the ESP32-S3 does not support 5 GHz), and that the phone is connected to that same network.

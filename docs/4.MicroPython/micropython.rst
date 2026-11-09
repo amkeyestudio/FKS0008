@@ -17,7 +17,7 @@ MicroPython course
 .. toctree::
     :maxdepth: 1
 	
-    1_ArduinoBasicTutorial
+    1_MicroPythonBasicTutorial
     2_LED
     3_PWM_LED
     4_Buzzer
