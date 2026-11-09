@@ -66,7 +66,7 @@ This 8x16 dot matrix module typically has 4 active pins, which we need to connec
 
 ## 3.5.6 Matrix Character Generation Tool
 
-The online version is used as the dot matrix character generation tool, link: [http://dotmatrixtool.com/#](http://dotmatrixtool.com/#)
+The online version is used as the dot matrix character generation tool, link: [https://dotmatrixtool.com/#](https://dotmatrixtool.com/#)
 
 **Step ①: Open the Online Character Generator**
 Open the link to enter the initial interface of the tool, as shown in the figure below:

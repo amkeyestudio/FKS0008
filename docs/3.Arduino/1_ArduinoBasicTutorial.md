@@ -72,7 +72,7 @@ Click “**File → Preferences**”, add the link `https://espressif.github.io/
 
 ![a31](./media/a31.png)
 
-Select the icon of board manager to open the the board options.
+Select the icon of board manager to open the board options.
 
 ![a32](./media/a32.png)
 
@@ -115,7 +115,7 @@ Connect the board to your computer via the USB cable.
 
 
 
-Connect the the corresponding ESP32 board model in Arduino IDE.
+Select the corresponding ESP32 board model in Arduino IDE. Here choose **ESP32S3 Dev Module**.
 
 ![image-20260921095313307](./media/image-20260921095313307.png)
 

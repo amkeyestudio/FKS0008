@@ -17,7 +17,7 @@ In this lesson, we will combine the motor driving knowledge we learned previousl
 
 *   Correctly connect the **infrared receiving module** (the component responsible for receiving remote control signals) to the specified **pin** (the small metal interface on the chip used to connect external devices) of the ESP32S3 Pro development board.
 *   Understand the basic principle of infrared remote control: the remote control acts like a "telegraph transmitter" sending signals, and the receiver acts like an "antenna" receiving signals.
-*   Use the `ir_rx` library (a code toolbox written by someone else specifically for processing infrared signals) to read the **hexadecimal code** corresponding to the buttons on the remote control (the "digital ID card" exclusive to each button).
+*   Use the `ir_rx` library (a code toolbox written by someone else specifically for processing infrared signals) to read the **decimal code** corresponding to the buttons on the remote control (the "digital ID card" exclusive to each button).
 *   Write programs to make the car execute forward, backward, left turn, right turn, and stop actions when different buttons on the remote control are pressed.
 *   Learn how to debug code and solve problems such as unresponsive remote controls or incorrect car actions.
 

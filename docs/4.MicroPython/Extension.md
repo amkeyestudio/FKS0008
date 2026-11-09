@@ -1,3 +1,7 @@
+# Extension
+
+Note: The Video Smart Car project (Project 4 in the Arduino extended tutorial) is Arduino-only, because the TinyVision video program is written in C/C++. The other three extended projects - Color Sorting, Vision Line-Following, and Soccer - are available in both Arduino and MicroPython versions.
+
 ## Installation Diagram
 
 ![FKS0008_44](./media/FKS0008_44-1790642501780-1.png)

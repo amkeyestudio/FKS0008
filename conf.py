@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'keyes WiKi'
+project = 'FKS0008 Keyestudio ESP32S3 4WD Smart Car'
 author = 'keyes WiKi'
 copyright = 'Shenzhen keyes Technology Co., Ltd'
 

@@ -74,7 +74,7 @@ This 8x16 dot matrix module usually has 4 valid **pins** (small metal pins on th
 
 **What is "Font/Pattern Generation (Modulus)"?** Computers don't understand graphics; they only understand numbers. Modulus generation is using a tool to "translate" the patterns we draw into a string of digital passwords that the computer can understand (hexadecimal data).
 
-The online dot matrix generation tool is used here. Link: [http://dotmatrixtool.com/#](http://dotmatrixtool.com/#)
+The online dot matrix generation tool is used here. Link: [https://dotmatrixtool.com/#](https://dotmatrixtool.com/#)
 
 **Step ①: Open the online generation tool**
 Open the link to enter the initial interface of the tool, as shown in the figure below:

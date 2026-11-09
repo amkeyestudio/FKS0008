@@ -12,7 +12,7 @@ In this lesson, we will combine the motor driving knowledge we learned previousl
 
 *   Correctly connect the infrared receiving module to the designated pins of the ESP32S3 Pro development board.
 *   Understand the basic principles of infrared remote control: the remote control transmits signals, and the receiving head receives them.
-*   Use the `IRremote` library to read the hexadecimal codes corresponding to the remote control buttons.
+*   Use the `IRremote` library to read the decimal codes corresponding to the remote control buttons.
 *   Write programs so that when different buttons on the remote control are pressed, the car executes forward, backward, left turn, right turn, and stop actions.
 *   Learn how to debug code and solve problems such as unresponsive remote control or incorrect car actions.
 
@@ -191,7 +191,7 @@ Five motion control functions are defined at the bottom. `forward` and `back` co
     *   Press the "Left" button: The car turns left (left wheel reverses, right wheel goes forward).
     *   Press the "Right" button: The car turns right (left wheel goes forward, right wheel reverses).
     *   Press the "OK" button: The car stops immediately.
-5.  **Success Indicator**: If pressing the buttons causes the car to accurately perform the corresponding actions, and the serial monitor shows correct hexadecimal print information, congratulations! You have successfully built an infrared remote-controlled smart car!
+5.  **Success Indicator**: If pressing the buttons causes the car to accurately perform the corresponding actions, and the serial monitor shows correct decimal print information, congratulations! You have successfully built an infrared remote-controlled smart car!
 
 ## 3.14.9 Common Issues and Troubleshooting
 
@@ -206,7 +206,7 @@ Five motion control functions are defined at the bottom. `forward` and `back` co
 **Issue 2: The serial monitor prints messages, but the command codes differ from those defined in the code.**
 
 *   **Cause**: Every infrared remote control uses different encoding protocols and key codes; directly copying someone else's key values will not work.
-*   **Solution**: First comment out the `switch` section and keep only the serial print code. After uploading, press various buttons on your remote and record the hexadecimal command code corresponding to each button in the serial monitor (e.g., `0x46`), then modify the values in the code's `switch-case`.
+*   **Solution**: First comment out the `switch` section and keep only the serial print code. After uploading, press various buttons on your remote and record the decimal command code corresponding to each button in the serial monitor (e.g., `70` for "Up"), then modify the values in the code's `switch-case`.
 
 **Issue 3: The car's actions are reversed (e.g., moving backward when pressing forward).**
 
