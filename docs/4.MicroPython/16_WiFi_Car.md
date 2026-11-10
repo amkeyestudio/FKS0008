@@ -308,7 +308,7 @@ Now, the exciting moment has arrived! Let's see the effect:
 4.  **Control Test**:
     *   Click "Forward", and both wheels of the smart car should rotate forward simultaneously.
     *   Click "Stop", and the smart car will stop immediately.
-    *   Click "Turn Left", the right wheel rotates while the left wheel stops, and the smart car turns to the left.
+    *   Click "Turn Left", the right wheel rotates forward while the left wheel rotates backward, and the smart car spins left in place.
     *   Click the servo control button to observe whether the servo rotates to the specified angle.
     *   If the smart car's action is reversed (e.g., it moves backward when you click forward), simply swap the corresponding motor direction pin definitions in the code (such as swapping the pin numbers of `MOTOR_AIN` and `MOTOR_BIN`), or physically swap the signal wires on the motor driver module.
 

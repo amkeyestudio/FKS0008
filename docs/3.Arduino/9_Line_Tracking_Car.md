@@ -118,17 +118,17 @@ void forward(int leftSpeed, int rightSpeed) {
   setMotor(leftSpeed, rightSpeed);
 }
 
-// Turn Left (Left wheel stops, right wheel moves forward)
+// Turn Left (Left wheel reverses, right wheel moves forward: spins left in place)
 void left(int leftSpeed, int rightSpeed) {
-  digitalWrite(MOTOR_AIN, LOW);  // Left wheel stops
+  digitalWrite(MOTOR_AIN, LOW);  // Left wheel reverses
   digitalWrite(MOTOR_BIN, HIGH); // Right wheel forward
   setMotor(leftSpeed, rightSpeed);
 }
 
-// Turn Right (Left wheel moves forward, right wheel stops)
+// Turn Right (Left wheel moves forward, right wheel reverses: spins right in place)
 void right(int leftSpeed, int rightSpeed) {
   digitalWrite(MOTOR_AIN, HIGH); // Left wheel forward
-  digitalWrite(MOTOR_BIN, LOW);  // Right wheel stops
+  digitalWrite(MOTOR_BIN, LOW);  // Right wheel reverses
   setMotor(leftSpeed, rightSpeed);
 }
 
@@ -146,9 +146,11 @@ void setup() {
   pinMode(MOTOR_BIN, OUTPUT);
   pinMode(MOTOR_AEN, OUTPUT);
   pinMode(MOTOR_BEN, OUTPUT);
-  
-  // Set onboard LED pin as output (optional)
-  pinMode(10, OUTPUT);
+
+  // Configure PWM channels (ESP32 Arduino Core 3.x syntax)
+  // Parameters: pin, frequency (1000Hz), resolution (8-bit, i.e., 0-255)
+  ledcAttach(MOTOR_AEN, 1000, 8);
+  ledcAttach(MOTOR_BEN, 1000, 8);
 
   // Initialize I2C expansion board
   pcf8574.begin();
@@ -242,7 +244,7 @@ The core of the code is a `switch-case` structure that determines the car's acti
 *   When the state is `0b00000`, it means none of the probes can see the black line, and the car has gone off track. At this time, `stopMotor()` is called for an emergency stop.
 
 **4. Motor Control Functions**
-We have encapsulated four functions: `forward()`, `left()`, `right()`, and `stopMotor()`. Taking `left()` as an example, to achieve a left turn, we need to slow down or stop the left wheel while keeping the right wheel at a high speed. Therefore, we set the left wheel direction pin `MOTOR_AIN` to `LOW`, and the PWM value of the speed pin `MOTOR_AEN` to `0`; at the same time, we set the right wheel direction pin `MOTOR_BIN` to `HIGH`, and keep the speed pin `MOTOR_BEN` at the passed speed value. Through this differential speed control, the car can complete the turn smoothly.
+We have encapsulated four functions: `forward()`, `left()`, `right()`, and `stopMotor()`. Taking `left()` as an example, to spin the car left in place we drive the two sides in opposite directions: the left wheel direction pin `MOTOR_AIN` is set to `LOW` (reverse) while the right wheel direction pin `MOTOR_BIN` is set to `HIGH` (forward), and the same PWM value is written to both speed pins `MOTOR_AEN` and `MOTOR_BEN` through `setMotor()`. Because the two sides run at equal speed in opposite directions, the car rotates around its own center instead of driving forward.
 
 ## 3.9.8 Experimental Phenomena
 

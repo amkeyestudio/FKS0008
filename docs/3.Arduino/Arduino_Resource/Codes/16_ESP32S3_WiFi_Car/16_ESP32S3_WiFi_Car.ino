@@ -49,17 +49,17 @@ void back(int leftSpeed, int rightSpeed) {
   setMotor(leftSpeed, rightSpeed);
 }
 
-// Turn left (left wheel stop, right wheel forward)
+// Turn left (left wheel reverses, right wheel forward: spins left in place)
 void left(int leftSpeed, int rightSpeed) {
-  digitalWrite(MOTOR_AIN, LOW);  // Left wheel stop
+  digitalWrite(MOTOR_AIN, LOW);  // Left wheel reverses
   digitalWrite(MOTOR_BIN, HIGH); // Right wheel forward
   setMotor(leftSpeed, rightSpeed);
 }
 
-// Turn right (left wheel forward, right wheel stop)
+// Turn right (left wheel forward, right wheel reverses: spins right in place)
 void right(int leftSpeed, int rightSpeed) {
   digitalWrite(MOTOR_AIN, HIGH); // Left wheel forward
-  digitalWrite(MOTOR_BIN, LOW);  // Right wheel stop
+  digitalWrite(MOTOR_BIN, LOW);  // Right wheel reverses
   setMotor(leftSpeed, rightSpeed);
 }
 

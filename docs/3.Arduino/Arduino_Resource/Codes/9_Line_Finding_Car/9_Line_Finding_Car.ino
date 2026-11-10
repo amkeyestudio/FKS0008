@@ -37,17 +37,17 @@ void forward(int leftSpeed, int rightSpeed) {
   setMotor(leftSpeed, rightSpeed);
 }
 
-// Turn Left (Left wheel stops, right wheel moves forward)
+// Turn Left (Left wheel reverses, right wheel moves forward: spins left in place)
 void left(int leftSpeed, int rightSpeed) {
-  digitalWrite(MOTOR_AIN, LOW);  // Left wheel stops
+  digitalWrite(MOTOR_AIN, LOW);  // Left wheel reverses
   digitalWrite(MOTOR_BIN, HIGH); // Right wheel forward
   setMotor(leftSpeed, rightSpeed);
 }
 
-// Turn Right (Left wheel moves forward, right wheel stops)
+// Turn Right (Left wheel moves forward, right wheel reverses: spins right in place)
 void right(int leftSpeed, int rightSpeed) {
   digitalWrite(MOTOR_AIN, HIGH); // Left wheel forward
-  digitalWrite(MOTOR_BIN, LOW);  // Right wheel stops
+  digitalWrite(MOTOR_BIN, LOW);  // Right wheel reverses
   setMotor(leftSpeed, rightSpeed);
 }
 
@@ -65,9 +65,11 @@ void setup() {
   pinMode(MOTOR_BIN, OUTPUT);
   pinMode(MOTOR_AEN, OUTPUT);
   pinMode(MOTOR_BEN, OUTPUT);
-  
-  // Set onboard LED pin as output (optional)
-  pinMode(10, OUTPUT);
+
+  // Configure PWM channels (ESP32 Arduino Core 3.x syntax)
+  // Parameters: pin, frequency (1000Hz), resolution (8-bit, i.e., 0-255)
+  ledcAttach(MOTOR_AEN, 1000, 8);
+  ledcAttach(MOTOR_BEN, 1000, 8);
 
   // Initialize I2C expansion board
   pcf8574.begin();

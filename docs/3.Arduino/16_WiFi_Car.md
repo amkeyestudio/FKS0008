@@ -117,17 +117,17 @@ void back(int leftSpeed, int rightSpeed) {
   setMotor(leftSpeed, rightSpeed);
 }
 
-// Turn left (left wheel stop, right wheel forward)
+// Turn left (left wheel reverses, right wheel forward: spins left in place)
 void left(int leftSpeed, int rightSpeed) {
-  digitalWrite(MOTOR_AIN, LOW);  // Left wheel stop
+  digitalWrite(MOTOR_AIN, LOW);  // Left wheel reverses
   digitalWrite(MOTOR_BIN, HIGH); // Right wheel forward
   setMotor(leftSpeed, rightSpeed);
 }
 
-// Turn right (left wheel forward, right wheel stop)
+// Turn right (left wheel forward, right wheel reverses: spins right in place)
 void right(int leftSpeed, int rightSpeed) {
   digitalWrite(MOTOR_AIN, HIGH); // Left wheel forward
-  digitalWrite(MOTOR_BIN, LOW);  // Right wheel stop
+  digitalWrite(MOTOR_BIN, LOW);  // Right wheel reverses
   setMotor(leftSpeed, rightSpeed);
 }
 
@@ -278,7 +278,7 @@ To help you better understand the running mechanism of the code, we have divided
 ### 2. Motor and Motion Control Logic
 
 *   **PWM Speed Control**: Uses the `ledcAttach` and `ledcWrite` functions to generate PWM (Pulse Width Modulation) signals. By changing the duty cycle (0-255), the motor speed can be adjusted steplessly.
-*   **Differential Steering**: The robot's steering relies on the speed difference between the left and right wheels. For example, in the `left()` function, the left wheel speed is set to 0 while the right wheel continues moving forward, causing the car to turn left around the left wheel as the center.
+*   **Differential Steering**: The robot's steering relies on driving the two sides in opposite directions. For example, in the `left()` function, the left wheel is driven in reverse while the right wheel moves forward at the same PWM value, so the car spins left in place around its own center.
 
 ### 3. Web Server Route Configuration
 
@@ -297,7 +297,7 @@ To help you better understand the running mechanism of the code, we have divided
 4.  **Control Test**:
     *   Click "Forward", and both wheels of the car should rotate forward simultaneously.
     *   Click "Stop", and the car will stop immediately.
-    *   Click "Left", the right wheel rotates while the left wheel stops, and the car turns left.
+    *   Click "Left", the right wheel rotates forward while the left wheel rotates backward, and the car spins left in place.
     *   Click the servo control buttons to observe whether the servo rotates to the specified angle.
     *   If the car's actions are reversed (e.g., it moves backward when you click forward), simply swap the direction pin definitions of the corresponding motor in the code (e.g., swap the pin numbers for `MOTOR_AIN` and `MOTOR_BIN`), or physically swap the signal wires on the motor driver module.
 

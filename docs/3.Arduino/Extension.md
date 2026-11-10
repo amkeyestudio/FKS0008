@@ -73,17 +73,17 @@ void back(int leftSpeed, int rightSpeed) {
   setMotor(leftSpeed, rightSpeed);
 }
 
-// Turn left function: using differential speed principles, left wheel stops, right wheel moves forward, turning left in place
+// Turn left function: differential drive, left wheel reverses, right wheel moves forward, spinning left in place
 void left(int leftSpeed, int rightSpeed) {
-  digitalWrite(MOTOR_AIN, LOW);   // Left wheel stops
+  digitalWrite(MOTOR_AIN, LOW);   // Left wheel reverses
   digitalWrite(MOTOR_BIN, HIGH);  // Right wheel moves forward
   setMotor(leftSpeed, rightSpeed);
 }
 
-// Turn right function: left wheel moves forward, right wheel stops, turning right in place
+// Turn right function: left wheel moves forward, right wheel reverses, spinning right in place
 void right(int leftSpeed, int rightSpeed) {
   digitalWrite(MOTOR_AIN, HIGH);  // Left wheel moves forward
-  digitalWrite(MOTOR_BIN, LOW);   // Right wheel stops
+  digitalWrite(MOTOR_BIN, LOW);   // Right wheel reverses
   setMotor(leftSpeed, rightSpeed);
 }
 
@@ -396,17 +396,17 @@ void back(int leftSpeed, int rightSpeed) {
   setMotor(leftSpeed, rightSpeed);
 }
 
-// Turn left (left wheel stops, right wheel moves forward)
+// Turn left (left wheel reverses, right wheel moves forward: spins left in place)
 void left(int leftSpeed, int rightSpeed) {
-  digitalWrite(MOTOR_AIN, LOW);  // Left wheel stop
+  digitalWrite(MOTOR_AIN, LOW);  // Left wheel reverses
   digitalWrite(MOTOR_BIN, HIGH); // Right wheel forward
   setMotor(leftSpeed, rightSpeed);
 }
 
-// Turn right (left wheel moves forward, right wheel stops)
+// Turn right (left wheel moves forward, right wheel reverses: spins right in place)
 void right(int leftSpeed, int rightSpeed) {
   digitalWrite(MOTOR_AIN, HIGH); // Left wheel forward
-  digitalWrite(MOTOR_BIN, LOW);  // Right wheel stop
+  digitalWrite(MOTOR_BIN, LOW);  // Right wheel reverses
   setMotor(leftSpeed, rightSpeed);
 }
 
@@ -580,17 +580,17 @@ void back(int leftSpeed, int rightSpeed) {
   setMotor(leftSpeed, rightSpeed);
 }
 
-// Left turn function (left wheel stops, right wheel moves forward, achieving differential steering)
+// Left turn function (left wheel reverses, right wheel moves forward, spinning left in place)
 void left(int leftSpeed, int rightSpeed) {
-  digitalWrite(MOTOR_AIN, LOW);   // Left wheel stops (or can be changed to reverse for in-place left turn if needed)
+  digitalWrite(MOTOR_AIN, LOW);   // Left wheel reverses
   digitalWrite(MOTOR_BIN, HIGH);  // Right wheel rotates forward
-  setMotor(leftSpeed, rightSpeed); // Here leftSpeed actually passes 0 or a smaller value
+  setMotor(leftSpeed, rightSpeed); // Both wheels get the same speed, so the car spins around its center
 }
 
-// Right turn function (left wheel moves forward, right wheel stops)
+// Right turn function (left wheel moves forward, right wheel reverses, spinning right in place)
 void right(int leftSpeed, int rightSpeed) {
   digitalWrite(MOTOR_AIN, HIGH);  // Left wheel rotates forward
-  digitalWrite(MOTOR_BIN, LOW);   // Right wheel stops
+  digitalWrite(MOTOR_BIN, LOW);   // Right wheel reverses
   setMotor(leftSpeed, rightSpeed);
 }
 

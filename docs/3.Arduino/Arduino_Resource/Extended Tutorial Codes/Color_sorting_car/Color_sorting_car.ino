@@ -38,17 +38,17 @@ void back(int leftSpeed, int rightSpeed) {
   setMotor(leftSpeed, rightSpeed);
 }
 
-// Turn left function: using differential speed principles, left wheel stops, right wheel moves forward, turning left in place
+// Turn left function: differential drive, left wheel reverses, right wheel moves forward, spinning left in place
 void left(int leftSpeed, int rightSpeed) {
-  digitalWrite(MOTOR_AIN, LOW);   // Left wheel stops
+  digitalWrite(MOTOR_AIN, LOW);   // Left wheel reverses
   digitalWrite(MOTOR_BIN, HIGH);  // Right wheel moves forward
   setMotor(leftSpeed, rightSpeed);
 }
 
-// Turn right function: left wheel moves forward, right wheel stops, turning right in place
+// Turn right function: left wheel moves forward, right wheel reverses, spinning right in place
 void right(int leftSpeed, int rightSpeed) {
   digitalWrite(MOTOR_AIN, HIGH);  // Left wheel moves forward
-  digitalWrite(MOTOR_BIN, LOW);   // Right wheel stops
+  digitalWrite(MOTOR_BIN, LOW);   // Right wheel reverses
   setMotor(leftSpeed, rightSpeed);
 }
 
